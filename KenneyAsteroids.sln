@@ -13,9 +13,15 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "KenneyAsteroids.PipelineExt
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "KenneyAsteroids.Engine.Benchmark", "src\KenneyAsteroids.Engine.Benchmark\KenneyAsteroids.Engine.Benchmark.csproj", "{AC74FD08-CE6E-478B-B76E-3221BCA31F30}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KenneyAsteroids.Engine.MonoGame", "src\KenneyAsteroids.Engine.MonoGame\KenneyAsteroids.Engine.MonoGame.csproj", "{62993E35-0259-47AA-9A6F-369E0494C1F9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "KenneyAsteroids.Engine.MonoGame", "src\KenneyAsteroids.Engine.MonoGame\KenneyAsteroids.Engine.MonoGame.csproj", "{62993E35-0259-47AA-9A6F-369E0494C1F9}"
+EndProject
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "KenneyAsteroids.Content", "src\KenneyAsteroids.Content\KenneyAsteroids.Content.shproj", "{A0CDBD0E-3A41-42B7-9425-A838BC2C7383}"
 EndProject
 Global
+	GlobalSection(SharedMSBuildProjectFiles) = preSolution
+		src\KenneyAsteroids.Content\KenneyAsteroids.Content.projitems*{217c6f0f-d2f6-4577-9e36-535e23af60be}*SharedItemsImports = 5
+		src\KenneyAsteroids.Content\KenneyAsteroids.Content.projitems*{a0cdbd0e-3a41-42b7-9425-a838bc2c7383}*SharedItemsImports = 13
+	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
