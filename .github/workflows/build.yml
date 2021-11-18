@@ -1,0 +1,34 @@
+name: Kenny Asteroids Build
+
+on:
+  push:
+    branches: [ main, develop ]
+
+jobs:
+  build:
+
+    runs-on: windows-latest
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v2   
+    - name: Read version
+      id: version
+      uses: juliangruber/read-file-action@v1
+      with:
+        path: ./.version
+    - name: Setup .NET Core
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: 3.1.200
+    - name: Build Pipeline Extensions
+      run: dotnet build ./src/KenneyAsteroids.PipelineExtension/KenneyAsteroids.PipelineExtension.csproj --configuration Release
+    - name: Build Game
+      run: dotnet build . --configuration Release
+    - name: Publish WinX64
+      run: dotnet publish ./src/KenneyAsteroids.Desktop/KenneyAsteroids.Desktop.csproj --configuration Release --runtime win-x64 --self-contained true -o ./publish/win-x64
+    - name: Artifacts
+      uses: actions/upload-artifact@v1
+      with:
+       name: ${{ format('kenney-asteroids-win-x64-v{0}.{1}', steps.version.outputs.content, github.run_number) }}
+       path: publish/win-x64
