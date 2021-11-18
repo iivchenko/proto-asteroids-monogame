@@ -25,7 +25,7 @@ jobs:
       run: dotnet build . --configuration Release
       
   publish-win-x64:
-    needs: buid
+    needs: build
     runs-on: windows-latest
     steps:
     - name: Publish WinX64
@@ -37,7 +37,7 @@ jobs:
        path: publish/win-x64
        
   publixh-linux-x64:
-    needs: buid
+    needs: build
     runs-on: windows-latest
     steps:
     - name: Publish LinuxX64
