@@ -5,7 +5,8 @@ on:
     branches: [ main, develop ]
 
 jobs:
-  build: 
+
+  win-x64:
     runs-on: windows-latest
     steps:
     - name: Checkout
@@ -21,13 +22,6 @@ jobs:
         dotnet-version: 3.1.200
     - name: Build Pipeline Extensions
       run: dotnet build ./src/KenneyAsteroids.PipelineExtension/KenneyAsteroids.PipelineExtension.csproj --configuration Release
-    - name: Build Game
-      run: dotnet build . --configuration Release
-      
-  publish-win-x64:
-    needs: build
-    runs-on: windows-latest
-    steps:
     - name: Publish WinX64
       run: dotnet publish ./src/KenneyAsteroids.Desktop/KenneyAsteroids.Desktop.csproj --configuration Release --runtime win-x64 --self-contained true -o ./publish/win-x64
     - name: Windows Artifacts
@@ -36,10 +30,22 @@ jobs:
        name: ${{ format('kenney-asteroids-win-x64-v{0}.{1}', steps.version.outputs.content, github.run_number) }}
        path: publish/win-x64
        
-  publixh-linux-x64:
-    needs: build
+  linux-x64:
     runs-on: windows-latest
     steps:
+    - name: Checkout
+      uses: actions/checkout@v2   
+    - name: Read version
+      id: version
+      uses: juliangruber/read-file-action@v1
+      with:
+        path: ./.version
+    - name: Setup .NET Core
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: 3.1.200
+    - name: Build Pipeline Extensions
+      run: dotnet build ./src/KenneyAsteroids.PipelineExtension/KenneyAsteroids.PipelineExtension.csproj --configuration Release
     - name: Publish LinuxX64
       run: dotnet publish ./src/KenneyAsteroids.Desktop/KenneyAsteroids.Desktop.csproj --configuration Release --runtime linux-x64 --self-contained true -o ./publish/linux-x64
     - name: Linux Artifacts
