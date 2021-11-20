@@ -53,19 +53,23 @@ namespace KenneyAsteroids.Core.Screens.GamePlay
             var timer1 = new Timer(TimeSpan.FromSeconds(3), GameTags.NextAsteroid, _publisher);
             var timer2 = new Timer(TimeSpan.FromSeconds(60), GameTags.NextAsteroidLimitChange, _publisher);
             var timer3 = new Timer(TimeSpan.FromSeconds(45), GameTags.NextHasardSituation, _publisher);
-            var hud = new GamePlayHud(
+            var hud = new GamePlayHud
+            (
                 container.GetService<IOptionsMonitor<GameSettings>>(),
                 container.GetService<IViewport>(),
                 container.GetService<IPainter>(),
                 container.GetService<IContentProvider>(),
-                container.GetService<IFontService>());
+                container.GetService<IFontService>()
+            );
 
-            _entities.Add(
-                ship, 
+            _entities.Add
+            (
+                ship,
                 hud,
                 timer1,
                 timer2,
-                timer3);
+                timer3
+            );
         }
 
         public override void Free()
@@ -114,9 +118,9 @@ namespace KenneyAsteroids.Core.Screens.GamePlay
                 var bodies = _entities.Where(x => x is IBody).Cast<IBody>();
 
                 // Move Collision eventing into collision system
-                foreach(var collision in _collisions.EvaluateCollisions(bodies))
+                foreach (var collision in _collisions.EvaluateCollisions(bodies))
                 {
-                    switch((collision.Body1, collision.Body2))
+                    switch ((collision.Body1, collision.Body2))
                     {
                         case (Ship ship, Asteroid asteroid):
                             _publisher.Publish(new GamePlayEntitiesCollideEvent<Ship, Asteroid>(ship, asteroid));

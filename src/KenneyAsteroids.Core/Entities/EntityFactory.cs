@@ -32,6 +32,7 @@ namespace KenneyAsteroids.Core.Entities
 
         private readonly SpriteSheet _spriteSheet;
         private readonly Sound _lazer;
+        private readonly Sound _explosion;
         private readonly IProjectileFactory _projectileFactory;
         private readonly IEventPublisher _publisher;
         private readonly IPainter _draw;
@@ -46,6 +47,7 @@ namespace KenneyAsteroids.Core.Entities
         {
             _spriteSheet = content.Load<SpriteSheet>("SpriteSheets/Asteroids.sheet");
             _lazer = content.Load<Sound>("Sounds/laser.sound");
+            _explosion = content.Load<Sound>("Sounds/asteroid-explosion.sound");
             _projectileFactory = projectileFactory;
             _publisher = eventService;
             _draw = draw;
@@ -59,9 +61,10 @@ namespace KenneyAsteroids.Core.Entities
             const float MaxRotation = 180.0f;
 
             var sprite = _spriteSheet["playerShip1_blue"];
+            var debri = new[] { _spriteSheet["scratch1"], _spriteSheet["scratch2"], _spriteSheet["scratch3"] };
             var reload = TimeSpan.FromMilliseconds(500);
             var weapon = new Weapon(new Vector2(0, -sprite.Width / 2), reload, _projectileFactory, _publisher, _player, _lazer);
-            return new Ship(_draw, sprite, weapon, MaxSpeed, Acceleration, MaxRotation.AsRadians())
+            return new Ship(_draw, _publisher, sprite, debri, weapon, MaxSpeed, Acceleration, MaxRotation.AsRadians())
             {
                 Position = position
             };
@@ -152,8 +155,9 @@ namespace KenneyAsteroids.Core.Entities
                 default:
                     throw new InvalidOperationException($"Unknown asteroid type {type}!");
             }
+            var debri = _spriteSheet["meteorBrown_tiny1"];
 
-            return new Asteroid(_draw, type, sprite, velocity, new Vector2(scale), rotationSpeed)
+            return new Asteroid(_draw, _player, _publisher, type, sprite, debri, _explosion, velocity, new Vector2(scale), rotationSpeed)
             {
                 Position = position
             };

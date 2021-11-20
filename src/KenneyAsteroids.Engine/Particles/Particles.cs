@@ -36,9 +36,9 @@ namespace KenneyAsteroids.Engine.Particles
             return this;
         }
 
-        public ParticleEngine Build(int seed, IPainter painter, IEventPublisher publisher)
+        public ParticleEngine Build(int seed, IPainter painter, Action<float> onFinished)
         {
-            return new ParticleEngine(_init(new Random(seed)), _update, seed, painter, publisher);
+            return new ParticleEngine(_init(new Random(seed)), _update, seed, painter, onFinished);
         }
     }
 }

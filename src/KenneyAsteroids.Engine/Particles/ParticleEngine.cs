@@ -8,12 +8,12 @@ using System.Numerics;
 
 namespace KenneyAsteroids.Engine.Particles
 {
-    public sealed class ParticleEngine : IEntity, IUpdatable, IDrawable
+    public sealed class ParticleEngine : IUpdatable, IDrawable
     {
         private readonly IList<Particle> _particles;
         private readonly Action<Random, float, Particle> _update;
         private readonly IPainter _painter;
-        private readonly IEventPublisher _publisher;
+        private readonly Action<float> _onFinish;
         private readonly Random _random;
 
         private bool _isFinished = false;
@@ -23,12 +23,12 @@ namespace KenneyAsteroids.Engine.Particles
             Action<Random, float, Particle> update,
             int seed,
             IPainter painter,
-            IEventPublisher publisher)
+            Action<float> onFinish)
         {
             _particles = particles.ToList();
             _update = update;
             _painter = painter;
-            _publisher = publisher;
+            _onFinish = onFinish;
 
             _random = new Random(seed);
         }
@@ -46,7 +46,7 @@ namespace KenneyAsteroids.Engine.Particles
                 if (_particles.All(x => x.TTL <= 0))
                 {
                     _isFinished = true;
-                    _publisher.Publish(new ParticlesEmmisionFinishedEvent(this));
+                    _onFinish(time);
                 }
             }            
         }
