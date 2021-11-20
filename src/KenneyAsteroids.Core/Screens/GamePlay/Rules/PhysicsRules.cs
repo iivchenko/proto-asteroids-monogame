@@ -1,11 +1,9 @@
 ﻿using KenneyAsteroids.Core.Entities;
 using KenneyAsteroids.Core.Leaderboards;
 using KenneyAsteroids.Engine.Entities;
-using KenneyAsteroids.Engine.Graphics;
 using KenneyAsteroids.Engine.Rules;
 using KenneyAsteroids.Engine.Screens;
 using System;
-using System.Numerics;
 using KenneyAsteroids.Engine;
 using System.Linq;
 
@@ -13,90 +11,97 @@ namespace KenneyAsteroids.Core.Screens.GamePlay.Rules
 {
     public static class PhysicsRules
     {
-        public static class WhenAsteroidCollidesPlayerShip
+        public abstract class WhenAsteroidCollidesPlayerShip : IRule<GamePlayEntitiesCollideEvent<Ship, Asteroid>>
         {
-            public static class AndPlayerShipHasEnoughLifes
+            protected WhenAsteroidCollidesPlayerShip(IEntitySystem entities)
             {
-                public sealed class ThenReduceLifes : IRule<GamePlayEntitiesCollideEvent<Ship, Asteroid>>
-                {
-                    private readonly IEntitySystem _entities;
+                Entities = entities;
+            }
 
+            protected IEntitySystem Entities { get; }
+
+            protected GamePlayHud GetHud() => Entities.First(x => x is GamePlayHud) as GamePlayHud;
+
+            public virtual bool ExecuteCondition(GamePlayEntitiesCollideEvent<Ship, Asteroid> @event)
+                => @event.Body1.State == ShipState.Alive && @event.Body2.State == AsteroidState.Alive;
+
+            public abstract void ExecuteAction(GamePlayEntitiesCollideEvent<Ship, Asteroid> @event);
+
+            public sealed class ThenDestroyAsteroid : WhenAsteroidCollidesPlayerShip
+            {
+                public ThenDestroyAsteroid(IEntitySystem entities) 
+                    : base(entities)
+                {
+                }
+
+                public override void ExecuteAction(GamePlayEntitiesCollideEvent<Ship, Asteroid> @event) => @event.Body2.Destroy();
+            }
+
+            public abstract class AndPlayerShipHasEnoughLifes : WhenAsteroidCollidesPlayerShip
+            {
+                protected AndPlayerShipHasEnoughLifes(IEntitySystem entities)
+                    : base(entities)
+                {
+                }
+
+                public override bool ExecuteCondition(GamePlayEntitiesCollideEvent<Ship, Asteroid> @event)
+                    => base.ExecuteCondition(@event) && GetHud().Lifes > 0;
+
+                public sealed class ThenReduceLifes : AndPlayerShipHasEnoughLifes
+                {
                     public ThenReduceLifes(IEntitySystem entities)
+                        : base (entities)
                     {
-                        _entities = entities;
                     }
 
-                    public bool ExecuteCondition(GamePlayEntitiesCollideEvent<Ship, Asteroid> @event) 
-                        => @event.Body1.State == ShipState.Alive && @event.Body2.State == AsteroidState.Alive && GetHud().Lifes > 0;
-
-                    public void ExecuteAction(GamePlayEntitiesCollideEvent<Ship, Asteroid> @event) => GetHud().Lifes--;
-
-                    private GamePlayHud GetHud() => _entities.First(x => x is GamePlayHud) as GamePlayHud;
+                    public override void ExecuteAction(GamePlayEntitiesCollideEvent<Ship, Asteroid> @event) => GetHud().Lifes--;
                 }
 
-                public sealed class ThenDestroyPlayersShip : IRule<GamePlayEntitiesCollideEvent<Ship, Asteroid>>
+                public sealed class ThenDestroyPlayersShip : AndPlayerShipHasEnoughLifes
                 {
-                    private readonly IEntitySystem _entities;
-
                     public ThenDestroyPlayersShip(IEntitySystem entities)
+                        : base(entities)
                     {
-                        _entities = entities;
                     }
 
-                    public bool ExecuteCondition(GamePlayEntitiesCollideEvent<Ship, Asteroid> @event)
-                        => @event.Body1.State == ShipState.Alive && @event.Body2.State == AsteroidState.Alive && GetHud().Lifes > 0;
-
-                    public void ExecuteAction(GamePlayEntitiesCollideEvent<Ship, Asteroid> @event) => @event.Body1.Destroy();
-
-                    private GamePlayHud GetHud()
-                        => _entities.First(x => x is GamePlayHud) as GamePlayHud;
-                }
-
-                public sealed class ThenDestroyAsteroid : IRule<GamePlayEntitiesCollideEvent<Ship, Asteroid>>
-                {
-                    public bool ExecuteCondition(GamePlayEntitiesCollideEvent<Ship, Asteroid> @event)
-                        => @event.Body1.State == ShipState.Alive && @event.Body2.State == AsteroidState.Alive;
-
-                    public void ExecuteAction(GamePlayEntitiesCollideEvent<Ship, Asteroid> @event) => @event.Body2.Destroy();
+                    public override void ExecuteAction(GamePlayEntitiesCollideEvent<Ship, Asteroid> @event) => @event.Body1.Destroy();
                 }
             }
 
-            public static class AndPlayerShipDoesntHaveEnoughLifes
+            public abstract class OrPlayerShipDoesntHaveEnoughLifes : WhenAsteroidCollidesPlayerShip
             {
-                public sealed class ThenRemovePlayersShipFromTheGame : IRule<GamePlayEntitiesCollideEvent<Ship, Asteroid>>
+                protected OrPlayerShipDoesntHaveEnoughLifes(IEntitySystem entities) 
+                    : base(entities)
                 {
-                    private readonly IEntitySystem _entities;
+                }
 
+                public override bool ExecuteCondition(GamePlayEntitiesCollideEvent<Ship, Asteroid> @event)
+                   => base.ExecuteCondition(@event) && GetHud().Lifes <= 0;
+
+                public sealed class ThenRemovePlayersShipFromTheGame : OrPlayerShipDoesntHaveEnoughLifes
+                {
                     public ThenRemovePlayersShipFromTheGame(IEntitySystem entities)
+                        : base(entities)
                     {
-                        _entities = entities;
                     }
 
-                    public bool ExecuteCondition(GamePlayEntitiesCollideEvent<Ship, Asteroid> @event)
-                        => @event.Body1.State == ShipState.Alive && @event.Body2.State == AsteroidState.Alive && GetHud().Lifes <= 0;
-
-                    public void ExecuteAction(GamePlayEntitiesCollideEvent<Ship, Asteroid> @event) => _entities.Remove(@event.Body1);
-
-                    private GamePlayHud GetHud() => _entities.First(x => x is GamePlayHud) as GamePlayHud;
+                    public override void ExecuteAction(GamePlayEntitiesCollideEvent<Ship, Asteroid> @event) => Entities.Remove(@event.Body1);
 
                 }
 
-                public sealed class ThenGameOver : IRule<GamePlayEntitiesCollideEvent<Ship, Asteroid>>
+                public sealed class ThenGameOver : OrPlayerShipDoesntHaveEnoughLifes
                 {
-                    private readonly IEntitySystem _entities;
                     private readonly LeaderboardsManager _leaderBoard;
 
                     public ThenGameOver(
                         IEntitySystem entities,
                         LeaderboardsManager leaderBoard)
+                        : base(entities)
                     {
-                        _entities = entities;
                         _leaderBoard = leaderBoard;
                     }
 
-                    public bool ExecuteCondition(GamePlayEntitiesCollideEvent<Ship, Asteroid> @event) => GetHud().Lifes <= 0;
-
-                    public void ExecuteAction(GamePlayEntitiesCollideEvent<Ship, Asteroid> @event)
+                    public override void ExecuteAction(GamePlayEntitiesCollideEvent<Ship, Asteroid> @event)
                     {
                         var ship = @event.Body1;
 
@@ -131,17 +136,21 @@ namespace KenneyAsteroids.Core.Screens.GamePlay.Rules
 
                         GameRoot.ScreenManager.AddScreen(msg, null);
                     }
-
-                    private GamePlayHud GetHud() => _entities.First(x => x is GamePlayHud) as GamePlayHud;
                 }
             }
         }
 
-        public static class WhenPlayersProjectileCollidesAsteroid
+        public abstract class WhenPlayersProjectileCollidesAsteroid : IRule<GamePlayEntitiesCollideEvent<Projectile, Asteroid>>
         {
-            public static class AndAsteroidIsAlive
+            public abstract bool ExecuteCondition(GamePlayEntitiesCollideEvent<Projectile, Asteroid> @event);
+
+            public abstract void ExecuteAction(GamePlayEntitiesCollideEvent<Projectile, Asteroid> @event);
+
+            public abstract class AndAsteroidIsAlive : WhenPlayersProjectileCollidesAsteroid
             {
-                public sealed class ThenScore : IRule<GamePlayEntitiesCollideEvent<Projectile, Asteroid>>
+                public override bool ExecuteCondition(GamePlayEntitiesCollideEvent<Projectile, Asteroid> @event) => @event.Body2.State == AsteroidState.Alive;
+
+                public sealed class ThenScore: AndAsteroidIsAlive
                 {
                     private readonly IEntitySystem _entities;
                     private readonly GamePlayScoreManager _scores;
@@ -152,9 +161,7 @@ namespace KenneyAsteroids.Core.Screens.GamePlay.Rules
                         _scores = new GamePlayScoreManager();
                     }
 
-                    public bool ExecuteCondition(GamePlayEntitiesCollideEvent<Projectile, Asteroid> @event) => @event.Body2.State == AsteroidState.Alive;
-
-                    public void ExecuteAction(GamePlayEntitiesCollideEvent<Projectile, Asteroid> @event)
+                    public override void ExecuteAction(GamePlayEntitiesCollideEvent<Projectile, Asteroid> @event)
                     {
                         GetHud().Scores += _scores.GetScore(@event.Body2);
                     }
@@ -163,7 +170,7 @@ namespace KenneyAsteroids.Core.Screens.GamePlay.Rules
 
                 }
 
-                public sealed class ThenRemoveProjectile : IRule<GamePlayEntitiesCollideEvent<Projectile, Asteroid>>
+                public sealed class ThenRemoveProjectile : AndAsteroidIsAlive
                 {
                     private readonly IEntitySystem _entities;
 
@@ -173,27 +180,26 @@ namespace KenneyAsteroids.Core.Screens.GamePlay.Rules
                         _entities = entities;
                     }
 
-                    public bool ExecuteCondition(GamePlayEntitiesCollideEvent<Projectile, Asteroid> @event) => @event.Body2.State == AsteroidState.Alive;
-
-                    public void ExecuteAction(GamePlayEntitiesCollideEvent<Projectile, Asteroid> @event)
+                    public override void ExecuteAction(GamePlayEntitiesCollideEvent<Projectile, Asteroid> @event)
                     {
                         _entities.Remove(@event.Body1);
                     }
                 }
 
-                public sealed class ThenDestroyAsteroid : IRule<GamePlayEntitiesCollideEvent<Projectile, Asteroid>>
+                public sealed class ThenDestroyAsteroid : AndAsteroidIsAlive
                 {
-                    public bool ExecuteCondition(GamePlayEntitiesCollideEvent<Projectile, Asteroid> @event) => @event.Body2.State == AsteroidState.Alive;
-
-                    public void ExecuteAction(GamePlayEntitiesCollideEvent<Projectile, Asteroid> @event)
+                    public override void ExecuteAction(GamePlayEntitiesCollideEvent<Projectile, Asteroid> @event)
                     {
                         @event.Body2.Destroy();
                     }
                 }
 
-                public static class AndAsteroidIsBig
+                public abstract class AndAsteroidIsBig : AndAsteroidIsAlive
                 {
-                    public sealed class TheFallAsteroidAppart : IRule<GamePlayEntitiesCollideEvent<Projectile, Asteroid>>
+                    public override bool ExecuteCondition(GamePlayEntitiesCollideEvent<Projectile, Asteroid> @event)
+                        => base.ExecuteCondition(@event) && @event.Body2.Type == AsteroidType.Big;
+
+                    public sealed class TheFallAsteroidAppart : AndAsteroidIsBig
                     {
                         private readonly IEntitySystem _entities;
                         private readonly IEntityFactory _entityFactory;
@@ -206,9 +212,7 @@ namespace KenneyAsteroids.Core.Screens.GamePlay.Rules
                             _entityFactory = entityFactory;
                         }
 
-                        public bool ExecuteCondition(GamePlayEntitiesCollideEvent<Projectile, Asteroid> @event) => @event.Body2.State == AsteroidState.Alive && @event.Body2.Type == AsteroidType.Big;
-
-                        public void ExecuteAction(GamePlayEntitiesCollideEvent<Projectile, Asteroid> @event)
+                        public override void ExecuteAction(GamePlayEntitiesCollideEvent<Projectile, Asteroid> @event)
                         {
                             var asteroid = @event.Body2;
                             var direction1 = asteroid.Velocity.ToRotation() - 20.AsRadians();
