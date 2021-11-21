@@ -86,7 +86,6 @@ namespace KenneyAsteroids.Core.Screens.GamePlay.Rules
                     }
 
                     public override void ExecuteAction(GamePlayEntitiesCollideEvent<Ship, Asteroid> @event) => Entities.Remove(@event.Body1);
-
                 }
 
                 public sealed class ThenGameOver : OrPlayerShipDoesntHaveEnoughLifes

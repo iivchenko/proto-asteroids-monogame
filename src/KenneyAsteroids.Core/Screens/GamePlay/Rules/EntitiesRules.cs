@@ -2,7 +2,6 @@
 using KenneyAsteroids.Engine.Entities;
 using KenneyAsteroids.Engine.Graphics;
 using KenneyAsteroids.Engine.Rules;
-using System.Linq;
 using System.Numerics;
 
 namespace KenneyAsteroids.Core.Screens.GamePlay.Rules

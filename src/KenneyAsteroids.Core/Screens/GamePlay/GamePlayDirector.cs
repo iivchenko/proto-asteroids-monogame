@@ -81,8 +81,10 @@ namespace KenneyAsteroids.Core.Screens.GamePlay
                 if (XMediaPlayer.State == XMediaState.Stopped)
                 {
                     var song = Next();
-                    while (song == XMediaPlayer.Queue.ActiveSong)
-                        song = Next();
+
+                    // TODO: Return it back when more sonds will be added to the list
+                    //while (song == XMediaPlayer.Queue.ActiveSong)
+                    //    song = Next();
 
                     XMediaPlayer.Play(song);
                 }
@@ -90,8 +92,9 @@ namespace KenneyAsteroids.Core.Screens.GamePlay
 
             private XSong Next()
             {
-                var next = Director._random.Next(4) + 1;
-                return Director._content.Load<XSong>($"Music/game{next}.song");
+                // TODO: Add more free music to the game
+                // var next = Director._random.Next(4) + 1;
+                return Director._content.Load<XSong>($"Music/game1.song");
             }
         }
     }
