@@ -61,10 +61,17 @@ namespace KenneyAsteroids.Core.Entities
             const float MaxRotation = 180.0f;
 
             var sprite = _spriteSheet["playerShip1_blue"];
+            var trailSprite = _spriteSheet["fire08"];
             var debri = new[] { _spriteSheet["scratch1"], _spriteSheet["scratch2"], _spriteSheet["scratch3"] };
             var reload = TimeSpan.FromMilliseconds(500);
             var weapon = new Weapon(new Vector2(0, -sprite.Width / 2), reload, _projectileFactory, _publisher, _player, _lazer);
-            return new Ship(_draw, _publisher, sprite, debri, weapon, MaxSpeed, Acceleration, MaxRotation.AsRadians())
+            var trails = new[] 
+            { 
+                new ShipTrail(trailSprite, new Vector2(-35, 28), new Vector2(trailSprite.Width / 2, 0), _draw),
+                new ShipTrail(trailSprite, new Vector2(35, 28), new Vector2(trailSprite.Width / 2, 0), _draw)
+            };
+
+            return new Ship(_draw, _publisher, sprite, debri, weapon, trails, MaxSpeed, Acceleration, MaxRotation.AsRadians())
             {
                 Position = position
             };

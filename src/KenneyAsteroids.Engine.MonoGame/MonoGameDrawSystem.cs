@@ -55,6 +55,32 @@ namespace KenneyAsteroids.Engine.MonoGame
                     color.ToXna());
         }
 
+        public void Draw(Sprite sprite, Vector2 position, Rectangle source, Vector2 origin, Vector2 scale, float rotation, Color color)
+        {
+            var rect = new Rectangle(
+                sprite.SourceRectangle.Value.X + source.X,
+                sprite.SourceRectangle.Value.Y + source.Y,
+                source.Width,
+                source.Height);
+
+            _batch
+                .Draw(
+                    sprite.Texture, 
+                    position.ToXnaVector(),
+                    rect.ToXna(),
+                    color.ToXna(),
+                    rotation,
+                    origin.ToXnaVector(),
+                    scale.ToXnaVector(),
+                    SpriteEffects.None,
+                    0);
+        }
+
+        public void Draw(Sprite sprite, Rectangle destination, Rectangle source, Color color)
+        {
+            _batch.Draw(sprite.Texture, destination.ToXna(), source.ToXna(), color.ToXna());
+        }
+
         public void DrawString(Font font, string text, Vector2 position, Color color)
         {
             var spriteFont = _content.Load<SpriteFont>(font.Id);
@@ -65,11 +91,6 @@ namespace KenneyAsteroids.Engine.MonoGame
         {
             var spriteFont = _content.Load<SpriteFont>(font.Id);
             _batch.DrawString(spriteFont, text, position.ToXnaVector(), color.ToXna(), rotation, origin.ToXnaVector(), scale, SpriteEffects.None, 0);
-        }
-
-        public void Draw(Sprite sprite, Rectangle destination, Rectangle source, Color color)
-        {
-            _batch.Draw(sprite.Texture, destination.ToXna(), source.ToXna(), color.ToXna());
         }
 
         public Size MeasureText(string text, Font font)
