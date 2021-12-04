@@ -5,8 +5,6 @@ using KenneyAsteroids.Engine.Screens;
 using KenneyAsteroids.Engine.Storage;
 using Microsoft.Extensions.DependencyInjection;
 
-using XMediaPlayer = Microsoft.Xna.Framework.Media.MediaPlayer;
-
 namespace KenneyAsteroids.Core.Screens
 {
     // TODO: Convert to 'record' after migrating to .NET 5
@@ -80,8 +78,6 @@ namespace KenneyAsteroids.Core.Screens
                 _sfxVolume.Text = $"Sound Effect Volume: {(int)(settings.Audio.SfxVolume * 100)}%";
 
                 _settingsRepository.Update(settings);
-
-                XMediaPlayer.Volume = settings.Audio.MusicVolume;
             };
 
             _musicVolume = new MenuEntry($"Music Volume: {(int)(settings.Audio.MusicVolume * 100)}%", font, fontService);

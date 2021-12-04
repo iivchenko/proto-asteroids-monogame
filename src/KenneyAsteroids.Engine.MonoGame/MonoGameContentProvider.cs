@@ -59,9 +59,15 @@ namespace KenneyAsteroids.Engine.MonoGame
 
                 return font as TContent;
             }
-            else if (type == typeof(Song))
+            else if (type == typeof(Music))
             {
-                return _content.Load<Song>(path) as TContent;
+                var music = new Music();
+
+                _content.Load<Song>(path);
+
+                _map.Add(music.Id, path);
+
+                return music as TContent;
             }
             else
             {

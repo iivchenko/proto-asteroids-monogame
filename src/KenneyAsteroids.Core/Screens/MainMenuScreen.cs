@@ -1,5 +1,6 @@
 ﻿using KenneyAsteroids.Core.Screens.GamePlay;
 using KenneyAsteroids.Engine;
+using KenneyAsteroids.Engine.Audio;
 using KenneyAsteroids.Engine.Content;
 using KenneyAsteroids.Engine.Graphics;
 using KenneyAsteroids.Engine.Screens;
@@ -7,15 +8,13 @@ using Microsoft.Extensions.DependencyInjection;
 using System.Numerics;
 
 using XTime = Microsoft.Xna.Framework.GameTime;
-using XMediaPlayer = Microsoft.Xna.Framework.Media.MediaPlayer;
-using XSong = Microsoft.Xna.Framework.Media.Song;
-using XMediaState = Microsoft.Xna.Framework.Media.MediaState;
 
 namespace KenneyAsteroids.Core.Screens
 {
     public sealed class MainMenuScreen : MenuScreen
     {
         private IPainter _painter;
+        private IMusicPlayer _musicPlayer;
         private Font _h1;
         private Font _h2;
         private Font _h4;
@@ -37,6 +36,7 @@ namespace KenneyAsteroids.Core.Screens
             var content = ScreenManager.Container.GetService<IContentProvider>();
             var fontService = ScreenManager.Container.GetService<IFontService>();
             _painter = ScreenManager.Container.GetService<IPainter>();
+            _musicPlayer = ScreenManager.Container.GetService<IMusicPlayer>();
             _h1 = content.Load<Font>("Fonts/kenney-future.h1.font");
             _h2 = content.Load<Font>("Fonts/kenney-future.h2.font");
             _h4 = content.Load<Font>("Fonts/kenney-future.h4.font");
@@ -64,12 +64,9 @@ namespace KenneyAsteroids.Core.Screens
             MenuEntries.Add(settingsMenuEntry);
             MenuEntries.Add(exitMenuEntry);
 
-            if (XMediaPlayer.State == XMediaState.Stopped)
-            {
-                var song = content.Load<XSong>("Music/menu.song");
 
-                XMediaPlayer.Play(song);
-            }
+            var music = content.Load<Music>("Music/menu.song");
+            _musicPlayer.Play(music);
         }
 
         public override void Draw(XTime gameTime)

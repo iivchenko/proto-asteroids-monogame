@@ -26,7 +26,9 @@ namespace Microsoft.Extensions.DependencyInjection
                 .Bind(configuration)
                 .ValidateDataAnnotations();
 
-            services.TryAddSingleton<IAudioPlayer, MonoGameSoundSystem>();
+            services.TryAddSingleton<MonoGameSoundSystem>();
+            services.TryAdd(new ServiceDescriptor(typeof(IAudioPlayer), x => x.GetService<MonoGameSoundSystem>(), ServiceLifetime.Singleton));
+            services.TryAdd(new ServiceDescriptor(typeof(IMusicPlayer), x => x.GetService<MonoGameSoundSystem>(), ServiceLifetime.Singleton));
 
             return services;
         }

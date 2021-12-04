@@ -14,7 +14,6 @@ using System.Linq;
 using System.Numerics;
 
 using XTime = Microsoft.Xna.Framework.GameTime;
-using XMediaPlayer = Microsoft.Xna.Framework.Media.MediaPlayer;
 using System;
 
 namespace KenneyAsteroids.Core.Screens.GamePlay
@@ -26,8 +25,8 @@ namespace KenneyAsteroids.Core.Screens.GamePlay
         private ICollisionSystem _collisions;
         private IViewport _viewport;
         private IEventPublisher _publisher;
+        private IMusicPlayer _musicPlayer;
 
-        private GamePlayDirector _director;
         private ShipPlayerController _controller;
 
         public override void Initialize()
@@ -39,14 +38,12 @@ namespace KenneyAsteroids.Core.Screens.GamePlay
             _rules = container.GetService<IGameRuleSystem>();
             _viewport = container.GetService<IViewport>();
             _publisher = container.GetService<IEventPublisher>();
+            _musicPlayer = container.GetService<IMusicPlayer>();
+            _collisions = new CollisionSystem();
 
             var factory = container.GetService<IEntityFactory>();
             var ship = factory.CreateShip(new Vector2(_viewport.Width / 2.0f, _viewport.Height / 2.0f));
-
-            _collisions = new CollisionSystem();
-            _director = new GamePlayDirector(
-                container.GetService<IOptionsMonitor<AudioSettings>>(),
-                container.GetService<IContentProvider>());
+            var content = container.GetService<IContentProvider>();
 
             _controller = new ShipPlayerController(ship);
 
@@ -70,15 +67,21 @@ namespace KenneyAsteroids.Core.Screens.GamePlay
                 timer2,
                 timer3
             );
+
+            var music = 
+                Enumerable
+                    .Range(1, 7)
+                    .Select(i => content.Load<Music>($"Music/game{i}.song"))
+                    .ToArray();
+
+            _musicPlayer.Play(music);
         }
 
         public override void Free()
         {
-            _director.Free();
+            _musicPlayer.Stop();
             _entities.Remove(_entities.ToArray());
             _entities.Commit();
-
-            XMediaPlayer.Stop();
 
             base.Free();
         }
@@ -89,12 +92,12 @@ namespace KenneyAsteroids.Core.Screens.GamePlay
 
             if (input.IsNewKeyPress(Keys.Escape, null, out _) || input.IsNewButtonPress(Buttons.Start, null, out _))
             {
-                XMediaPlayer.Pause();
+                _musicPlayer.Pause();
                 const string message = "Exit game?\nA button, Space, Enter = ok\nB button, Esc = cancel";
                 var confirmExitMessageBox = new MessageBoxScreen(message);
 
                 confirmExitMessageBox.Accepted += (_, __) => LoadingScreen.Load(ScreenManager, false, null, new StarScreen(), new MainMenuScreen());
-                confirmExitMessageBox.Cancelled += (_, __) => XMediaPlayer.Resume();
+                confirmExitMessageBox.Cancelled += (_, __) => _musicPlayer.Resume();
 
                 ScreenManager.AddScreen(confirmExitMessageBox, null);
             }
@@ -145,7 +148,6 @@ namespace KenneyAsteroids.Core.Screens.GamePlay
                     .Where(IsOutOfScreen)
                     .Iter(HandleOutOfScreenBodies);
 
-                _director.Update(time);
                 _rules.Update(time);
 
                 _entities.Commit();
