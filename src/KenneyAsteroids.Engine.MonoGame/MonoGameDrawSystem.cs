@@ -36,12 +36,12 @@ namespace KenneyAsteroids.Engine.MonoGame
             _batch
                 .Draw(
                     sprite.Texture,
-                    position.ToXnaVector(),
+                    position.ToXna(),
                     sprite.SourceRectangle.ToXna(),
                     color.ToXna(),
                     rotation,
-                    origin.ToXnaVector(),
-                    scale.ToXnaVector(),
+                    origin.ToXna(),
+                    scale.ToXna(),
                     SpriteEffects.None,
                     0);
         }
@@ -66,12 +66,12 @@ namespace KenneyAsteroids.Engine.MonoGame
             _batch
                 .Draw(
                     sprite.Texture, 
-                    position.ToXnaVector(),
+                    position.ToXna(),
                     rect.ToXna(),
                     color.ToXna(),
                     rotation,
-                    origin.ToXnaVector(),
-                    scale.ToXnaVector(),
+                    origin.ToXna(),
+                    scale.ToXna(),
                     SpriteEffects.None,
                     0);
         }
@@ -84,13 +84,13 @@ namespace KenneyAsteroids.Engine.MonoGame
         public void DrawString(Font font, string text, Vector2 position, Color color)
         {
             var spriteFont = _content.Load<SpriteFont>(font.Id);
-            _batch.DrawString(spriteFont, text, position.ToXnaVector(), color.ToXna());
+            _batch.DrawString(spriteFont, text, position.ToXna(), color.ToXna());
         }
         
         public void DrawString(Font font, string text, Vector2 position, Color color, float rotation, Vector2 origin, float scale)
         {
             var spriteFont = _content.Load<SpriteFont>(font.Id);
-            _batch.DrawString(spriteFont, text, position.ToXnaVector(), color.ToXna(), rotation, origin.ToXnaVector(), scale, SpriteEffects.None, 0);
+            _batch.DrawString(spriteFont, text, position.ToXna(), color.ToXna(), rotation, origin.ToXna(), scale, SpriteEffects.None, 0);
         }
 
         public Size MeasureText(string text, Font font)
