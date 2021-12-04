@@ -26,10 +26,10 @@ namespace KenneyAsteroids.Engine.MonoGame
             MediaPlayer.MediaStateChanged += OnStateChanged;
         }
 
-        public void Play(Sound sound)
+        public void Play(Sound sound, float pitch = 0.0f)
         {
             var sfx = _content.Load<SoundEffect>(sound.Id);
-            sfx.Play(_settings.CurrentValue.SfxVolume, 0.0f, 0.0f);
+            sfx.Play(_settings.CurrentValue.SfxVolume, pitch, 0.0f);
         }
 
         public void Play(Music music)

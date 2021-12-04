@@ -20,6 +20,7 @@ namespace KenneyAsteroids.Core.Entities
         private readonly IProjectileFactory _factory;
         private readonly IEventPublisher _eventService;
         private readonly IAudioPlayer _player;
+        private readonly Random _random;
 
         private readonly Sound _lazer;
 
@@ -43,6 +44,7 @@ namespace KenneyAsteroids.Core.Entities
             _lazer = lazer;
 
             _state = State.Idle;
+            _random = new Random();
 
             Id = Guid.NewGuid();
         }
@@ -81,7 +83,9 @@ namespace KenneyAsteroids.Core.Entities
                 var projectile = _factory.Create(position, direction);
 
                 _eventService.Publish(new EntityCreatedEvent(projectile));
-                _player.Play(_lazer);
+
+                var pitch = _random.Next(-50, 50) / 100.0f;
+                _player.Play(_lazer, pitch);
             }
         }
 
