@@ -9,9 +9,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
 
-using XMatrix = Microsoft.Xna.Framework.Matrix;
-using XVector = Microsoft.Xna.Framework.Vector2;
-
 namespace KenneyAsteroids.Core.Entities
 {
     public sealed class Ship : IEntity<Guid>, IUpdatable, IDrawable, IBody
@@ -315,11 +312,7 @@ namespace KenneyAsteroids.Core.Entities
                 _power = Math.Clamp(_power, 0, 1);
             }
 
-            var xnaOffset = new XVector(_offset.X, _offset.Y);
-            var xnaParentPos = new XVector(parentPosition.X, parentPosition.Y);
-            var xnaPosition = xnaOffset.Transform(XMatrix.CreateRotationZ(parentRotation)) + xnaParentPos;
-
-            _position = new Vector2(xnaPosition.X, xnaPosition.Y);
+            _position = Matrix2.CreateRotation(parentRotation) * _offset + parentPosition;
             _rotation = parentRotation;
         }
 

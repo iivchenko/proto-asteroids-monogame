@@ -8,9 +8,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
 
-using XMatrix = Microsoft.Xna.Framework.Matrix;
-using XVector = Microsoft.Xna.Framework.Vector2;
-
 namespace KenneyAsteroids.Core.Entities
 {
     public sealed class Weapon : IEntity<Guid>, IUpdatable
@@ -75,10 +72,7 @@ namespace KenneyAsteroids.Core.Entities
             {
                 _state = State.Reload;
                 _reloading = _reload.TotalSeconds;
-                var xnaOffset = new XVector(_offset.X, _offset.Y);
-                var xnaParentPos = new XVector(parentPosition.X, parentPosition.Y);
-                var xnaPosition = xnaOffset.Transform(XMatrix.CreateRotationZ(parentRotation)) + xnaParentPos;
-                var position = new Vector2(xnaPosition.X, xnaPosition.Y);
+                var position = Matrix2.CreateRotation(parentRotation) * _offset + parentPosition;
                 var direction = parentRotation.ToDirection();
                 var projectile = _factory.Create(position, direction);
 
