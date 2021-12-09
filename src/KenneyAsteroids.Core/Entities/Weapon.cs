@@ -2,6 +2,7 @@
 using KenneyAsteroids.Engine;
 using KenneyAsteroids.Engine.Audio;
 using KenneyAsteroids.Engine.Entities;
+using KenneyAsteroids.Engine.Graphics;
 using KenneyAsteroids.Engine.Rules;
 using System;
 using System.Collections.Generic;
@@ -19,6 +20,7 @@ namespace KenneyAsteroids.Core.Entities
         private readonly IAudioPlayer _player;
         private readonly Random _random;
 
+        private readonly Sprite _lazerSprite;
         private readonly Sound _lazer;
 
         private State _state;
@@ -30,6 +32,7 @@ namespace KenneyAsteroids.Core.Entities
             IProjectileFactory factory,
             IEventPublisher eventService,
             IAudioPlayer player,
+            Sprite lazerSprite,
             Sound lazer)
         {
             _offset = offset;
@@ -38,6 +41,7 @@ namespace KenneyAsteroids.Core.Entities
             _eventService = eventService;
             _player = player;
 
+            _lazerSprite = lazerSprite;
             _lazer = lazer;
 
             _state = State.Idle;
@@ -74,7 +78,7 @@ namespace KenneyAsteroids.Core.Entities
                 _reloading = _reload.TotalSeconds;
                 var position = Matrix2.CreateRotation(parentRotation) * _offset + parentPosition;
                 var direction = parentRotation.ToDirection();
-                var projectile = _factory.Create(position, direction);
+                var projectile = _factory.Create(position, direction, _lazerSprite);
 
                 _eventService.Publish(new EntityCreatedEvent(projectile));
 

@@ -38,6 +38,8 @@ namespace KenneyAsteroids.Core.Entities
         private readonly IPainter _draw;
         private readonly IAudioPlayer _player;
 
+        private readonly Random _random;
+
         public EntityFactory(
             IContentProvider content,
             IProjectileFactory projectileFactory,
@@ -52,6 +54,8 @@ namespace KenneyAsteroids.Core.Entities
             _publisher = eventService;
             _draw = draw;
             _player = player;
+
+            _random = new Random();
         }
 
         public Ship CreateShip(Vector2 position)
@@ -60,13 +64,29 @@ namespace KenneyAsteroids.Core.Entities
             const float Acceleration = 10.0f;
             const float MaxRotation = 180.0f;
 
-            var sprite = _spriteSheet["playerShip1_blue"];
-            var trailSprite = _spriteSheet["fire08"];
+            var shipSpriteName = new[]
+                {
+                    "playerShip1_blue", "playerShip1_orange", "playerShip1_red", "playerShip1_green",
+                    "playerShip2_blue", "playerShip2_orange", "playerShip2_red", "playerShip2_green",
+                    "playerShip3_blue", "playerShip3_orange", "playerShip3_red", "playerShip3_green"
+                }.RandomPick();
+
+            var trailSpriteName = $"fire{_random.Next(0, 20):D2}";
+            var lazerSpriteName = new[]
+            {
+                "laserBlue01", "laserBlue02", "laserBlue03", "laserBlue04", "laserBlue05", "laserBlue06", "laserBlue07", "laserBlue12", "laserBlue13", "laserBlue14", "laserBlue15", "laserBlue16",
+                "laserGreen02", "laserGreen03", "laserGreen04", "laserGreen05", "laserGreen06", "laserGreen07", "laserGreen08", "laserGreen09", "laserGreen10", "laserGreen11", "laserGreen12", "laserGreen13",   
+                "laserRed01", "laserRed02", "laserRed03", "laserRed04", "laserRed05", "laserRed06", "laserRed07", "laserRed12", "laserRed13", "laserRed14", "laserRed15", "laserRed16"
+            }.RandomPick();
+
+            var sprite = _spriteSheet[shipSpriteName];
+            var trailSprite = _spriteSheet[trailSpriteName];
+            var lazerSprite = _spriteSheet[lazerSpriteName];
             var debri = new[] { _spriteSheet["scratch1"], _spriteSheet["scratch2"], _spriteSheet["scratch3"] };
             var reload = TimeSpan.FromMilliseconds(500);
-            var weapon = new Weapon(new Vector2(0, -sprite.Width / 2), reload, _projectileFactory, _publisher, _player, _lazer);
-            var trails = new[] 
-            { 
+            var weapon = new Weapon(new Vector2(0, -sprite.Width / 2), reload, _projectileFactory, _publisher, _player, lazerSprite, _lazer);
+            var trails = new[]
+            {
                 new ShipTrail(trailSprite, new Vector2(-35, 28), new Vector2(trailSprite.Width / 2, 0), _draw),
                 new ShipTrail(trailSprite, new Vector2(35, 28), new Vector2(trailSprite.Width / 2, 0), _draw)
             };
@@ -78,7 +98,6 @@ namespace KenneyAsteroids.Core.Entities
         }
         public Asteroid CreateAsteroid(AsteroidType type, Vector2 position, float direction)
         {
-            var random = new Random();
             String spriteName;
             Sprite sprite;
             int speedX;
@@ -90,7 +109,7 @@ namespace KenneyAsteroids.Core.Entities
             switch (type)
             {
                 case AsteroidType.Tiny:
-                    spriteName = new[] 
+                    spriteName = new[]
                     {
                         "meteorBrown_tiny1",
                         "meteorBrown_tiny2",
@@ -99,9 +118,9 @@ namespace KenneyAsteroids.Core.Entities
                     }.RandomPick();
                     sprite = _spriteSheet[spriteName];
                     scale = 3;
-                    speedX = random.Next(TinyAsteroidMinSpeed, TinyAsteroidMaxSpeed);
-                    speedY = random.Next(TinyAsteroidMinSpeed, TinyAsteroidMaxSpeed);
-                    rotationSpeed = random.Next(TinyAsteroidMinRotationSpeed, TinyAsteroidMaxRotationSpeed).AsRadians() * random.NextDouble() > 0.5 ? 1 : -1;
+                    speedX = _random.Next(TinyAsteroidMinSpeed, TinyAsteroidMaxSpeed);
+                    speedY = _random.Next(TinyAsteroidMinSpeed, TinyAsteroidMaxSpeed);
+                    rotationSpeed = _random.Next(TinyAsteroidMinRotationSpeed, TinyAsteroidMaxRotationSpeed).AsRadians() * _random.NextDouble() > 0.5 ? 1 : -1;
                     velocity = direction.ToDirection() * new Vector2(speedX, speedY);
                     break;
 
@@ -116,9 +135,9 @@ namespace KenneyAsteroids.Core.Entities
 
                     sprite = _spriteSheet[spriteName];
                     scale = 2.2f;
-                    speedX = random.Next(SmallAsteroidMinSpeed, SmallAsteroidMaxSpeed);
-                    speedY = random.Next(SmallAsteroidMinSpeed, SmallAsteroidMaxSpeed);
-                    rotationSpeed = random.Next(SmallAsteroidMinRotationSpeed, SmallAsteroidMaxRotationSpeed).AsRadians() * random.NextDouble() > 0.5 ? 1 : -1;
+                    speedX = _random.Next(SmallAsteroidMinSpeed, SmallAsteroidMaxSpeed);
+                    speedY = _random.Next(SmallAsteroidMinSpeed, SmallAsteroidMaxSpeed);
+                    rotationSpeed = _random.Next(SmallAsteroidMinRotationSpeed, SmallAsteroidMaxRotationSpeed).AsRadians() * _random.NextDouble() > 0.5 ? 1 : -1;
                     velocity = direction.ToDirection() * new Vector2(speedX, speedY);
                     break;
 
@@ -133,9 +152,9 @@ namespace KenneyAsteroids.Core.Entities
 
                     sprite = _spriteSheet[spriteName];
                     scale = 1.7f;
-                    speedX = random.Next(MediumAsteroidMinSpeed, MediumAsteroidMaxSpeed);
-                    speedY = random.Next(MediumAsteroidMinSpeed, MediumAsteroidMaxSpeed);
-                    rotationSpeed = random.Next(MediumAsteroidMinRotationSpeed, MediumAsteroidMaxRotationSpeed).AsRadians() * random.NextDouble() > 0.5 ? 1 : -1;
+                    speedX = _random.Next(MediumAsteroidMinSpeed, MediumAsteroidMaxSpeed);
+                    speedY = _random.Next(MediumAsteroidMinSpeed, MediumAsteroidMaxSpeed);
+                    rotationSpeed = _random.Next(MediumAsteroidMinRotationSpeed, MediumAsteroidMaxRotationSpeed).AsRadians() * _random.NextDouble() > 0.5 ? 1 : -1;
                     velocity = direction.ToDirection() * new Vector2(speedX, speedY);
                     break;
 
@@ -154,9 +173,9 @@ namespace KenneyAsteroids.Core.Entities
 
                     sprite = _spriteSheet[spriteName];
                     scale = 1;
-                    speedX = random.Next(BigAsteroidMinSpeed, BigAsteroidMaxSpeed);
-                    speedY = random.Next(BigAsteroidMinSpeed, BigAsteroidMaxSpeed);
-                    rotationSpeed = random.Next(BigAsteroidMinRotationSpeed, BigAsteroidMaxRotationSpeed).AsRadians() * random.NextDouble() > 0.5 ? 1 : -1;
+                    speedX = _random.Next(BigAsteroidMinSpeed, BigAsteroidMaxSpeed);
+                    speedY = _random.Next(BigAsteroidMinSpeed, BigAsteroidMaxSpeed);
+                    rotationSpeed = _random.Next(BigAsteroidMinRotationSpeed, BigAsteroidMaxRotationSpeed).AsRadians() * _random.NextDouble() > 0.5 ? 1 : -1;
                     velocity = direction.ToDirection() * new Vector2(speedX, speedY);
                     break;
                 default:
