@@ -1,4 +1,5 @@
 ﻿using KenneyAsteroids.Core.Entities;
+using KenneyAsteroids.Core.Events;
 using KenneyAsteroids.Engine.Entities;
 using KenneyAsteroids.Engine.Graphics;
 using KenneyAsteroids.Engine.Rules;
@@ -8,6 +9,26 @@ namespace KenneyAsteroids.Core.Screens.GamePlay.Rules
 {
     public static class EntitiesRules
     {
+        public static class WhenEntityIsCreated
+        {
+            public sealed class ThenAddItToTheWorld : IRule<EntityCreatedEvent>
+            {
+                private readonly IWorld _world;
+
+                public ThenAddItToTheWorld(IWorld world)
+                {
+                    _world = world;
+                }
+
+                public bool ExecuteCondition(EntityCreatedEvent @event) => true;
+
+                public void ExecuteAction(EntityCreatedEvent @event)
+                {
+                    _world.Add(@event.Entity);
+                }
+            }
+        }
+       
         public static class WhenAsteoidDestroyed
         {
             public sealed class ThenRemoveAsteroid : IRule<AsteroidDestroyedEvent>
