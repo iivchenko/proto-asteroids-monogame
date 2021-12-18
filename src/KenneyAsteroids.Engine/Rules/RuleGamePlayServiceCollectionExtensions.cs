@@ -13,7 +13,7 @@ namespace Microsoft.Extensions.DependencyInjection
         {
             services.TryAddSingleton<ServiceFactory>(x => x.GetServices);
             services.TryAddSingleton<RuleGamePlaySystem>(x => new RuleGamePlaySystem(x.GetRequiredService<ServiceFactory>(), priority));
-            services.TryAdd(new ServiceDescriptor(typeof(IGamePlaySystem), x => x.GetService<RuleGamePlaySystem>(), ServiceLifetime.Singleton));
+            services.Add(new ServiceDescriptor(typeof(IGamePlaySystem), x => x.GetService<RuleGamePlaySystem>(), ServiceLifetime.Singleton));
             services.TryAdd(new ServiceDescriptor(typeof(IEventPublisher), x => x.GetService<RuleGamePlaySystem>(), ServiceLifetime.Singleton));                      
 
             assembliesToScan

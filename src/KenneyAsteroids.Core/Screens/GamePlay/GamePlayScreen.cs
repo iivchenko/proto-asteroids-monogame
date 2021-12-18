@@ -144,11 +144,6 @@ namespace KenneyAsteroids.Core.Screens.GamePlay
                     }
                 }
 
-                // TODO: Make this rules
-                bodies
-                    .Where(IsOutOfScreen)
-                    .Iter(HandleOutOfScreenBodies);
-
                 _systems.Iter(system => system.Update(time));
 
                 _entities.Commit();
@@ -162,49 +157,6 @@ namespace KenneyAsteroids.Core.Screens.GamePlay
             var time = (float)gameTime.ElapsedGameTime.TotalSeconds;
 
             _entities.Where(x => x is IDrawable).Cast<IDrawable>().Iter(x => x.Draw(time));
-        }
-
-        private bool IsOutOfScreen(IBody entity)
-        {
-            return
-                entity.Position.X + entity.Width / 2.0 < 0 ||
-                entity.Position.X - entity.Width / 2.0 > _viewport.Width ||
-                entity.Position.Y + entity.Height / 2.0 < 0 ||
-                entity.Position.Y - entity.Height / 2.0 > _viewport.Height;
-        }
-
-        private void HandleOutOfScreenBodies(IBody body)
-        {
-            switch (body)
-            {
-                case Projectile projectile:
-                    _entities.Remove(projectile);
-                    break;
-                default:
-                    var x = body.Position.X;
-                    var y = body.Position.Y;
-
-                    if (body.Position.X + body.Width / 2.0f < 0)
-                    {
-                        x = _viewport.Width + body.Width / 2.0f;
-                    }
-                    else if (body.Position.X - body.Width / 2.0f > _viewport.Width)
-                    {
-                        x = 0 - body.Width / 2.0f;
-                    }
-
-                    if (body.Position.Y + body.Height / 2.0f < 0)
-                    {
-                        y = _viewport.Height + body.Height / 2.0f;
-                    }
-                    else if (body.Position.Y - body.Height / 2.0f > _viewport.Height)
-                    {
-                        y = 0 - body.Height / 2.0f;
-                    }
-
-                    body.Position = new Vector2(x, y);
-                    break;
-            }
         }
     }
 }
