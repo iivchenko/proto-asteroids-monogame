@@ -12,16 +12,16 @@ namespace KenneyAsteroids.Core.Screens.GamePlay.Rules
         {
             public sealed class ThenRemoveAsteroid : IRule<AsteroidDestroyedEvent>
             {
-                private readonly IEntitySystem _entities;
+                private readonly IWorld _world;
 
-                public ThenRemoveAsteroid(IEntitySystem entities)
+                public ThenRemoveAsteroid(IWorld world)
                 {
-                    _entities = entities;
+                    _world = world;
                 }
 
                 public bool ExecuteCondition(AsteroidDestroyedEvent @event) => true;
 
-                public void ExecuteAction(AsteroidDestroyedEvent @event) => _entities.Remove(@event.Asteroid);
+                public void ExecuteAction(AsteroidDestroyedEvent @event) => _world.Remove(@event.Asteroid);
             }
         }
 

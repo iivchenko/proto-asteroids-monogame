@@ -13,14 +13,14 @@ namespace KenneyAsteroids.Core.Screens.GamePlay.Rules
     {
         public abstract class WhenAsteroidCollidesPlayerShip : IRule<GamePlayEntitiesCollideEvent<Ship, Asteroid>>
         {
-            protected WhenAsteroidCollidesPlayerShip(IEntitySystem entities)
+            protected WhenAsteroidCollidesPlayerShip(IWorld world)
             {
-                Entities = entities;
+                World = world;
             }
 
-            protected IEntitySystem Entities { get; }
+            protected IWorld World { get; }
 
-            protected GamePlayHud GetHud() => Entities.First(x => x is GamePlayHud) as GamePlayHud;
+            protected GamePlayHud GetHud() => World.First(x => x is GamePlayHud) as GamePlayHud;
 
             public virtual bool ExecuteCondition(GamePlayEntitiesCollideEvent<Ship, Asteroid> @event)
                 => @event.Body1.State == ShipState.Alive && @event.Body2.State == AsteroidState.Alive;
@@ -29,8 +29,8 @@ namespace KenneyAsteroids.Core.Screens.GamePlay.Rules
 
             public sealed class ThenDestroyAsteroid : WhenAsteroidCollidesPlayerShip
             {
-                public ThenDestroyAsteroid(IEntitySystem entities) 
-                    : base(entities)
+                public ThenDestroyAsteroid(IWorld world) 
+                    : base(world)
                 {
                 }
 
@@ -39,8 +39,8 @@ namespace KenneyAsteroids.Core.Screens.GamePlay.Rules
 
             public abstract class AndPlayerShipHasEnoughLifes : WhenAsteroidCollidesPlayerShip
             {
-                protected AndPlayerShipHasEnoughLifes(IEntitySystem entities)
-                    : base(entities)
+                protected AndPlayerShipHasEnoughLifes(IWorld world)
+                    : base(world)
                 {
                 }
 
@@ -49,8 +49,8 @@ namespace KenneyAsteroids.Core.Screens.GamePlay.Rules
 
                 public sealed class ThenReduceLifes : AndPlayerShipHasEnoughLifes
                 {
-                    public ThenReduceLifes(IEntitySystem entities)
-                        : base (entities)
+                    public ThenReduceLifes(IWorld world)
+                        : base (world)
                     {
                     }
 
@@ -59,8 +59,8 @@ namespace KenneyAsteroids.Core.Screens.GamePlay.Rules
 
                 public sealed class ThenDestroyPlayersShip : AndPlayerShipHasEnoughLifes
                 {
-                    public ThenDestroyPlayersShip(IEntitySystem entities)
-                        : base(entities)
+                    public ThenDestroyPlayersShip(IWorld world)
+                        : base(world)
                     {
                     }
 
@@ -70,8 +70,8 @@ namespace KenneyAsteroids.Core.Screens.GamePlay.Rules
 
             public abstract class OrPlayerShipDoesntHaveEnoughLifes : WhenAsteroidCollidesPlayerShip
             {
-                protected OrPlayerShipDoesntHaveEnoughLifes(IEntitySystem entities) 
-                    : base(entities)
+                protected OrPlayerShipDoesntHaveEnoughLifes(IWorld world) 
+                    : base(world)
                 {
                 }
 
@@ -80,12 +80,12 @@ namespace KenneyAsteroids.Core.Screens.GamePlay.Rules
 
                 public sealed class ThenRemovePlayersShipFromTheGame : OrPlayerShipDoesntHaveEnoughLifes
                 {
-                    public ThenRemovePlayersShipFromTheGame(IEntitySystem entities)
-                        : base(entities)
+                    public ThenRemovePlayersShipFromTheGame(IWorld world)
+                        : base(world)
                     {
                     }
 
-                    public override void ExecuteAction(GamePlayEntitiesCollideEvent<Ship, Asteroid> @event) => Entities.Remove(@event.Body1);
+                    public override void ExecuteAction(GamePlayEntitiesCollideEvent<Ship, Asteroid> @event) => World.Remove(@event.Body1);
                 }
 
                 public sealed class ThenGameOver : OrPlayerShipDoesntHaveEnoughLifes
@@ -93,9 +93,9 @@ namespace KenneyAsteroids.Core.Screens.GamePlay.Rules
                     private readonly LeaderboardsManager _leaderBoard;
 
                     public ThenGameOver(
-                        IEntitySystem entities,
+                        IWorld world,
                         LeaderboardsManager leaderBoard)
-                        : base(entities)
+                        : base(world)
                     {
                         _leaderBoard = leaderBoard;
                     }
@@ -151,12 +151,12 @@ namespace KenneyAsteroids.Core.Screens.GamePlay.Rules
 
                 public sealed class ThenScore: AndAsteroidIsAlive
                 {
-                    private readonly IEntitySystem _entities;
+                    private readonly IWorld _world;
                     private readonly GamePlayScoreManager _scores;
 
-                    public ThenScore(IEntitySystem entities)
+                    public ThenScore(IWorld world)
                     {
-                        _entities = entities;
+                        _world = world;
                         _scores = new GamePlayScoreManager();
                     }
 
@@ -165,23 +165,23 @@ namespace KenneyAsteroids.Core.Screens.GamePlay.Rules
                         GetHud().Scores += _scores.GetScore(@event.Body2);
                     }
 
-                    private GamePlayHud GetHud() => _entities.First(x => x is GamePlayHud) as GamePlayHud;
+                    private GamePlayHud GetHud() => _world.First(x => x is GamePlayHud) as GamePlayHud;
 
                 }
 
                 public sealed class ThenRemoveProjectile : AndAsteroidIsAlive
                 {
-                    private readonly IEntitySystem _entities;
+                    private readonly IWorld _world;
 
                     public ThenRemoveProjectile(
-                       IEntitySystem entities)
+                       IWorld world)
                     {
-                        _entities = entities;
+                        _world = world;
                     }
 
                     public override void ExecuteAction(GamePlayEntitiesCollideEvent<Projectile, Asteroid> @event)
                     {
-                        _entities.Remove(@event.Body1);
+                        _world.Remove(@event.Body1);
                     }
                 }
 
@@ -200,14 +200,14 @@ namespace KenneyAsteroids.Core.Screens.GamePlay.Rules
 
                     public sealed class TheFallAsteroidAppart : AndAsteroidIsBig
                     {
-                        private readonly IEntitySystem _entities;
+                        private readonly IWorld _world;
                         private readonly IEntityFactory _entityFactory;
 
                         public TheFallAsteroidAppart(
-                           IEntitySystem entities,
+                           IWorld world,
                            IEntityFactory entityFactory)
                         {
-                            _entities = entities;
+                            _world = world;
                             _entityFactory = entityFactory;
                         }
 
@@ -221,7 +221,7 @@ namespace KenneyAsteroids.Core.Screens.GamePlay.Rules
                             var med1 = _entityFactory.CreateAsteroid(AsteroidType.Medium, position1, direction1);
                             var med2 = _entityFactory.CreateAsteroid(AsteroidType.Medium, position2, direction2);
 
-                            _entities.Add(med1, med2);
+                            _world.Add(med1, med2);
                         }
                     }
                 }

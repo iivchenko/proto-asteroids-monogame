@@ -41,7 +41,6 @@ namespace KenneyAsteroids.Desktop
                             .Decorate<IRepository<GameSettings>, DefaultInitializerRepositoryDecorator<GameSettings>>()
                             .AddSingleton<IRepository<Collection<LeaderboardItem>>>(_ => new JsonRepository<Collection<LeaderboardItem>>(LeaderBoardsFile))
                             .Decorate<IRepository<Collection<LeaderboardItem>>, DefaultInitializerRepositoryDecorator<Collection<LeaderboardItem>>>()
-                            .AddSingleton<IEntitySystem, EntitySystem>()
                             .AddSingleton<IEntityFactory, EntityFactory>()
                             .AddSingleton<IProjectileFactory, ProjectileFactory>()
                             .AddSingleton<IViewport, Viewport>(_ => new Viewport(0.0f, 0.0f, 3840.0f, 2160.0f))
@@ -50,6 +49,7 @@ namespace KenneyAsteroids.Desktop
                             .AddMonoGameDrawSystem()
                             .AddMonoGameAudioSystem(configuration.GetSection("Audio"))
                             .AddSingleton<IGamePlaySystem, OutOfScreenSystem>()
+                            .AddEntitySystem(10, 50)
                             .AddGameRules(new[] { Assembly.GetAssembly(typeof(Core.Version)) }, 90)
                             .AddSingleton<LeaderboardsManager>();
                     })

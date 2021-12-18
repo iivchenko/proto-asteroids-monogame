@@ -2,11 +2,11 @@
 
 namespace KenneyAsteroids.Engine.Entities
 {
-    public interface IEntitySystem : IEnumerable<IEntity>
+    public interface IWorld : IEnumerable<IEntity>
     {
         void Add(params IEntity[] entities);
         void Remove(params IEntity[] entities);
-
         void Commit();
+        void Free();
     }
 }

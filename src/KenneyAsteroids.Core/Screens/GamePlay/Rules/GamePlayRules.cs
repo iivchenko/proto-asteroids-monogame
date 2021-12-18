@@ -15,17 +15,17 @@ namespace KenneyAsteroids.Core.Screens.GamePlay.Rules
         {
             public sealed class ThenCreateAsteroid : IRule<OnTimerEvent>
             {
-                private readonly IEntitySystem _entities;
+                private readonly IWorld _world;
                 private readonly IViewport _viewport;
                 private readonly IEntityFactory _entityFactory;
                 private readonly Random _random;
 
                 public ThenCreateAsteroid(
-                    IEntitySystem entities,
+                    IWorld world,
                     IViewport viewport,
                     IEntityFactory entityFactory)
                 {
-                    _entities = entities;
+                    _world = world;
                     _viewport = viewport;
                     _entityFactory = entityFactory;
 
@@ -67,20 +67,20 @@ namespace KenneyAsteroids.Core.Screens.GamePlay.Rules
                     var type = new[] { AsteroidType.Tiny, AsteroidType.Small, AsteroidType.Medium, AsteroidType.Big }.RandomPick();
                     var asteroid = _entityFactory.CreateAsteroid(type, position, direction);
 
-                    _entities.Add(asteroid);
+                    _world.Add(asteroid);
                 }
             }
 
             public sealed class ThenDecreaseAsteroidTimeout : IRule<OnTimerEvent>
             {
-                private readonly IEntitySystem _entities;
+                private readonly IWorld _world;
                 private readonly IEventPublisher _publisher;
 
                 public ThenDecreaseAsteroidTimeout(
-                    IEntitySystem entities,
+                    IWorld world,
                     IEventPublisher publisher)
                 {
-                    _entities = entities;
+                    _world = world;
                     _publisher = publisher;
                 }
 
@@ -88,34 +88,34 @@ namespace KenneyAsteroids.Core.Screens.GamePlay.Rules
 
                 public void ExecuteAction(OnTimerEvent @event)
                 {
-                    var timer = _entities.First(timer => timer.Tags.Contains(GameTags.NextAsteroid)) as Timer;                    
+                    var timer = _world.First(timer => timer.Tags.Contains(GameTags.NextAsteroid)) as Timer;                    
 
                     if (timer.Timeout.TotalSeconds > 0.3)
                     {
-                        _entities.Remove(timer);
+                        _world.Remove(timer);
                         var newTimer = new Timer(TimeSpan.FromSeconds(timer.Timeout.TotalSeconds - 0.2), GameTags.NextAsteroid, _publisher);
 
-                        _entities.Add(newTimer);
+                        _world.Add(newTimer);
                     }
                     else
                     {
-                        _entities.Remove(@event.Timer);
+                        _world.Remove(@event.Timer);
                     }
                 }
             }
 
             public sealed class ThenCreateHazardousSituation : IRule<OnTimerEvent>
             {
-                private readonly IEntitySystem _entities;
+                private readonly IWorld _world;
                 private readonly IViewport _viewport;
                 private readonly IEntityFactory _entityFactory;
 
                 public ThenCreateHazardousSituation(
-                    IEntitySystem entities,
+                    IWorld world,
                     IViewport viewport,
                     IEntityFactory entityFactory)
                 {
-                    _entities = entities;
+                    _world = world;
                     _viewport = viewport;
                     _entityFactory = entityFactory;
                 }
@@ -124,9 +124,9 @@ namespace KenneyAsteroids.Core.Screens.GamePlay.Rules
 
                 public void ExecuteAction(OnTimerEvent @event)
                 {
-                    var player  = _entities.First(entity => entity is Ship) as Ship;
+                    var player  = _world.First(entity => entity is Ship) as Ship;
                     var target = player.Position;
-                    _entities.Add(
+                    _world.Add(
                         Create(new Vector2(_viewport.Width / 2, 0), target),
                         Create(new Vector2(_viewport.Width, _viewport.Height / 2), target),
                         Create(new Vector2(_viewport.Width / 2, _viewport.Height), target),

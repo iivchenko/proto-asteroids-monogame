@@ -4,12 +4,12 @@ using System.Linq;
 
 namespace KenneyAsteroids.Engine.Entities
 {
-    public sealed class EntitySystem : IEntitySystem
+    public sealed class World : IWorld
     {
         private readonly List<IEntity> _entities;
         private readonly List<Modification> _modifications;
 
-        public EntitySystem()
+        public World()
         {
             _entities = new List<IEntity>();
             _modifications = new List<Modification>();
@@ -29,6 +29,22 @@ namespace KenneyAsteroids.Engine.Entities
                 .Iter(_modifications.Add);
         }
 
+        public void Free()
+        {
+            _entities.Clear();
+            _modifications.Clear();
+        }
+
+        public IEnumerator<IEntity> GetEnumerator()
+        {
+            return _entities.GetEnumerator();
+        }
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return _entities.GetEnumerator();
+        }
+
         public void Commit()
         {
             _modifications.Iter(x =>
@@ -46,16 +62,6 @@ namespace KenneyAsteroids.Engine.Entities
             });
 
             _modifications.Clear();
-        }
-
-        public IEnumerator<IEntity> GetEnumerator()
-        {
-            return _entities.GetEnumerator();
-        }
-
-        IEnumerator IEnumerable.GetEnumerator()
-        {
-            return _entities.GetEnumerator();
         }
 
         private enum ModificationType

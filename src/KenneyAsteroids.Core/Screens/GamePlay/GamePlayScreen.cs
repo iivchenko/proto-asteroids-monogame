@@ -23,7 +23,7 @@ namespace KenneyAsteroids.Core.Screens.GamePlay
     public sealed class GamePlayScreen : GameScreen
     {
         private List<IGamePlaySystem> _systems;
-        private IEntitySystem _entities;
+        private IWorld _world;
         private ICollisionSystem _collisions;
         private IViewport _viewport;
         private IEventPublisher _publisher;
@@ -37,7 +37,7 @@ namespace KenneyAsteroids.Core.Screens.GamePlay
             var container = ScreenManager.Container;
 
             _systems = container.GetServices<IGamePlaySystem>().OrderByDescending(x => x.Priority).ToList();
-            _entities = container.GetService<IEntitySystem>();
+            _world = container.GetService<IWorld>();
             _viewport = container.GetService<IViewport>();
             _publisher = container.GetService<IEventPublisher>();
             _musicPlayer = container.GetService<IMusicPlayer>();
@@ -61,7 +61,7 @@ namespace KenneyAsteroids.Core.Screens.GamePlay
                 container.GetService<IFontService>()
             );
 
-            _entities.Add
+            _world.Add
             (
                 ship,
                 hud,
@@ -82,8 +82,7 @@ namespace KenneyAsteroids.Core.Screens.GamePlay
         public override void Free()
         {
             _musicPlayer.Stop();
-            _entities.Remove(_entities.ToArray());
-            _entities.Commit();
+            _world.Free();
 
             base.Free();
         }
@@ -115,12 +114,9 @@ namespace KenneyAsteroids.Core.Screens.GamePlay
 
             if (!otherScreenHasFocus)
             {
-                _entities
-                    .Where(x => x is IUpdatable)
-                    .Cast<IUpdatable>()
-                    .Iter(x => x.Update(time));
+                _systems.Iter(system => system.Update(time));
 
-                var bodies = _entities.Where(x => x is IBody).Cast<IBody>();
+                var bodies = _world.Where(x => x is IBody).Cast<IBody>();
 
                 // Move Collision eventing into collision system
                 foreach (var collision in _collisions.EvaluateCollisions(bodies))
@@ -144,10 +140,6 @@ namespace KenneyAsteroids.Core.Screens.GamePlay
                             break;
                     }
                 }
-
-                _systems.Iter(system => system.Update(time));
-
-                _entities.Commit();
             }
         }
 
@@ -157,7 +149,7 @@ namespace KenneyAsteroids.Core.Screens.GamePlay
 
             var time = (float)gameTime.ElapsedGameTime.TotalSeconds;
 
-            _entities.Where(x => x is IDrawable).Cast<IDrawable>().Iter(x => x.Draw(time));
+            _world.Where(x => x is IDrawable).Cast<IDrawable>().Iter(x => x.Draw(time));
         }
     }
 }

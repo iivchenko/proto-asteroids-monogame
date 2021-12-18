@@ -6,18 +6,18 @@ namespace KenneyAsteroids.Core.Screens.GamePlay
 {
     public sealed class GamePlayEntityCreatedEventHandler : IRule<EntityCreatedEvent>
     {
-        private readonly IEntitySystem _entities;
+        private readonly IWorld _world;
 
-        public GamePlayEntityCreatedEventHandler(IEntitySystem entities)
+        public GamePlayEntityCreatedEventHandler(IWorld world)
         {
-            _entities = entities;
+            _world = world;
         }
 
         public bool ExecuteCondition(EntityCreatedEvent @event) => true;
 
         public void ExecuteAction(EntityCreatedEvent @event)
         {
-            _entities.Add(@event.Entity);
+            _world.Add(@event.Entity);
         }
     }
 }

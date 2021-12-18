@@ -10,12 +10,12 @@ namespace KenneyAsteroids.Core.Screens.GamePlay.Systems
 {
     public sealed class OutOfScreenSystem : IGamePlaySystem
     {
-        private readonly IEntitySystem _entities;
+        private readonly IWorld _world;
         private readonly IViewport _viewport;
 
-        public OutOfScreenSystem(IEntitySystem entities, IViewport viewport)
+        public OutOfScreenSystem(IWorld world, IViewport viewport)
         {
-            _entities = entities;
+            _world = world;
             _viewport = viewport;
         }
 
@@ -23,7 +23,7 @@ namespace KenneyAsteroids.Core.Screens.GamePlay.Systems
 
         public void Update(float time)
         {
-            _entities
+            _world
                 .Where(x => x is IBody).Cast<IBody>()
                 .Where(IsOutOfScreen)
                 .Iter(HandleOutOfScreenBodies);
@@ -43,7 +43,7 @@ namespace KenneyAsteroids.Core.Screens.GamePlay.Systems
             switch (body)
             {
                 case Projectile projectile:
-                    _entities.Remove(projectile);
+                    _world.Remove(projectile);
                     break;
                 default:
                     var x = body.Position.X;
