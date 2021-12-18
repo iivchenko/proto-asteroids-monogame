@@ -60,9 +60,10 @@ namespace KenneyAsteroids.Core.Entities
 
         public Ship CreateShip(Vector2 position)
         {
-            const float MaxSpeed = 400.0f;
-            const float Acceleration = 10.0f;
-            const float MaxRotation = 180.0f;
+            const float MaxSpeed = 600.0f;
+            const float Acceleration = 20.0f;
+            const float MaxRotation = 290.0f;
+            const float MaxAngularAcceleration = 30.0f;
 
             var shipSpriteName = new[]
                 {
@@ -91,7 +92,7 @@ namespace KenneyAsteroids.Core.Entities
                 new ShipTrail(trailSprite, new Vector2(35, 28), new Vector2(trailSprite.Width / 2, 0), _draw)
             };
 
-            return new Ship(_draw, _publisher, sprite, debri, weapon, trails, MaxSpeed, Acceleration, MaxRotation.AsRadians())
+            return new Ship(_draw, _publisher, sprite, debri, weapon, trails, MaxSpeed, Acceleration, MaxRotation.AsRadians(), MaxAngularAcceleration.AsRadians())
             {
                 Position = position
             };

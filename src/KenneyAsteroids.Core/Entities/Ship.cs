@@ -19,11 +19,14 @@ namespace KenneyAsteroids.Core.Entities
         private readonly Sprite[] _debri;
         private readonly Weapon _weapon;
         private readonly ShipTrail[] _trails;
+
         private readonly float _maxSpeed;
         private readonly float _maxAcceleration;
         private readonly float _maxRotation;
+        private readonly float _maxAngularAcceleration;
 
         private Vector2 _velocity;
+        private float _angularVelocity;
         private ShipAction _action;
         private IState _state;
 
@@ -36,7 +39,8 @@ namespace KenneyAsteroids.Core.Entities
             ShipTrail[] trails,
             float maxSpeed,
             float maxAcceleration,
-            float maxRotation)
+            float maxRotation,
+            float maxAngularAcceleration)
         {
             _draw = draw;
             _publisher = publisher;
@@ -47,6 +51,7 @@ namespace KenneyAsteroids.Core.Entities
             _maxSpeed = maxSpeed;
             _maxAcceleration = maxAcceleration;
             _maxRotation = maxRotation;
+            _maxAngularAcceleration = maxAngularAcceleration;
 
             _velocity = Vector2.Zero;
             _action = ShipAction.None;
@@ -145,10 +150,23 @@ namespace KenneyAsteroids.Core.Entities
                 _ship._weapon.Update(time);
 
                 if (_ship._action.HasFlag(ShipAction.Left))
-                    _ship.Rotation -= _ship._maxRotation * time;
+                {
+                    var angularVelocity = _ship._angularVelocity - _ship._maxAngularAcceleration;
+                    _ship._angularVelocity = Math.Abs(angularVelocity) > _ship._maxRotation ? -_ship._maxRotation : angularVelocity;
 
-                if (_ship._action.HasFlag(ShipAction.Right))
-                    _ship.Rotation += _ship._maxRotation * time;
+                    _ship.Rotation += _ship._angularVelocity * time;
+                }
+                else if (_ship._action.HasFlag(ShipAction.Right))
+                {
+                    var angularVelocity = _ship._angularVelocity + _ship._maxAngularAcceleration;
+                    _ship._angularVelocity = Math.Abs(angularVelocity) > _ship._maxRotation ? _ship._maxRotation : angularVelocity;
+
+                    _ship.Rotation += _ship._angularVelocity * time;
+                }
+                else
+                {
+                    _ship._angularVelocity = 0;
+                }
 
                 if (_ship._action.HasFlag(ShipAction.Accelerate))
                 {

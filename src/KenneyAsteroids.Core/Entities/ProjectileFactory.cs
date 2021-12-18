@@ -17,7 +17,7 @@ namespace KenneyAsteroids.Core.Entities
 
         public Projectile Create(Vector2 position, Vector2 direction, Sprite sprite)
         {
-            const float Speed = 800.0f;
+            const float Speed = 1200.0f;
             var rotation = direction.ToRotation();
 
             return new Projectile(_draw, sprite, rotation, Speed)
