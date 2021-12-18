@@ -26,8 +26,8 @@ namespace KenneyAsteroids.Core.Screens.GamePlay
         private IViewport _viewport;
         private IEventPublisher _publisher;
         private IMusicPlayer _musicPlayer;
-
         private IPlayerController _controller;
+        private GamePlayHud _hud;
 
         public override void Initialize()
         {
@@ -43,25 +43,25 @@ namespace KenneyAsteroids.Core.Screens.GamePlay
             var factory = container.GetService<IEntityFactory>();
             var ship = factory.CreateShip(new Vector2(_viewport.Width / 2.0f, _viewport.Height / 2.0f));
             var content = container.GetService<IContentProvider>();
-
+            var context = container.GetService<GamePlayContext>();
             _controller = new PlayerShipKeyboardAndGamePadController(ship);
 
             var timer1 = new Timer(TimeSpan.FromSeconds(3), GameTags.NextAsteroid, _publisher);
             var timer2 = new Timer(TimeSpan.FromSeconds(60), GameTags.NextAsteroidLimitChange, _publisher);
             var timer3 = new Timer(TimeSpan.FromSeconds(45), GameTags.NextHasardSituation, _publisher);
-            var hud = new GamePlayHud
+            _hud = new GamePlayHud
             (
                 container.GetService<IOptionsMonitor<GameSettings>>(),
                 container.GetService<IViewport>(),
                 container.GetService<IPainter>(),
                 container.GetService<IContentProvider>(),
-                container.GetService<IFontService>()
+                container.GetService<IFontService>(),
+                context
             );
 
             _world.Add
             (
                 ship,
-                hud,
                 timer1,
                 timer2,
                 timer3
@@ -73,6 +73,7 @@ namespace KenneyAsteroids.Core.Screens.GamePlay
                     .Where(file => file.Contains("game"))
                     .RandomPick();
 
+            context.Initialize();
             _musicPlayer.Play(content.Load<Music>(file));
         }
 
@@ -122,6 +123,7 @@ namespace KenneyAsteroids.Core.Screens.GamePlay
             var time = (float)gameTime.ElapsedGameTime.TotalSeconds;
 
             _world.Where(x => x is IDrawable).Cast<IDrawable>().Iter(x => x.Draw(time));
+            _hud.Draw(time);
         }
     }
 }

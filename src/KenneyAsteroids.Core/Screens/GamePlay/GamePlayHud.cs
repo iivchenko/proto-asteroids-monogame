@@ -1,16 +1,14 @@
 ﻿using KenneyAsteroids.Engine;
 using KenneyAsteroids.Engine.Content;
-using KenneyAsteroids.Engine.Entities;
 using KenneyAsteroids.Engine.Graphics;
 using Microsoft.Extensions.Options;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Numerics;
 
 namespace KenneyAsteroids.Core.Screens.GamePlay
 {
-    public sealed class GamePlayHud : IEntity, IDrawable
+    public sealed class GamePlayHud
     {
         private readonly IOptionsMonitor<GameSettings> _settings;
 
@@ -18,6 +16,7 @@ namespace KenneyAsteroids.Core.Screens.GamePlay
         private readonly Font _font;
         private readonly IViewport _view;
         private readonly IFontService _fontService;
+        private readonly GamePlayContext _context;
         private readonly IList<Action<float>> _draws;
 
         public GamePlayHud(
@@ -25,7 +24,8 @@ namespace KenneyAsteroids.Core.Screens.GamePlay
             IViewport viewport,
             IPainter painter,
             IContentProvider content,
-            IFontService fontService)
+            IFontService fontService,
+            GamePlayContext context)
         {
             _draws = new List<Action<float>>();
 
@@ -33,6 +33,7 @@ namespace KenneyAsteroids.Core.Screens.GamePlay
             _view = viewport;
             _painter = painter;
             _fontService = fontService;
+            _context = context;
 
             _font = content.Load<Font>("Fonts/kenney-future.h4.font");
 
@@ -42,19 +43,7 @@ namespace KenneyAsteroids.Core.Screens.GamePlay
             {
                 _draws.Add(DrawFrameRate);
             }
-
-            Lifes = 3;
-
-            StartTime = DateTime.Now;
         }
-
-        public IEnumerable<string> Tags => Enumerable.Empty<string>();
-
-        public int Scores { get; set; }
-
-        public int Lifes { get; set; }
-
-        public DateTime StartTime { get; private set; }
 
         public void Draw(float time)
         {
@@ -63,7 +52,7 @@ namespace KenneyAsteroids.Core.Screens.GamePlay
 
         private void DrawLifes(float time)
         {
-            var text = $"HP: {Lifes}\nScores: {Scores}";
+            var text = $"HP: {_context.Lifes}\nScores: {_context.Scores}";
             var position = new Vector2(0, 0); 
 
             _painter.DrawString(_font, text, position, Colors.White);

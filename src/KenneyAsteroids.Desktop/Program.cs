@@ -2,9 +2,9 @@
 using KenneyAsteroids.Core.Entities;
 using KenneyAsteroids.Core.Leaderboards;
 using KenneyAsteroids.Core.Screens;
+using KenneyAsteroids.Core.Screens.GamePlay;
 using KenneyAsteroids.Core.Screens.GamePlay.Systems;
 using KenneyAsteroids.Engine;
-using KenneyAsteroids.Engine.Entities;
 using KenneyAsteroids.Engine.Graphics;
 using KenneyAsteroids.Engine.Storage;
 using Microsoft.Extensions.Configuration;
@@ -52,6 +52,7 @@ namespace KenneyAsteroids.Desktop
                             .AddEntitySystem(10, 50)
                             .AddCollisions(20)
                             .AddGameRules(new[] { Assembly.GetAssembly(typeof(Core.Version)) }, 30)
+                            .AddSingleton<GamePlayContext>()
                             .AddSingleton<LeaderboardsManager>();
                     })
                 .WithConfiguration(config => // TODO: This beast seems become redundant

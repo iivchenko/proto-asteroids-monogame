@@ -14,14 +14,12 @@ namespace KenneyAsteroids.Core.Screens.GamePlay.Rules
     {
         public abstract class WhenAsteroidCollidesPlayerShip : IRule<BodiesCollideEvent> //IRule<GamePlayEntitiesCollideEvent<Ship, Asteroid>>
         {
-            protected WhenAsteroidCollidesPlayerShip(IWorld world)
+            protected WhenAsteroidCollidesPlayerShip(GamePlayContext context)
             {
-                World = world;
+                Context = context;
             }
 
-            protected IWorld World { get; }
-
-            protected GamePlayHud GetHud() => World.First(x => x is GamePlayHud) as GamePlayHud;               
+            protected GamePlayContext Context { get; }
 
             public bool ExecuteCondition(BodiesCollideEvent @event)
             {
@@ -54,8 +52,8 @@ namespace KenneyAsteroids.Core.Screens.GamePlay.Rules
 
             public sealed class ThenDestroyAsteroid : WhenAsteroidCollidesPlayerShip
             {
-                public ThenDestroyAsteroid(IWorld world) 
-                    : base(world)
+                public ThenDestroyAsteroid(GamePlayContext context) 
+                    : base(context)
                 {
                 }
 
@@ -64,28 +62,28 @@ namespace KenneyAsteroids.Core.Screens.GamePlay.Rules
 
             public abstract class AndPlayerShipHasEnoughLifes : WhenAsteroidCollidesPlayerShip
             {
-                protected AndPlayerShipHasEnoughLifes(IWorld world)
-                    : base(world)
+                protected AndPlayerShipHasEnoughLifes(GamePlayContext context)
+                    : base(context)
                 {
                 }
 
                 protected override bool ExecuteConditionInternal(Ship ship, Asteroid asteroid)
-                    => base.ExecuteConditionInternal(ship, asteroid) && GetHud().Lifes > 0;
+                    => base.ExecuteConditionInternal(ship, asteroid) && Context.Lifes > 0;
 
                 public sealed class ThenReduceLifes : AndPlayerShipHasEnoughLifes
                 {
-                    public ThenReduceLifes(IWorld world)
-                        : base (world)
+                    public ThenReduceLifes(GamePlayContext context)
+                        : base(context)
                     {
                     }
 
-                    protected override void ExecuteActionInternal(Ship ship, Asteroid asteroid) => GetHud().Lifes--;
+                    protected override void ExecuteActionInternal(Ship ship, Asteroid asteroid) => Context.Lifes--;
                 }
 
                 public sealed class ThenDestroyPlayersShip : AndPlayerShipHasEnoughLifes
                 {
-                    public ThenDestroyPlayersShip(IWorld world)
-                        : base(world)
+                    public ThenDestroyPlayersShip(GamePlayContext context)
+                        : base(context)
                     {
                     }
 
@@ -95,22 +93,25 @@ namespace KenneyAsteroids.Core.Screens.GamePlay.Rules
 
             public abstract class OrPlayerShipDoesntHaveEnoughLifes : WhenAsteroidCollidesPlayerShip
             {
-                protected OrPlayerShipDoesntHaveEnoughLifes(IWorld world) 
-                    : base(world)
+                protected OrPlayerShipDoesntHaveEnoughLifes(GamePlayContext context) 
+                    : base(context)
                 {
                 }
 
                 protected override bool ExecuteConditionInternal(Ship ship, Asteroid asteroid)
-                   => base.ExecuteConditionInternal(ship, asteroid) && GetHud().Lifes <= 0;
+                   => base.ExecuteConditionInternal(ship, asteroid) && Context.Lifes <= 0;
 
                 public sealed class ThenRemovePlayersShipFromTheGame : OrPlayerShipDoesntHaveEnoughLifes
                 {
-                    public ThenRemovePlayersShipFromTheGame(IWorld world)
-                        : base(world)
+                    private readonly IWorld _world;
+
+                    public ThenRemovePlayersShipFromTheGame(GamePlayContext context, IWorld world)
+                        : base(context)
                     {
+                        _world = world;
                     }
 
-                    protected override void ExecuteActionInternal(Ship ship, Asteroid asteroid) => World.Remove(ship);
+                    protected override void ExecuteActionInternal(Ship ship, Asteroid asteroid) => _world.Remove(ship);
                 }
 
                 public sealed class ThenGameOver : OrPlayerShipDoesntHaveEnoughLifes
@@ -118,24 +119,24 @@ namespace KenneyAsteroids.Core.Screens.GamePlay.Rules
                     private readonly LeaderboardsManager _leaderBoard;
 
                     public ThenGameOver(
-                        IWorld world,
+                        GamePlayContext context,
                         LeaderboardsManager leaderBoard)
-                        : base(world)
+                        : base(context)
                     {
                         _leaderBoard = leaderBoard;
                     }
 
                     protected override void ExecuteActionInternal(Ship ship, Asteroid asteroid)
                     {
-                        var playedTime = DateTime.Now - GetHud().StartTime;
+                        var playedTime = DateTime.Now - Context.StartTime;
 
-                        if (_leaderBoard.CanAddLeader(GetHud().Scores))
+                        if (_leaderBoard.CanAddLeader(Context.Scores))
                         {
                             var newHigthScorePrompt = new PromptScreen("Congratulations, you made new high score!\nEnter you name:");
 
                             newHigthScorePrompt.Accepted += (_, __) =>
                             {
-                                _leaderBoard.AddLeader(newHigthScorePrompt.Text, GetHud().Scores, playedTime);
+                                _leaderBoard.AddLeader(newHigthScorePrompt.Text, Context.Scores, playedTime);
                                 GameOverMessage();
                             };
                             newHigthScorePrompt.Cancelled += (_, __) => GameOverMessage();
@@ -199,19 +200,16 @@ namespace KenneyAsteroids.Core.Screens.GamePlay.Rules
 
                 public sealed class ThenScore: AndAsteroidIsAlive
                 {
-                    private readonly IWorld _world;
+                    private readonly GamePlayContext _context;
                     private readonly GamePlayScoreManager _scores;
 
-                    public ThenScore(IWorld world)
+                    public ThenScore(GamePlayContext context)
                     {
-                        _world = world;
+                        _context = context;
                         _scores = new GamePlayScoreManager();
                     }
 
-                    protected override void ExecuteActionInternal(Projectile projectile, Asteroid asteroid) => GetHud().Scores += _scores.GetScore(asteroid);
-
-                    private GamePlayHud GetHud() => _world.First(x => x is GamePlayHud) as GamePlayHud;
-
+                    protected override void ExecuteActionInternal(Projectile projectile, Asteroid asteroid) => _context.Scores += _scores.GetScore(asteroid);
                 }
 
                 public sealed class ThenRemoveProjectile : AndAsteroidIsAlive
