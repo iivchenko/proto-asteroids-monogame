@@ -15,12 +15,13 @@ using System.Numerics;
 
 using XTime = Microsoft.Xna.Framework.GameTime;
 using System;
+using System.Collections.Generic;
 
 namespace KenneyAsteroids.Core.Screens.GamePlay
 {
     public sealed class GamePlayScreen : GameScreen
     {
-        private IGameRuleSystem _rules;
+        private List<IGamePlaySystem> _systems;
         private IEntitySystem _entities;
         private ICollisionSystem _collisions;
         private IViewport _viewport;
@@ -34,8 +35,8 @@ namespace KenneyAsteroids.Core.Screens.GamePlay
             base.Initialize();
             var container = ScreenManager.Container;
 
+            _systems = container.GetServices<IGamePlaySystem>().OrderByDescending(x => x.Priority).ToList();
             _entities = container.GetService<IEntitySystem>();
-            _rules = container.GetService<IGameRuleSystem>();
             _viewport = container.GetService<IViewport>();
             _publisher = container.GetService<IEventPublisher>();
             _musicPlayer = container.GetService<IMusicPlayer>();
@@ -148,7 +149,7 @@ namespace KenneyAsteroids.Core.Screens.GamePlay
                     .Where(IsOutOfScreen)
                     .Iter(HandleOutOfScreenBodies);
 
-                _rules.Update(time);
+                _systems.Iter(system => system.Update(time));
 
                 _entities.Commit();
             }

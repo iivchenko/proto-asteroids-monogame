@@ -7,14 +7,14 @@ using System.Reflection;
 
 namespace Microsoft.Extensions.DependencyInjection
 {
-    public static class GameRulesServiceCollectionExtensions
+    public static class RuleGamePlayServiceCollectionExtensions
     {
-        public static IServiceCollection AddGameRules(this IServiceCollection services, IEnumerable<Assembly> assembliesToScan)
+        public static IServiceCollection AddGameRules(this IServiceCollection services, IEnumerable<Assembly> assembliesToScan, uint priority)
         {
             services.TryAddSingleton<ServiceFactory>(x => x.GetServices);
-            services.TryAddSingleton<GameRuleSystem>();
-            services.TryAdd(new ServiceDescriptor(typeof(IGameRuleSystem), x => x.GetService<GameRuleSystem>(), ServiceLifetime.Singleton));
-            services.TryAdd(new ServiceDescriptor(typeof(IEventPublisher), x => x.GetService<GameRuleSystem>(), ServiceLifetime.Singleton));                      
+            services.TryAddSingleton<RuleGamePlaySystem>(x => new RuleGamePlaySystem(x.GetRequiredService<ServiceFactory>(), priority));
+            services.TryAdd(new ServiceDescriptor(typeof(IGamePlaySystem), x => x.GetService<RuleGamePlaySystem>(), ServiceLifetime.Singleton));
+            services.TryAdd(new ServiceDescriptor(typeof(IEventPublisher), x => x.GetService<RuleGamePlaySystem>(), ServiceLifetime.Singleton));                      
 
             assembliesToScan
                 .SelectMany(assembly => assembly.DefinedTypes)

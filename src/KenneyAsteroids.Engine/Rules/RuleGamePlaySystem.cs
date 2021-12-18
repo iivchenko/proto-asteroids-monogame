@@ -6,19 +6,23 @@ namespace KenneyAsteroids.Engine.Rules
 {
     public delegate IEnumerable<object> ServiceFactory(Type serviceType);
 
-    public sealed class GameRuleSystem : IGameRuleSystem, IEventPublisher
+    public sealed class RuleGamePlaySystem : IGamePlaySystem, IEventPublisher
     {
         private readonly ServiceFactory _serviceFactory;
         private readonly IList<IEvent> _events;
         private readonly Type _handlerType;
 
-        public GameRuleSystem(ServiceFactory serviceFactory)
+        public RuleGamePlaySystem(ServiceFactory serviceFactory, uint priority)
         {
             _serviceFactory = serviceFactory;
+
+            Priority = priority;
 
             _handlerType = typeof(IRule<>);
             _events = new List<IEvent>();
         }
+
+        public uint Priority { get; }
 
         public void Publish<TEvent>(TEvent @event) where TEvent : IEvent
         {

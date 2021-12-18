@@ -48,7 +48,7 @@ namespace KenneyAsteroids.Desktop
                             .AddMonoGameContentSystem()
                             .AddMonoGameDrawSystem()
                             .AddMonoGameAudioSystem(configuration.GetSection("Audio"))
-                            .AddGameRules(new[] { Assembly.GetAssembly(typeof(Core.Version)) })
+                            .AddGameRules(new[] { Assembly.GetAssembly(typeof(Core.Version)) }, 90)
                             .AddSingleton<LeaderboardsManager>();
                     })
                 .WithConfiguration(config => // TODO: This beast seems become redundant
