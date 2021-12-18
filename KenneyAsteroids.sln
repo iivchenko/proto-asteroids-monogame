@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.30907.101
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.32002.185
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "KenneyAsteroids.Engine", "src\KenneyAsteroids.Engine\KenneyAsteroids.Engine.csproj", "{4B02DFA3-6643-4878-B9E5-F54996805333}"
 EndProject
@@ -10,8 +10,6 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "KenneyAsteroids.Desktop", "src\KenneyAsteroids.Desktop\KenneyAsteroids.Desktop.csproj", "{217C6F0F-D2F6-4577-9E36-535E23AF60BE}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "KenneyAsteroids.PipelineExtension", "src\KenneyAsteroids.PipelineExtension\KenneyAsteroids.PipelineExtension.csproj", "{C0929254-D788-49FC-8E91-544948ACDC55}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "KenneyAsteroids.Engine.Benchmark", "src\KenneyAsteroids.Engine.Benchmark\KenneyAsteroids.Engine.Benchmark.csproj", "{AC74FD08-CE6E-478B-B76E-3221BCA31F30}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "KenneyAsteroids.Engine.MonoGame", "src\KenneyAsteroids.Engine.MonoGame\KenneyAsteroids.Engine.MonoGame.csproj", "{62993E35-0259-47AA-9A6F-369E0494C1F9}"
 EndProject
@@ -43,10 +41,6 @@ Global
 		{C0929254-D788-49FC-8E91-544948ACDC55}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C0929254-D788-49FC-8E91-544948ACDC55}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C0929254-D788-49FC-8E91-544948ACDC55}.Release|Any CPU.Build.0 = Release|Any CPU
-		{AC74FD08-CE6E-478B-B76E-3221BCA31F30}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{AC74FD08-CE6E-478B-B76E-3221BCA31F30}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{AC74FD08-CE6E-478B-B76E-3221BCA31F30}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{AC74FD08-CE6E-478B-B76E-3221BCA31F30}.Release|Any CPU.Build.0 = Release|Any CPU
 		{62993E35-0259-47AA-9A6F-369E0494C1F9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{62993E35-0259-47AA-9A6F-369E0494C1F9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{62993E35-0259-47AA-9A6F-369E0494C1F9}.Release|Any CPU.ActiveCfg = Release|Any CPU

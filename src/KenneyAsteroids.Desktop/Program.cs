@@ -50,7 +50,8 @@ namespace KenneyAsteroids.Desktop
                             .AddMonoGameAudioSystem(configuration.GetSection("Audio"))
                             .AddSingleton<IGamePlaySystem, OutOfScreenSystem>()
                             .AddEntitySystem(10, 50)
-                            .AddGameRules(new[] { Assembly.GetAssembly(typeof(Core.Version)) }, 90)
+                            .AddCollisions(20)
+                            .AddGameRules(new[] { Assembly.GetAssembly(typeof(Core.Version)) }, 30)
                             .AddSingleton<LeaderboardsManager>();
                     })
                 .WithConfiguration(config => // TODO: This beast seems become redundant

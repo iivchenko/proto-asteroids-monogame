@@ -1,7 +1,6 @@
 ﻿using KenneyAsteroids.Core.Entities;
 using KenneyAsteroids.Engine;
 using KenneyAsteroids.Engine.Audio;
-using KenneyAsteroids.Engine.Collisions;
 using KenneyAsteroids.Engine.Content;
 using KenneyAsteroids.Engine.Entities;
 using KenneyAsteroids.Engine.Graphics;
@@ -24,7 +23,6 @@ namespace KenneyAsteroids.Core.Screens.GamePlay
     {
         private List<IGamePlaySystem> _systems;
         private IWorld _world;
-        private ICollisionSystem _collisions;
         private IViewport _viewport;
         private IEventPublisher _publisher;
         private IMusicPlayer _musicPlayer;
@@ -41,7 +39,6 @@ namespace KenneyAsteroids.Core.Screens.GamePlay
             _viewport = container.GetService<IViewport>();
             _publisher = container.GetService<IEventPublisher>();
             _musicPlayer = container.GetService<IMusicPlayer>();
-            _collisions = new CollisionSystem();
 
             var factory = container.GetService<IEntityFactory>();
             var ship = factory.CreateShip(new Vector2(_viewport.Width / 2.0f, _viewport.Height / 2.0f));
@@ -110,36 +107,11 @@ namespace KenneyAsteroids.Core.Screens.GamePlay
         {
             base.Update(gameTime, otherScreenHasFocus, coveredByOtherScreen);
 
-            var time = (float)gameTime.ElapsedGameTime.TotalSeconds;
-
             if (!otherScreenHasFocus)
             {
+                var time = (float)gameTime.ElapsedGameTime.TotalSeconds;
+
                 _systems.Iter(system => system.Update(time));
-
-                var bodies = _world.Where(x => x is IBody).Cast<IBody>();
-
-                // Move Collision eventing into collision system
-                foreach (var collision in _collisions.EvaluateCollisions(bodies))
-                {
-                    switch ((collision.Body1, collision.Body2))
-                    {
-                        case (Ship ship, Asteroid asteroid):
-                            _publisher.Publish(new GamePlayEntitiesCollideEvent<Ship, Asteroid>(ship, asteroid));
-                            break;
-
-                        case (Asteroid asteroid, Ship ship):
-                            _publisher.Publish(new GamePlayEntitiesCollideEvent<Ship, Asteroid>(ship, asteroid));
-                            break;
-
-                        case (Projectile projectile, Asteroid asteroid):
-                            _publisher.Publish(new GamePlayEntitiesCollideEvent<Projectile, Asteroid>(projectile, asteroid));
-                            break;
-
-                        case (Asteroid asteroid, Projectile projectile):
-                            _publisher.Publish(new GamePlayEntitiesCollideEvent<Projectile, Asteroid>(projectile, asteroid));
-                            break;
-                    }
-                }
             }
         }
 

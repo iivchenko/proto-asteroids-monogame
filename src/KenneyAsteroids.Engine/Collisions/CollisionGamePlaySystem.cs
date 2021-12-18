@@ -1,5 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using KenneyAsteroids.Engine.Entities;
+using KenneyAsteroids.Engine.Rules;
+using System;
 using System.Linq;
 
 using Matrix = Microsoft.Xna.Framework.Matrix;
@@ -8,13 +9,24 @@ using Vector3 = Microsoft.Xna.Framework.Vector3;
 
 namespace KenneyAsteroids.Engine.Collisions
 {
-    // TODO: Improve with body type registration.
-    public sealed class CollisionSystem : ICollisionSystem
+    public sealed class CollisionGamePlaySystem : IGamePlaySystem
     {
-        public IEnumerable<Collision> EvaluateCollisions(IEnumerable<IBody> bodies)
+        private readonly IEventPublisher _publisher;
+        private readonly IWorld _world;
+
+        public CollisionGamePlaySystem(IEventPublisher publisher, IWorld world, uint priority)
         {
-            var array = bodies.ToArray();
-            var collisions = new List<Collision>();
+            _publisher = publisher;
+            _world = world;
+
+            Priority = priority;
+        }
+
+        public uint Priority { get; }
+
+        public void Update(float time)
+        {
+            var array = _world.Where(x => x is IBody).Cast<IBody>().ToArray();
 
             for (var i = 0; i < array.Length; i++)
                 for (var j = i + 1; j < array.Length; j++)
@@ -33,15 +45,13 @@ namespace KenneyAsteroids.Engine.Collisions
                     var bottom2 = body2.Position.Y - body2.Origin.Y * body2.Scale.X + body2.Height * body2.Scale.X;
 
                     if (
-                        left1 < right2 && left2 < right1 && 
+                        left1 < right2 && left2 < right1 &&
                         top1 < bottom2 && top2 < bottom1 &&
                         IntersectPixels(body1, body2))
                     {
-                        collisions.Add(new Collision(body1, body2));
+                        _publisher.Publish(new BodiesCollideEvent(body1, body2));
                     }
                 }
-
-            return collisions;
         }
 
         private static bool IntersectPixels(IBody body1, IBody body2)
