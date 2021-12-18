@@ -55,6 +55,54 @@
 /processorParam:Quality=Best
 /build:Music/game1.song.mp3
 
+#begin Music/game2.song.wav
+/importer:WavImporter
+/processor:SongProcessor
+/processorParam:Quality=Best
+/build:Music/game2.song.wav
+
+#begin Music/game3.song.wav
+/importer:WavImporter
+/processor:SongProcessor
+/processorParam:Quality=Best
+/build:Music/game3.song.wav
+
+#begin Music/game4.song.wav
+/importer:WavImporter
+/processor:SongProcessor
+/processorParam:Quality=Best
+/build:Music/game4.song.wav
+
+#begin Music/game5.song.wav
+/importer:WavImporter
+/processor:SongProcessor
+/processorParam:Quality=Best
+/build:Music/game5.song.wav
+
+#begin Music/game6.song.wav
+/importer:WavImporter
+/processor:SongProcessor
+/processorParam:Quality=Best
+/build:Music/game6.song.wav
+
+#begin Music/game7.song.ogg
+/importer:OggImporter
+/processor:SongProcessor
+/processorParam:Quality=Best
+/build:Music/game7.song.ogg
+
+#begin Music/game8.song.ogg
+/importer:OggImporter
+/processor:SongProcessor
+/processorParam:Quality=Best
+/build:Music/game8.song.ogg
+
+#begin Music/game9.song.ogg
+/importer:OggImporter
+/processor:SongProcessor
+/processorParam:Quality=Best
+/build:Music/game9.song.ogg
+
 #begin Music/menu.song.mp3
 /importer:Mp3Importer
 /processor:SongProcessor

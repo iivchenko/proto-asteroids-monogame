@@ -54,3 +54,17 @@ Classical implementation or the [Asteroids Game](https://en.wikipedia.org/wiki/A
       * Thank you Joshua McLean for the great assets!
       * [Repo Asset](src/KenneyAsteroids.Desktop/Content/Music/game1.song.mp3)
       * [CC BY 4.0 License](https://creativecommons.org/licenses/by/4.0/)
+    * [Izakaya Funes' Metal Pack](https://polarnyne.itch.io/izakaya-funes-metal-pack)
+      * Thank you Izakaya Funes' for the great assets!
+      * [Repo Asset#1](src/KenneyAsteroids.Desktop/Content/Music/game2.song.wav)
+      * [Repo Asset#2](src/KenneyAsteroids.Desktop/Content/Music/game3.song.wav)
+      * [Repo Asset#3](src/KenneyAsteroids.Desktop/Content/Music/game4.song.wav)
+      * [Repo Asset#4](src/KenneyAsteroids.Desktop/Content/Music/game5.song.wav)
+      * [Repo Asset#5](src/KenneyAsteroids.Desktop/Content/Music/game6.song.wav)
+      * [License](https://polarnyne.itch.io/izakaya-funes-metal-pack)
+    * [Hair and Kuckles Techno+Metal Music Pack](https://davidkbd.itch.io/hair-and-kuckles-technometal-music-pack)
+        * Thank you David KBD for the great assets!
+        * [Repo Asset#1](src/KenneyAsteroids.Desktop/Content/Music/game7.song.ogg)
+        * [Repo Asset#2](src/KenneyAsteroids.Desktop/Content/Music/game8.song.ogg)
+        * [Repo Asset#3](src/KenneyAsteroids.Desktop/Content/Music/game9.song.ogg)
+        * [License](https://davidkbd.itch.io/hair-and-kuckles-technometal-music-pack)

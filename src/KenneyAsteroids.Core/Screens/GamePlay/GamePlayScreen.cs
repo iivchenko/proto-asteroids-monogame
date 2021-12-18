@@ -67,14 +67,14 @@ namespace KenneyAsteroids.Core.Screens.GamePlay
                 timer2,
                 timer3
             );
+            
+            var file =
+                content
+                    .GetFiles("Music")
+                    .Where(file => file.Contains("game"))
+                    .RandomPick();
 
-            var music = 
-                Enumerable
-                    .Range(1, 7)
-                    .Select(i => content.Load<Music>($"Music/game{i}.song"))
-                    .ToArray();
-
-            _musicPlayer.Play(music);
+            _musicPlayer.Play(content.Load<Music>(file));
         }
 
         public override void Free()

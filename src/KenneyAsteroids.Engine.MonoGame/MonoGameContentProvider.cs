@@ -7,6 +7,8 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Media;
 using System;
 using System.Collections.Generic;
+using System.IO;
+using System.Linq;
 
 namespace KenneyAsteroids.Engine.MonoGame
 {
@@ -19,6 +21,22 @@ namespace KenneyAsteroids.Engine.MonoGame
         {
             _content = content;
             _map = new Dictionary<Guid, string>();
+        }
+
+        public IEnumerable<string> GetFiles(string subFolder)
+        {
+            var index = _content.RootDirectory.Length + 1;
+
+            return
+                Directory
+                    .GetFiles(Path.Combine(_content.RootDirectory, subFolder))
+                    .Select(path =>
+                    {
+                        var relativePath = path.Substring(index);
+                        var file = relativePath.Substring(0, relativePath.Length - 4);
+
+                        return file;
+                    }).ToList();
         }
 
         public TContent Load<TContent>(string path)
