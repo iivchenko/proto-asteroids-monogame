@@ -16,6 +16,7 @@ using System.Numerics;
 using XTime = Microsoft.Xna.Framework.GameTime;
 using System;
 using System.Collections.Generic;
+using KenneyAsteroids.Core.Screens.GamePlay.PlayerControllers;
 
 namespace KenneyAsteroids.Core.Screens.GamePlay
 {
@@ -28,7 +29,7 @@ namespace KenneyAsteroids.Core.Screens.GamePlay
         private IEventPublisher _publisher;
         private IMusicPlayer _musicPlayer;
 
-        private ShipPlayerController _controller;
+        private IPlayerController _controller;
 
         public override void Initialize()
         {
@@ -46,7 +47,7 @@ namespace KenneyAsteroids.Core.Screens.GamePlay
             var ship = factory.CreateShip(new Vector2(_viewport.Width / 2.0f, _viewport.Height / 2.0f));
             var content = container.GetService<IContentProvider>();
 
-            _controller = new ShipPlayerController(ship);
+            _controller = new PlayerShipKeyboardAndGamePadController(ship);
 
             var timer1 = new Timer(TimeSpan.FromSeconds(3), GameTags.NextAsteroid, _publisher);
             var timer2 = new Timer(TimeSpan.FromSeconds(60), GameTags.NextAsteroidLimitChange, _publisher);

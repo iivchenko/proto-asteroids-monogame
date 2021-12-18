@@ -1,22 +1,19 @@
-﻿using KenneyAsteroids.Engine.Entities;
+﻿using KenneyAsteroids.Core.Entities;
+using KenneyAsteroids.Engine;
 using KenneyAsteroids.Engine.Screens;
 using Microsoft.Xna.Framework.Input;
-using System.Collections.Generic;
-using System.Linq;
 
-namespace KenneyAsteroids.Core.Entities
+namespace KenneyAsteroids.Core.Screens.GamePlay.PlayerControllers
 {
     // TODO: Think on how to split keyboard and game pad correclty and by SOLID
-    public class ShipPlayerController : IEntity
+    public class PlayerShipKeyboardAndGamePadController : IPlayerController
     {
         private readonly Ship _ship;
 
-        public ShipPlayerController(Ship ship)
+        public PlayerShipKeyboardAndGamePadController(Ship ship)
         {
             _ship = ship;
         }
-
-        public IEnumerable<string> Tags => Enumerable.Empty<string>();
 
         public void Handle(InputState input)
         {
