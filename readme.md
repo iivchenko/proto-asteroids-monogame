@@ -69,3 +69,6 @@ Roadmap based on github milestones which you can also find [here](https://github
         * [Repo Asset#2](src/KenneyAsteroids.Desktop/Content/Music/game8.song.ogg)
         * [Repo Asset#3](src/KenneyAsteroids.Desktop/Content/Music/game9.song.ogg)
         * [License](https://davidkbd.itch.io/hair-and-kuckles-technometal-music-pack)
+
+# Stats for Develop branch
+![Alt](https://repobeats.axiom.co/api/embed/a59bd07ebe8be71e4c1d320f262bd72bb4fd7320.svg "Repobeats analytics image")
