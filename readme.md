@@ -23,7 +23,8 @@ Classical implementation or the [Asteroids Game](https://en.wikipedia.org/wiki/A
 * [Newton.Json](https://www.newtonsoft.com/json)
 * [BenchmarkDotNet](https://github.com/dotnet/BenchmarkDotNet)
 
-[Roadmap](https://github.com/iivchenko/kenney-asteroids/milestones)
+# Roadmap
+Roadmap based on github milestones which you can also find [here](https://github.com/iivchenko/kenney-asteroids/milestones)
 
 # License
 * Source Code
