@@ -37,6 +37,7 @@ namespace Core.Entities
         private readonly IEventPublisher _publisher;
         private readonly IPainter _draw;
         private readonly IAudioPlayer _player;
+        private readonly IContentProvider _content;
 
         private readonly Random _random;
 
@@ -47,6 +48,7 @@ namespace Core.Entities
             IPainter draw,
             IAudioPlayer player)
         {
+            _content = content;
             _spriteSheet = content.Load<SpriteSheet>("SpriteSheets/Asteroids.sheet");
             _lazer = content.Load<Sound>("Sounds/laser.sound");
             _explosion = content.Load<Sound>("Sounds/asteroid-explosion.sound");
@@ -110,15 +112,8 @@ namespace Core.Entities
             switch (type)
             {
                 case AsteroidType.Tiny:
-                    spriteName = new[]
-                    {
-                        "meteorBrown_tiny1",
-                        "meteorBrown_tiny2",
-                        "meteorGrey_tiny1",
-                        "meteorGrey_tiny2"
-                    }.RandomPick();
-                    sprite = _spriteSheet[spriteName];
-                    scale = 3;
+                    sprite = _content.Load<Sprite>("Sprites/Asteroids/Tiny/AsteroidTiny01");
+                    scale = 4;
                     speedX = _random.Next(TinyAsteroidMinSpeed, TinyAsteroidMaxSpeed);
                     speedY = _random.Next(TinyAsteroidMinSpeed, TinyAsteroidMaxSpeed);
                     rotationSpeed = _random.Next(TinyAsteroidMinRotationSpeed, TinyAsteroidMaxRotationSpeed).AsRadians() * _random.NextDouble() > 0.5 ? 1 : -1;
