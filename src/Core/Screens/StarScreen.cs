@@ -5,6 +5,7 @@ using Engine.Screens;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Numerics;
 
 using XGameTime = Microsoft.Xna.Framework.GameTime;
@@ -13,7 +14,6 @@ namespace Core.Screens
 {
     public sealed class StarScreen : GameScreen
     {
-        private SpriteSheet _spriteSheet;
         private IViewport _viewport;
         private IPainter _painter;
 
@@ -34,20 +34,20 @@ namespace Core.Screens
 
             var content = ScreenManager.Container.GetService<IContentProvider>();
 
-            _spriteSheet = content.Load<SpriteSheet>("SpriteSheets/Asteroids.sheet");
-
             _stars = new List<Star>();
             _random = new Random();
 
             var block = 96;
-            var sprite = _spriteSheet["star1"];
+            var sprites = content.GetFiles("Sprites/Stars/").Select(x => content.Load<Sprite>(x)).ToList();
+            var sprite = content.Load<Sprite>("Sprites/Stars/star03");
+
             var origin = new Vector2(sprite.Width / 2.0f, sprite.Height / 2.0f);
             for (var x = 0; x <= _viewport.Width / block; x++)
                 for (var y = 0; y <= _viewport.Height / block; y++)
                 {
                     if (_random.Next(2) == 0)
                         continue;
-                    var scale = _random.Next(30, 85) / 100.0f;
+                    var scale = (_random.Next(30, 85) / 100.0f) * 4.0f;
                     var star = new Star
                     {
                         Color = new Color((byte)_random.Next(255), (byte)_random.Next(255), (byte)_random.Next(255), 255) * (_random.Next(35, 70)/100.0f),
@@ -56,7 +56,7 @@ namespace Core.Screens
                         Position = new Vector2(_random.Next(block) + x * block, _random.Next(block) + y * block),
                         Rotation = _random.Next(0, 366).AsRadians(),
                         Scale = new Vector2(scale, scale),
-                        Sprite = sprite
+                        Sprite = sprites.RandomPick()
                     };
 
                     _stars.Add(star);
