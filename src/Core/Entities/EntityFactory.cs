@@ -66,13 +66,10 @@ namespace Core.Entities
             const float Acceleration = 20.0f;
             const float MaxRotation = 290.0f;
             const float MaxAngularAcceleration = 30.0f;
+            const float Scale = 4.0f;
 
-            var shipSpriteName = new[]
-                {
-                    "playerShip1_blue", "playerShip1_orange", "playerShip1_red", "playerShip1_green",
-                    "playerShip2_blue", "playerShip2_orange", "playerShip2_red", "playerShip2_green",
-                    "playerShip3_blue", "playerShip3_orange", "playerShip3_red", "playerShip3_green"
-                }.RandomPick();
+            var spriteName = _content.GetFiles("Sprites/PlayerShips").RandomPick();
+            var sprite = _content.Load<Sprite>(spriteName);
 
             var trailSpriteName = $"fire{_random.Next(0, 20):D2}";
             var lazerSpriteName = new[]
@@ -82,7 +79,6 @@ namespace Core.Entities
                 "laserRed01", "laserRed02", "laserRed03", "laserRed04", "laserRed05", "laserRed06", "laserRed07", "laserRed12", "laserRed13", "laserRed14", "laserRed15", "laserRed16"
             }.RandomPick();
 
-            var sprite = _spriteSheet[shipSpriteName];
             var trailSprite = _spriteSheet[trailSpriteName];
             var lazerSprite = _spriteSheet[lazerSpriteName];
             var debri = new[] { _spriteSheet["scratch1"], _spriteSheet["scratch2"], _spriteSheet["scratch3"] };
@@ -96,12 +92,12 @@ namespace Core.Entities
 
             return new Ship(_draw, _publisher, sprite, debri, weapon, trails, MaxSpeed, Acceleration, MaxRotation.AsRadians(), MaxAngularAcceleration.AsRadians())
             {
-                Position = position
+                Position = position,
+                Scale = new Vector2(Scale)
             };
         }
         public Asteroid CreateAsteroid(AsteroidType type, Vector2 position, float direction)
         {
-            String spriteName;
             Sprite sprite;
             int speedX;
             int speedY;

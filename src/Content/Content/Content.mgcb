@@ -186,6 +186,30 @@
 /processorParam:TextureFormat=Color
 /build:Sprites/gradient.sprite.png
 
+#begin Sprites/PlayerShips/PlayerShip01.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Sprites/PlayerShips/PlayerShip01.png
+
+#begin Sprites/PlayerShips/PlayerShip02.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Sprites/PlayerShips/PlayerShip02.png
+
 #begin SpriteSheets/asteroids.sheet.xml
 /importer:SpriteSheetImporter
 /processor:SpriteSheetProcessor
