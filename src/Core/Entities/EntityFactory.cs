@@ -70,20 +70,15 @@ namespace Core.Entities
 
             var spriteName = _content.GetFiles("Sprites/PlayerShips").RandomPick();
             var sprite = _content.Load<Sprite>(spriteName);
+            var laserSpriteName = _content.GetFiles("Sprites/Lasers").RandomPick();
+            var laserSprite = _content.Load<Sprite>(laserSpriteName);
 
             var trailSpriteName = $"fire{_random.Next(0, 20):D2}";
-            var lazerSpriteName = new[]
-            {
-                "laserBlue01", "laserBlue02", "laserBlue03", "laserBlue04", "laserBlue05", "laserBlue06", "laserBlue07", "laserBlue12", "laserBlue13", "laserBlue14", "laserBlue15", "laserBlue16",
-                "laserGreen02", "laserGreen03", "laserGreen04", "laserGreen05", "laserGreen06", "laserGreen07", "laserGreen08", "laserGreen09", "laserGreen10", "laserGreen11", "laserGreen12", "laserGreen13",   
-                "laserRed01", "laserRed02", "laserRed03", "laserRed04", "laserRed05", "laserRed06", "laserRed07", "laserRed12", "laserRed13", "laserRed14", "laserRed15", "laserRed16"
-            }.RandomPick();
 
             var trailSprite = _spriteSheet[trailSpriteName];
-            var lazerSprite = _spriteSheet[lazerSpriteName];
             var debri = new[] { _spriteSheet["scratch1"], _spriteSheet["scratch2"], _spriteSheet["scratch3"] };
             var reload = TimeSpan.FromMilliseconds(500);
-            var weapon = new Weapon(new Vector2(0, -sprite.Width / 2), reload, _projectileFactory, _publisher, _player, lazerSprite, _lazer);
+            var weapon = new Weapon(new Vector2(0, -sprite.Width / 2), reload, _projectileFactory, _publisher, _player, laserSprite, _lazer);
             var trails = new[]
             {
                 new ShipTrail(trailSprite, new Vector2(-35, 28), new Vector2(trailSprite.Width / 2, 0), _draw),
