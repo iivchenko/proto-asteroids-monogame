@@ -107,13 +107,12 @@ namespace Core.Entities
             int speedY;
             int rotationSpeed;
             Vector2 velocity;
-            float scale;
+            float scale = 4;
 
             switch (type)
             {
                 case AsteroidType.Tiny:
-                    sprite = _content.Load<Sprite>("Sprites/Asteroids/Tiny/AsteroidTiny01");
-                    scale = 4;
+                    sprite = _content.Load<Sprite>("Sprites/Asteroids/Tiny/AsteroidTiny01");                    
                     speedX = _random.Next(TinyAsteroidMinSpeed, TinyAsteroidMaxSpeed);
                     speedY = _random.Next(TinyAsteroidMinSpeed, TinyAsteroidMaxSpeed);
                     rotationSpeed = _random.Next(TinyAsteroidMinRotationSpeed, TinyAsteroidMaxRotationSpeed).AsRadians() * _random.NextDouble() > 0.5 ? 1 : -1;
@@ -122,7 +121,6 @@ namespace Core.Entities
 
                 case AsteroidType.Small:
                     sprite = _content.Load<Sprite>("Sprites/Asteroids/Small/AsteroidSmall01");
-                    scale = 4;
                     speedX = _random.Next(SmallAsteroidMinSpeed, SmallAsteroidMaxSpeed);
                     speedY = _random.Next(SmallAsteroidMinSpeed, SmallAsteroidMaxSpeed);
                     rotationSpeed = _random.Next(SmallAsteroidMinRotationSpeed, SmallAsteroidMaxRotationSpeed).AsRadians() * _random.NextDouble() > 0.5 ? 1 : -1;
@@ -131,7 +129,6 @@ namespace Core.Entities
 
                 case AsteroidType.Medium:
                     sprite = _content.Load<Sprite>("Sprites/Asteroids/Medium/AsteroidMedium01");
-                    scale = 4;
                     speedX = _random.Next(MediumAsteroidMinSpeed, MediumAsteroidMaxSpeed);
                     speedY = _random.Next(MediumAsteroidMinSpeed, MediumAsteroidMaxSpeed);
                     rotationSpeed = _random.Next(MediumAsteroidMinRotationSpeed, MediumAsteroidMaxRotationSpeed).AsRadians() * _random.NextDouble() > 0.5 ? 1 : -1;
@@ -140,8 +137,6 @@ namespace Core.Entities
 
                 case AsteroidType.Big:
                     sprite = _content.Load<Sprite>("Sprites/Asteroids/Big/AsteroidBig01");
-                    scale = 4;
-
                     speedX = _random.Next(BigAsteroidMinSpeed, BigAsteroidMaxSpeed);
                     speedY = _random.Next(BigAsteroidMinSpeed, BigAsteroidMaxSpeed);
                     rotationSpeed = _random.Next(BigAsteroidMinRotationSpeed, BigAsteroidMaxRotationSpeed).AsRadians() * _random.NextDouble() > 0.5 ? 1 : -1;
