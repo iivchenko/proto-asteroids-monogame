@@ -139,20 +139,9 @@ namespace Core.Entities
                     break;
 
                 case AsteroidType.Big:
-                    spriteName = new[]
-                    {
-                        "meteorBrown_big1",
-                        "meteorBrown_big2",
-                        "meteorBrown_big3",
-                        "meteorBrown_big4",
-                        "meteorGrey_big1",
-                        "meteorGrey_big2",
-                        "meteorGrey_big3",
-                        "meteorGrey_big4"
-                    }.RandomPick();
+                    sprite = _content.Load<Sprite>("Sprites/Asteroids/Big/AsteroidBig01");
+                    scale = 4;
 
-                    sprite = _spriteSheet[spriteName];
-                    scale = 1;
                     speedX = _random.Next(BigAsteroidMinSpeed, BigAsteroidMaxSpeed);
                     speedY = _random.Next(BigAsteroidMinSpeed, BigAsteroidMaxSpeed);
                     rotationSpeed = _random.Next(BigAsteroidMinRotationSpeed, BigAsteroidMaxRotationSpeed).AsRadians() * _random.NextDouble() > 0.5 ? 1 : -1;
