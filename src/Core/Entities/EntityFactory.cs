@@ -73,16 +73,19 @@ namespace Core.Entities
             var laserSpriteName = _content.GetFiles("Sprites/Lasers").RandomPick();
             var laserSprite = _content.Load<Sprite>(laserSpriteName);
 
-            var trailSpriteName = $"fire{_random.Next(0, 20):D2}";
-
-            var trailSprite = _spriteSheet[trailSpriteName];
+            var trailSpriteName = _content.GetFiles("Sprites/Trails").RandomPick();
+            var trailSprite = _content.Load<Sprite>(trailSpriteName);
             var debri = new[] { _spriteSheet["scratch1"], _spriteSheet["scratch2"], _spriteSheet["scratch3"] };
             var reload = TimeSpan.FromMilliseconds(500);
             var weapon = new Weapon(new Vector2(0, -sprite.Width / 2), reload, _projectileFactory, _publisher, _player, laserSprite, _lazer);
+
+            var xoffset = (sprite.Width * Scale / 2.0f) * 0.65f;
+            var yoffset = sprite.Height * Scale / 2.0f;
+
             var trails = new[]
             {
-                new ShipTrail(trailSprite, new Vector2(-35, 28), new Vector2(trailSprite.Width / 2, 0), _draw),
-                new ShipTrail(trailSprite, new Vector2(35, 28), new Vector2(trailSprite.Width / 2, 0), _draw)
+                new ShipTrail(trailSprite, new Vector2(-xoffset, yoffset), new Vector2(trailSprite.Width / 2, 0), new Vector2(Scale), _draw),
+                new ShipTrail(trailSprite, new Vector2(xoffset, yoffset), new Vector2(trailSprite.Width / 2, 0), new Vector2(Scale), _draw)
             };
 
             return new Ship(_draw, _publisher, sprite, debri, weapon, trails, MaxSpeed, Acceleration, MaxRotation.AsRadians(), MaxAngularAcceleration.AsRadians())

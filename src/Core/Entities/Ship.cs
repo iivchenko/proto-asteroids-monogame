@@ -294,6 +294,7 @@ namespace Core.Entities
         private readonly Sprite _sprite;
         private readonly Vector2 _offset;
         private readonly Vector2 _origin;
+        private readonly Vector2 _scale;
         private readonly IPainter _painer;
 
         private Vector2 _position;
@@ -305,11 +306,13 @@ namespace Core.Entities
             Sprite sprite, 
             Vector2 offset,
             Vector2 origin,
+            Vector2 scale,
             IPainter painer)
         {
             _sprite = sprite;
             _offset = offset;
             _origin = origin;
+            _scale = scale;
             _painer = painer;
 
             _power = 0;
@@ -337,7 +340,7 @@ namespace Core.Entities
         public void Draw()
         {
             var rect = new Rectangle(0, 0, (int)_sprite.Width, (int)(_sprite.Height * _power));
-            _painer.Draw(_sprite, _position, rect, _origin, Vector2.One, _rotation, Colors.White);
+            _painer.Draw(_sprite, _position, rect, _origin, _scale, _rotation, Colors.White);
         }
     }
 
