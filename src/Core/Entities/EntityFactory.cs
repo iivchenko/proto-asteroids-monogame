@@ -145,7 +145,7 @@ namespace Core.Entities
                 default:
                     throw new InvalidOperationException($"Unknown asteroid type {type}!");
             }
-            var debri = _spriteSheet["meteorBrown_tiny1"];
+            var debri = _content.Load<Sprite>("Sprites/Asteroids/Tiny/AsteroidTiny01"); // TODO: Create own asteroid debri
 
             return new Asteroid(_draw, _player, _publisher, type, sprite, debri, _explosion, velocity, new Vector2(scale), rotationSpeed)
             {
