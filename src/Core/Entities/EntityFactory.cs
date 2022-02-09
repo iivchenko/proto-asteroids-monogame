@@ -130,16 +130,8 @@ namespace Core.Entities
                     break;
 
                 case AsteroidType.Medium:
-                    spriteName = new[]
-                    {
-                        "meteorGrey_med1",
-                        "meteorGrey_med2",
-                        "meteorBrown_med1",
-                        "meteorBrown_med2"
-                    }.RandomPick();
-
-                    sprite = _spriteSheet[spriteName];
-                    scale = 1.7f;
+                    sprite = _content.Load<Sprite>("Sprites/Asteroids/Medium/AsteroidMedium01");
+                    scale = 4;
                     speedX = _random.Next(MediumAsteroidMinSpeed, MediumAsteroidMaxSpeed);
                     speedY = _random.Next(MediumAsteroidMinSpeed, MediumAsteroidMaxSpeed);
                     rotationSpeed = _random.Next(MediumAsteroidMinRotationSpeed, MediumAsteroidMaxRotationSpeed).AsRadians() * _random.NextDouble() > 0.5 ? 1 : -1;
