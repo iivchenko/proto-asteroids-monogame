@@ -121,16 +121,8 @@ namespace Core.Entities
                     break;
 
                 case AsteroidType.Small:
-                    spriteName = new[]
-                    {
-                        "meteorBrown_small1",
-                        "meteorBrown_small2",
-                        "meteorGrey_small1",
-                        "meteorGrey_small2"
-                    }.RandomPick();
-
-                    sprite = _spriteSheet[spriteName];
-                    scale = 2.2f;
+                    sprite = _content.Load<Sprite>("Sprites/Asteroids/Small/AsteroidSmall01");
+                    scale = 4;
                     speedX = _random.Next(SmallAsteroidMinSpeed, SmallAsteroidMaxSpeed);
                     speedY = _random.Next(SmallAsteroidMinSpeed, SmallAsteroidMaxSpeed);
                     rotationSpeed = _random.Next(SmallAsteroidMinRotationSpeed, SmallAsteroidMaxRotationSpeed).AsRadians() * _random.NextDouble() > 0.5 ? 1 : -1;
