@@ -37,7 +37,7 @@ namespace Engine.MonoGame
                 .Draw(
                     sprite.Texture,
                     position.ToXna(),
-                    sprite.SourceRectangle.ToXna(),
+                    null,
                     color.ToXna(),
                     rotation,
                     origin.ToXna(),
@@ -57,17 +57,12 @@ namespace Engine.MonoGame
 
         public void Draw(Sprite sprite, Vector2 position, Rectangle source, Vector2 origin, Vector2 scale, float rotation, Color color)
         {
-            var rect = new Rectangle(
-                sprite.SourceRectangle.Value.X + source.X,
-                sprite.SourceRectangle.Value.Y + source.Y,
-                source.Width,
-                source.Height);
 
             _batch
                 .Draw(
                     sprite.Texture, 
                     position.ToXna(),
-                    rect.ToXna(),
+                    source.ToXna(),
                     color.ToXna(),
                     rotation,
                     origin.ToXna(),

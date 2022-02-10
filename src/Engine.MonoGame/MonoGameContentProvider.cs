@@ -54,10 +54,6 @@ namespace Engine.MonoGame
 
                 return sprite as TContent;
             }
-            else if (type == typeof(SpriteSheet))
-            {
-                return _content.Load<SpriteSheet>(path) as TContent;
-            }
             else if (type == typeof(Sound))
             {
                 var sound = new Sound();

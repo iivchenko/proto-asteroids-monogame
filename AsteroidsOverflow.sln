@@ -9,8 +9,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Core", "src\Core\Core.cspro
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Desktop", "src\Desktop\Desktop.csproj", "{217C6F0F-D2F6-4577-9E36-535E23AF60BE}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PipelineExtension", "src\PipelineExtension\PipelineExtension.csproj", "{C0929254-D788-49FC-8E91-544948ACDC55}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Engine.MonoGame", "src\Engine.MonoGame\Engine.MonoGame.csproj", "{62993E35-0259-47AA-9A6F-369E0494C1F9}"
 EndProject
 Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Content", "src\Content\Content.shproj", "{A0CDBD0E-3A41-42B7-9425-A838BC2C7383}"
@@ -37,10 +35,6 @@ Global
 		{217C6F0F-D2F6-4577-9E36-535E23AF60BE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{217C6F0F-D2F6-4577-9E36-535E23AF60BE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{217C6F0F-D2F6-4577-9E36-535E23AF60BE}.Release|Any CPU.Build.0 = Release|Any CPU
-		{C0929254-D788-49FC-8E91-544948ACDC55}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{C0929254-D788-49FC-8E91-544948ACDC55}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{C0929254-D788-49FC-8E91-544948ACDC55}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{C0929254-D788-49FC-8E91-544948ACDC55}.Release|Any CPU.Build.0 = Release|Any CPU
 		{62993E35-0259-47AA-9A6F-369E0494C1F9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{62993E35-0259-47AA-9A6F-369E0494C1F9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{62993E35-0259-47AA-9A6F-369E0494C1F9}.Release|Any CPU.ActiveCfg = Release|Any CPU

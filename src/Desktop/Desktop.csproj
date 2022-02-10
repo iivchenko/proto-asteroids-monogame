@@ -33,7 +33,6 @@
     <ProjectReference Include="..\Core\Core.csproj" />
     <ProjectReference Include="..\Engine.MonoGame\Engine.MonoGame.csproj" />
     <ProjectReference Include="..\Engine\Engine.csproj" />
-    <ProjectReference Include="..\PipelineExtension\PipelineExtension.csproj" />
   </ItemGroup>
   <ItemGroup>
     <None Update="game-settings.json">
