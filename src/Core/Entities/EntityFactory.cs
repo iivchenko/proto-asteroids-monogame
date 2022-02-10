@@ -4,6 +4,7 @@ using Engine.Content;
 using Engine.Graphics;
 using Engine.Rules;
 using System;
+using System.Linq;
 using System.Numerics;
 
 namespace Core.Entities
@@ -75,8 +76,7 @@ namespace Core.Entities
 
             var trailSpriteName = _content.GetFiles("Sprites/Trails").RandomPick();
             var trailSprite = _content.Load<Sprite>(trailSpriteName);
-            var debri = new[] { _spriteSheet["scratch1"], _spriteSheet["scratch2"], _spriteSheet["scratch3"] };
-            var reload = TimeSpan.FromMilliseconds(500);
+            var debris = _content.GetFiles("Sprites/Debris").Select(_content.Load<Sprite>).ToArray(); var reload = TimeSpan.FromMilliseconds(500);
             var weapon = new Weapon(new Vector2(0, -sprite.Width / 2), reload, _projectileFactory, _publisher, _player, laserSprite, _lazer);
 
             var xoffset = (sprite.Width * Scale / 2.0f) * 0.65f;
@@ -88,7 +88,7 @@ namespace Core.Entities
                 new ShipTrail(trailSprite, new Vector2(xoffset, yoffset), new Vector2(trailSprite.Width / 2, 0), new Vector2(Scale), _draw)
             };
 
-            return new Ship(_draw, _publisher, sprite, debri, weapon, trails, MaxSpeed, Acceleration, MaxRotation.AsRadians(), MaxAngularAcceleration.AsRadians())
+            return new Ship(_draw, _publisher, sprite, debris, weapon, trails, MaxSpeed, Acceleration, MaxRotation.AsRadians(), MaxAngularAcceleration.AsRadians())
             {
                 Position = position,
                 Scale = new Vector2(Scale)
