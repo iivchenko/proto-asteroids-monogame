@@ -42,7 +42,7 @@ namespace Core.Leaderboards
                     .Read()
                     .Concat(new[] { item })
                     .OrderByDescending(x => x.Score)
-                    .Take(10)
+                    .Take(25)
                     .ToList();
 
             _repository.Update(new Collection<LeaderboardItem>(items));
