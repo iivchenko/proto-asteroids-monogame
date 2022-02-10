@@ -19,7 +19,7 @@ namespace Core.Leaderboards
         {
             var items = _repository.Read();
 
-            return score > 0 && items.Count() < 10 || items.Any(x => x.Score < score);
+            return score > 0 && items.All(x => x.Score < score);
         }
 
         public void AddLeader(string name, int score, TimeSpan playedTime)
