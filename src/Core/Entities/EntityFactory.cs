@@ -31,7 +31,6 @@ namespace Core.Entities
         private const int BigAsteroidMinRotationSpeed = 5;
         private const int BigAsteroidMaxRotationSpeed = 25;
 
-        private readonly SpriteSheet _spriteSheet;
         private readonly Sound _lazer;
         private readonly Sound _explosion;
         private readonly IProjectileFactory _projectileFactory;
@@ -50,7 +49,6 @@ namespace Core.Entities
             IAudioPlayer player)
         {
             _content = content;
-            _spriteSheet = content.Load<SpriteSheet>("SpriteSheets/Asteroids.sheet");
             _lazer = content.Load<Sound>("Sounds/laser.sound");
             _explosion = content.Load<Sound>("Sounds/asteroid-explosion.sound");
             _projectileFactory = projectileFactory;
