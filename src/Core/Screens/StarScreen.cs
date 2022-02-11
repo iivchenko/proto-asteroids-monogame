@@ -47,7 +47,7 @@ namespace Core.Screens
                 {
                     if (_random.Next(2) == 0)
                         continue;
-                    var scale = (_random.Next(30, 85) / 100.0f) * 4.0f;
+                    var scale = (_random.Next(30, 85) / 100.0f) * GameRoot.Scale;
                     var star = new Star
                     {
                         Color = new Color((byte)_random.Next(255), (byte)_random.Next(255), (byte)_random.Next(255), 255) * (_random.Next(35, 70)/100.0f),

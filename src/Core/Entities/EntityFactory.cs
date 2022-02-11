@@ -65,7 +65,6 @@ namespace Core.Entities
             const float Acceleration = 20.0f;
             const float MaxRotation = 290.0f;
             const float MaxAngularAcceleration = 30.0f;
-            const float Scale = 4.0f;
 
             var spriteName = _content.GetFiles("Sprites/PlayerShips").RandomPick();
             var sprite = _content.Load<Sprite>(spriteName);
@@ -75,21 +74,21 @@ namespace Core.Entities
             var trailSpriteName = _content.GetFiles("Sprites/Trails").RandomPick();
             var trailSprite = _content.Load<Sprite>(trailSpriteName);
             var debris = _content.GetFiles("Sprites/Debris").Select(_content.Load<Sprite>).ToArray(); var reload = TimeSpan.FromMilliseconds(500);
-            var weapon = new Weapon(new Vector2(0, -sprite.Width / 2), reload, _projectileFactory, _publisher, _player, laserSprite, _lazer);
+            var weapon = new Weapon(new Vector2(0, -(sprite.Width * GameRoot.Scale) / 2), reload, _projectileFactory, _publisher, _player, laserSprite, _lazer);
 
-            var xoffset = (sprite.Width * Scale / 2.0f) * 0.65f;
-            var yoffset = sprite.Height * Scale / 2.0f;
+            var xoffset = (sprite.Width * GameRoot.Scale / 2.0f) * 0.65f;
+            var yoffset = sprite.Height * GameRoot.Scale / 2.0f;
 
             var trails = new[]
             {
-                new ShipTrail(trailSprite, new Vector2(-xoffset, yoffset), new Vector2(trailSprite.Width / 2, 0), new Vector2(Scale), _draw),
-                new ShipTrail(trailSprite, new Vector2(xoffset, yoffset), new Vector2(trailSprite.Width / 2, 0), new Vector2(Scale), _draw)
+                new ShipTrail(trailSprite, new Vector2(-xoffset, yoffset), new Vector2(trailSprite.Width / 2, 0), new Vector2(GameRoot.Scale), _draw),
+                new ShipTrail(trailSprite, new Vector2(xoffset, yoffset), new Vector2(trailSprite.Width / 2, 0), new Vector2(GameRoot.Scale), _draw)
             };
 
             return new Ship(_draw, _publisher, sprite, debris, weapon, trails, MaxSpeed, Acceleration, MaxRotation.AsRadians(), MaxAngularAcceleration.AsRadians())
             {
                 Position = position,
-                Scale = new Vector2(Scale)
+                Scale = new Vector2(GameRoot.Scale)
             };
         }
         public Asteroid CreateAsteroid(AsteroidType type, Vector2 position, float direction)
@@ -99,7 +98,6 @@ namespace Core.Entities
             int speedY;
             int rotationSpeed;
             Vector2 velocity;
-            float scale = 4;
 
             switch (type)
             {
@@ -139,7 +137,7 @@ namespace Core.Entities
             }
             var debri = _content.Load<Sprite>("Sprites/Asteroids/Tiny/AsteroidTiny01"); // TODO: Create own asteroid debri
 
-            return new Asteroid(_draw, _player, _publisher, type, sprite, debri, _explosion, velocity, new Vector2(scale), rotationSpeed)
+            return new Asteroid(_draw, _player, _publisher, type, sprite, debri, _explosion, velocity, new Vector2(GameRoot.Scale), rotationSpeed)
             {
                 Position = position
             };

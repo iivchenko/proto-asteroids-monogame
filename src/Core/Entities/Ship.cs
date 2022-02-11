@@ -211,7 +211,7 @@ namespace Core.Entities
                                         AngularVelocity = rand.Next(5, 100).AsRadians(),
                                         Color = Colors.White,
                                         Position = _ship.Position,
-                                        Scale = new Vector2(4), // TODO: Remove this scale hack! Make it configurable
+                                        Scale = new Vector2(GameRoot.Scale), // TODO: Remove this scale hack! Make it configurable
                                         Sprite = _ship._debri[rand.Next(_ship._debri.Length)],
                                         TTL = 0.8f,
                                         Velocity = new Vector2(rand.Next(-100, 100), rand.Next(-100, 100))
