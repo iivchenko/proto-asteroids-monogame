@@ -12,24 +12,38 @@ using System.Linq;
 
 namespace Engine.MonoGame
 {
+    public sealed class ContentRoot
+    {
+        public ContentRoot(string path)
+        {
+            Path = path;
+        }
+
+        public string Path { get; }
+    }
+
     public sealed class MonoGameContentProvider : IContentProvider
     {
         private readonly ContentManager _content;
         private readonly IDictionary<Guid, string> _map;
+        private readonly string _root;
 
-        public MonoGameContentProvider(ContentManager content)
+        public MonoGameContentProvider(ContentManager content, ContentRoot root)
         {
             _content = content;
             _map = new Dictionary<Guid, string>();
+
+            _root = root.Path;
         }
 
         public IEnumerable<string> GetFiles(string subFolder)
         {
-            var index = _content.RootDirectory.Length + 1;
+            var root = Path.Combine(_root, _content.RootDirectory);
+            var index = root.Length + 1;
 
             return
                 Directory
-                    .GetFiles(Path.Combine(_content.RootDirectory, subFolder))
+                    .GetFiles(Path.Combine(root, subFolder))
                     .Select(path =>
                     {
                         var relativePath = path.Substring(index);

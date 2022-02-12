@@ -33,8 +33,9 @@ namespace Microsoft.Extensions.DependencyInjection
             return services;
         }
 
-        public static IServiceCollection AddMonoGameContentSystem(this IServiceCollection services)
+        public static IServiceCollection AddMonoGameContentSystem(this IServiceCollection services, string content)
         {
+            services.TryAddSingleton(x => new ContentRoot(content));
             services.TryAddSingleton<MonoGameContentProvider>();
             services.TryAdd(new ServiceDescriptor(typeof(IContentProvider), x => x.GetService<MonoGameContentProvider>(), ServiceLifetime.Singleton));
 

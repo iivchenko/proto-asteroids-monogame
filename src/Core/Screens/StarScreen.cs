@@ -39,9 +39,6 @@ namespace Core.Screens
 
             var block = 96;
             var sprites = content.GetFiles("Sprites/Stars/").Select(x => content.Load<Sprite>(x)).ToList();
-            var sprite = content.Load<Sprite>("Sprites/Stars/star03");
-
-            var origin = new Vector2(sprite.Width / 2.0f, sprite.Height / 2.0f);
             for (var x = 0; x <= _viewport.Width / block; x++)
                 for (var y = 0; y <= _viewport.Height / block; y++)
                 {
@@ -52,7 +49,6 @@ namespace Core.Screens
                     {
                         Color = new Color((byte)_random.Next(255), (byte)_random.Next(255), (byte)_random.Next(255), 255) * (_random.Next(35, 70)/100.0f),
                         ColorConst = _random.Next(int.MaxValue),
-                        Origin = origin,
                         Position = new Vector2(_random.Next(block) + x * block, _random.Next(block) + y * block),
                         Rotation = _random.Next(0, 366).AsRadians(),
                         Scale = new Vector2(scale, scale),

@@ -24,28 +24,38 @@ namespace Desktop
         [STAThread]
         public static void Main()
         {
-            GameBuilder
+#if MacOS
+            var root = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "..", "Resources");
+#else
+            var root = string.Empty;
+#endif
+            var configFilePath = Path.Combine(root, ConfigFile);
+            var leaderboardsFilePath = Path.Combine(root, LeaderBoardsFile);
+            var contentRoot = root;
+            try
+            { 
+                GameBuilder
                 .CreateBuilder()
                 .WithServices(container =>
                     {
                         var configuration =
                             new ConfigurationBuilder()
                                 .SetBasePath(Directory.GetCurrentDirectory())
-                                .AddJsonFile(ConfigFile, optional: true, reloadOnChange: true)
+                                .AddJsonFile(configFilePath, optional: true, reloadOnChange: true)
                                 .Build();
 
                         container
                             .AddOptions()
                             .Configure<GameSettings>(configuration)
-                            .AddSingleton<IRepository<GameSettings>>(_ => new JsonRepository<GameSettings>(ConfigFile))
-                            .Decorate<IRepository<GameSettings>, DefaultInitializerRepositoryDecorator<GameSettings>>()
-                            .AddSingleton<IRepository<Collection<LeaderboardItem>>>(_ => new JsonRepository<Collection<LeaderboardItem>>(LeaderBoardsFile))
-                            .Decorate<IRepository<Collection<LeaderboardItem>>, DefaultInitializerRepositoryDecorator<Collection<LeaderboardItem>>>()
+                            .AddSingleton<IRepository<GameSettings>>(_ => new JsonRepository<GameSettings>(configFilePath))
+                            .Decorate<IRepository<GameSettings>>(x => new DefaultInitializerRepositoryDecorator<GameSettings>(x, new GameSettings { Audio = { SfxVolume = 0.2f, MusicVolume = 0.2f } }))
+                            .AddSingleton<IRepository<Collection<LeaderboardItem>>>(_ => new JsonRepository<Collection<LeaderboardItem>>(leaderboardsFilePath))
+                            .Decorate<IRepository<Collection<LeaderboardItem>>>(x => new DefaultInitializerRepositoryDecorator<Collection<LeaderboardItem>>(x, new Collection<LeaderboardItem>()))
                             .AddSingleton<IEntityFactory, EntityFactory>()
                             .AddSingleton<IProjectileFactory, ProjectileFactory>()
                             .AddSingleton<IViewport, Viewport>(_ => new Viewport(0.0f, 0.0f, 3840.0f, 2160.0f))
                             .AddSingleton<ICamera, Camera>()
-                            .AddMonoGameContentSystem()
+                            .AddMonoGameContentSystem(contentRoot)
                             .AddMonoGameDrawSystem()
                             .AddMonoGameAudioSystem(configuration.GetSection("Audio"))
                             .AddSingleton<IGamePlaySystem, OutOfScreenSystem>()
@@ -64,6 +74,14 @@ namespace Desktop
                     })
                 .Build((services, config) => new MonoGameGame(services, config, new BootstrapScreen<MainMenuScreen>()))
                 .Run();
+            }
+            catch(Exception e)
+            {
+                using (var file = File.CreateText("/Users/mtarcha/error.log"))
+                {
+                    file.WriteLine(e.ToString());
+                }
+            }
         }
     }
 }

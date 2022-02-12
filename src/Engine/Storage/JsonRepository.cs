@@ -8,29 +8,26 @@ namespace Engine.Storage
         where TItem : class, new()
     {
         private readonly IRepository<TItem> _parent;
+        private readonly TItem _byDefault;
 
-        public DefaultInitializerRepositoryDecorator(IRepository<TItem> parent)
+        public DefaultInitializerRepositoryDecorator(IRepository<TItem> parent, TItem byDefault)
         {
             _parent = parent;
+            _byDefault = byDefault;
         }
 
         public TItem Read()
         {
             var item = _parent.Read();
 
-            if (item == default)
-            {
-                item = (TItem)Activator.CreateInstance(typeof(TItem));
-            }
-
-            return item;
+            return item == default ? _byDefault : item;
         }
 
         public void Update(TItem item)
         {
             if (item == default)
             {
-                item = (TItem)Activator.CreateInstance(typeof(TItem));
+                item = _byDefault;
             }
 
             _parent.Update(item);
