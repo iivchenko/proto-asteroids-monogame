@@ -98,4 +98,5 @@ jobs:
       uses: actions/upload-artifact@v2
       with:
         name: ${{ format('asteroids-overflow-macos-x64-v{0}.{1}', steps.version.outputs.content, github.run_number) }}
-        path: Asteroids Overflow.App
+        path: |
+            Asteroids Overflow.App
