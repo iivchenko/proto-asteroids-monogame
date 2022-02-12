@@ -67,12 +67,12 @@ jobs:
       run: dotnet publish ./src/Desktop/Desktop.csproj --configuration Release --runtime osx-x64 /p:PublishReadyToRun=false /p:TieredCompilation=false /p:DefineConstants="RELEASE MacOS" --self-contained true -o ./publish/macos-x64
     - name: Create Mac App
       run: |
-        New-Item -ItemType Directory -Name './Asteroids Overflow.App/Contents/MacOS'
-        New-Item -ItemType Directory -Name './Asteroids Overflow.App/Contents/Resources'
-        Copy-Item -Path './publish/macos-x64/Content' -Destination './Asteroids Overflow.App/Contents/Resources' -Recurse
-        Copy-Item -Path './publish/macos-x64/game-settings.json' -Destination './Asteroids Overflow.App/Contents/Resources/'
-        Copy-Item -Path './publish/macos-x64/*' -Destination './Asteroids Overflow.App/Contents/MacOS' -Exclude 'Content','game-settings.json'
-        Set-Content -Path './Asteroids Overflow.App/Contents/Info.plist' -Value '<?xml version="1.0" encoding="UTF-8"?>
+        New-Item -ItemType Directory -Name './mac/Asteroids Overflow.App/Contents/MacOS'
+        New-Item -ItemType Directory -Name './mac/Asteroids Overflow.App/Contents/Resources'
+        Copy-Item -Path './publish/macos-x64/Content' -Destination './mac/Asteroids Overflow.App/Contents/Resources' -Recurse
+        Copy-Item -Path './publish/macos-x64/game-settings.json' -Destination './mac/Asteroids Overflow.App/Contents/Resources/'
+        Copy-Item -Path './publish/macos-x64/*' -Destination './mac/Asteroids Overflow.App/Contents/MacOS' -Exclude 'Content','game-settings.json'
+        Set-Content -Path './mac/Asteroids Overflow.App/Contents/Info.plist' -Value '<?xml version="1.0" encoding="UTF-8"?>
         <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
         <plist version="1.0">
         <dict>
@@ -98,5 +98,4 @@ jobs:
       uses: actions/upload-artifact@v2
       with:
         name: ${{ format('asteroids-overflow-macos-x64-v{0}.{1}', steps.version.outputs.content, github.run_number) }}
-        path: |
-            Asteroids Overflow.App
+        path: mac/Asteroids Overflow.App
