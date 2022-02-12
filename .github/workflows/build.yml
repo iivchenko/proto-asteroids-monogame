@@ -94,8 +94,10 @@ jobs:
             <string>NSApplication</string>
         </dict>
         </plist>'
+    - name: Tar files
+      run: tar -cvf ${{ format('asteroids-overflow-macos-x64-v{0}.{1}.tar', steps.version.outputs.content, github.run_number) }} Asteroids Overflow.App
     - name: MacOS Artifacts
-      uses: actions/upload-artifact@v1
+      uses: actions/upload-artifact@v2
       with:
-       name: ${{ format('asteroids-overflow-macos-x64-v{0}.{1}', steps.version.outputs.content, github.run_number) }}
-       path: Asteroids Overflow.App
+        name: ${{ format('asteroids-overflow-macos-x64-v{0}.{1}', steps.version.outputs.content, github.run_number) }}
+        path: ${{ format('asteroids-overflow-macos-x64-v{0}.{1}.tar', steps.version.outputs.content, github.run_number) }}
