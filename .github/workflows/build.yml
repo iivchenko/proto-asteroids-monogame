@@ -49,3 +49,53 @@ jobs:
       with:
        name: ${{ format('asteroids-overflow-linux-x64-v{0}.{1}', steps.version.outputs.content, github.run_number) }}
        path: publish/linux-x64
+   mac-x64:
+    runs-on: windows-latest
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v2   
+    - name: Read version
+      id: version
+      uses: juliangruber/read-file-action@v1
+      with:
+        path: ./.version
+    - name: Setup .NET Core
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: 3.1.200
+    - name: Publish MacOSX64
+      run: dotnet publish ./src/Desktop/Desktop.csproj --configuration Release --runtime osx-x64 /p:PublishReadyToRun=false /p:TieredCompilation=false /p:DefineConstants="RELEASE MacOS" --self-contained true -o ./publish/macos-x64
+    - name: Create Mac App
+      run: |
+        New-Item -ItemType Directory -Name './Asteroids Overflow.App/Contents/MacOS'
+        New-Item -ItemType Directory -Name './Asteroids Overflow.App/Contents/Resources'
+        Copy-Item -Path './publish/macos-x64/Content' -Destination './Asteroids Overflow.App/Contents/Resources' -Recurse
+        Copy-Item -Path './publish/macos-x64/game-settings.json' -Destination './Asteroids Overflow.App/Contents/Resources/'
+        Copy-Item -Path './publish/macos-x64/*' -Destination './Asteroids Overflow.App/Contents/MacOS' -Exclude 'Content','game-settings.json'
+        Set-Content -Path './Asteroids Overflow.App/Contents/Info.plist' -Value '<?xml version="1.0" encoding="UTF-8"?>
+        <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+        <plist version="1.0">
+        <dict>
+            <key>CFBundleExecutable</key>
+            <string>Asteroids Overflow</string>
+            <key>CFBundleIconFile</key>
+            <string>Asteroids Overflow</string>
+            <key>CFBundleName</key>
+            <string>Asteroids Overflow</string>
+            <key>CFBundlePackageType</key>
+            <string>APPL</string>
+            <key>CFBundleShortVersionString</key>
+            <string>${{ steps.version.outputs.content }}</string>
+            <key>LSApplicationCategoryType</key>
+            <string>public.app-category.games</string>
+            <key>NSHumanReadableCopyright</key>
+            <string>Copyright © 2022</string>
+            <key>NSPrincipalClass</key>
+            <string>NSApplication</string>
+        </dict>
+        </plist>'
+    - name: MacOS Artifacts
+      uses: actions/upload-artifact@v1
+      with:
+       name: ${{ format('asteroids-overflow-linux-x64-v{0}.{1}', steps.version.outputs.content, github.run_number) }}
+       path: publish/linux-x64
