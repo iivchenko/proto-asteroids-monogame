@@ -72,6 +72,7 @@ jobs:
         Copy-Item -Path './publish/macos-x64/Content' -Destination './mac/Asteroids Overflow.App/Contents/Resources' -Recurse
         Copy-Item -Path './publish/macos-x64/game-settings.json' -Destination './mac/Asteroids Overflow.App/Contents/Resources/'
         Copy-Item -Path './publish/macos-x64/*' -Destination './mac/Asteroids Overflow.App/Contents/MacOS' -Exclude 'Content','game-settings.json'
+        Copy-Item -Path './src/Desktop/Icon.icns' -Destination './mac/Asteroids Overflow.App/Contents/Resources/'
         Set-Content -Path './mac/Asteroids Overflow.App/Contents/Info.plist' -Value '<?xml version="1.0" encoding="UTF-8"?>
         <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
         <plist version="1.0">
@@ -79,7 +80,7 @@ jobs:
             <key>CFBundleExecutable</key>
             <string>Asteroids Overflow</string>
             <key>CFBundleIconFile</key>
-            <string>Asteroids Overflow</string>
+            <string>Icon</string>
             <key>CFBundleName</key>
             <string>Asteroids Overflow</string>
             <key>CFBundlePackageType</key>
