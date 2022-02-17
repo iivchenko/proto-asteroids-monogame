@@ -32,9 +32,7 @@ namespace Desktop
             var configFilePath = Path.Combine(root, ConfigFile);
             var leaderboardsFilePath = Path.Combine(root, LeaderBoardsFile);
             var contentRoot = root;
-            try
-            { 
-                GameBuilder
+            GameBuilder
                 .CreateBuilder()
                 .WithServices(container =>
                     {
@@ -74,14 +72,6 @@ namespace Desktop
                     })
                 .Build((services, config) => new MonoGameGame(services, config, new BootstrapScreen<MainMenuScreen>()))
                 .Run();
-            }
-            catch(Exception e)
-            {
-                using (var file = File.CreateText("/Users/mtarcha/error.log"))
-                {
-                    file.WriteLine(e.ToString());
-                }
-            }
         }
     }
 }
