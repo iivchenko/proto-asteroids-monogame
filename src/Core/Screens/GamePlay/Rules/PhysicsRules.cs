@@ -7,12 +7,13 @@ using Engine;
 using Engine.Collisions;
 using System;
 using System.Linq;
+using System.Numerics;
 
 namespace Core.Screens.GamePlay.Rules
 {
     public static class PhysicsRules
     {
-        public abstract class WhenAsteroidCollidesPlayerShip : IRule<BodiesCollideEvent> //IRule<GamePlayEntitiesCollideEvent<Ship, Asteroid>>
+        public abstract class WhenAsteroidCollidesPlayerShip : IRule<BodiesCollideEvent>
         {
             protected WhenAsteroidCollidesPlayerShip(GamePlayContext context)
             {
@@ -163,7 +164,7 @@ namespace Core.Screens.GamePlay.Rules
             }
         }
 
-        public abstract class WhenPlayersProjectileCollidesAsteroid : IRule<BodiesCollideEvent> // IRule<GamePlayEntitiesCollideEvent<Projectile, Asteroid>>
+        public abstract class WhenPlayersProjectileCollidesAsteroid : IRule<BodiesCollideEvent>
         {
             public bool ExecuteCondition(BodiesCollideEvent @event)
             {
@@ -250,10 +251,99 @@ namespace Core.Screens.GamePlay.Rules
 
                         protected override void ExecuteActionInternal(Projectile projectile, Asteroid asteroid)
                         {
-                            var direction1 = asteroid.Velocity.ToRotation() - 20.AsRadians();
-                            var direction2 = asteroid.Velocity.ToRotation() + 20.AsRadians();
-                            var position1 = asteroid.Position;
-                            var position2 = asteroid.Position;
+                            var offset = new Vector2(23);
+                            var direction1 = asteroid.Velocity.ToRotation() - 30.AsRadians();
+                            var direction2 = asteroid.Velocity.ToRotation() + 30.AsRadians();
+                            var position1 = asteroid.Position - offset;
+                            var position2 = asteroid.Position + offset;
+                            var med1 = _entityFactory.CreateAsteroid(AsteroidType.Medium, position1, direction1);
+                            var med2 = _entityFactory.CreateAsteroid(AsteroidType.Medium, position2, direction2);
+
+                            _world.Add(med1, med2);
+                        }
+                    }
+                }
+            }
+        }
+
+        public abstract class WhenAsteroidCollidesAsteroid : IRule<BodiesCollideEvent>
+        {
+            public bool ExecuteCondition(BodiesCollideEvent @event)
+            {
+                return (@event.Body1, @event.Body2)
+                switch
+                {
+                    (Asteroid asteroid1, Asteroid asteroid2) 
+                        when asteroid1.State == AsteroidState.Alive && asteroid2.State == AsteroidState.Alive 
+                            => ExecuteConditionInternal(asteroid1, asteroid2),
+                    _ => false
+                };
+            }
+
+            public void ExecuteAction(BodiesCollideEvent @event)
+            {
+                switch (@event.Body1, @event.Body2)
+                {
+                    case (Asteroid asteroid1, Asteroid asteroid2):
+                        ExecuteActionInternal(asteroid1, asteroid2);
+                        break;
+                };
+            }
+
+            protected abstract bool ExecuteConditionInternal(Asteroid asteroid1, Asteroid asteroid2);
+
+            protected abstract void ExecuteActionInternal(Asteroid asteroid1, Asteroid asteroid2);
+
+            public sealed class ThenDestroyAsteroids : WhenAsteroidCollidesAsteroid
+            {
+                protected override bool ExecuteConditionInternal(Asteroid asteroid1, Asteroid asteroid2) => true;
+
+                protected override void ExecuteActionInternal(Asteroid asteroid1, Asteroid asteroid2)
+                {
+                    asteroid1.Destroy();
+                    asteroid2.Destroy();
+                }
+            }
+
+            public abstract class AndAsteroidIsBig : WhenAsteroidCollidesAsteroid
+            {
+                protected override bool ExecuteConditionInternal(Asteroid asteroid1, Asteroid asteroid2) =>
+                    asteroid1.Type == AsteroidType.Big || asteroid2.Type == AsteroidType.Big;
+
+                public sealed class TheFallAsteroidAppart : AndAsteroidIsBig
+                {
+                    private readonly IWorld _world;
+                    private readonly IEntityFactory _entityFactory;
+
+                    public TheFallAsteroidAppart(
+                       IWorld world,
+                       IEntityFactory entityFactory)
+                    {
+                        _world = world;
+                        _entityFactory = entityFactory;
+                    }
+
+                    protected override void ExecuteActionInternal(Asteroid asteroid1, Asteroid asteroid2)
+                    {
+                        var offset = new Vector2(23);
+                        if (asteroid1.Type == AsteroidType.Big)
+                        {
+                            var direction1 = asteroid1.Velocity.ToRotation() - 30.AsRadians();
+                            var direction2 = asteroid1.Velocity.ToRotation() + 30.AsRadians();
+                            var position1 = asteroid1.Position - offset;
+                            var position2 = asteroid1.Position + offset;
+                            var med1 = _entityFactory.CreateAsteroid(AsteroidType.Medium, position1, direction1);
+                            var med2 = _entityFactory.CreateAsteroid(AsteroidType.Medium, position2, direction2);
+
+                            _world.Add(med1, med2);
+                        }
+
+                        if (asteroid2.Type == AsteroidType.Big)
+                        {
+                            var direction1 = asteroid2.Velocity.ToRotation() - 30.AsRadians();
+                            var direction2 = asteroid2.Velocity.ToRotation() + 30.AsRadians();
+                            var position1 = asteroid1.Position - offset;
+                            var position2 = asteroid1.Position + offset;
                             var med1 = _entityFactory.CreateAsteroid(AsteroidType.Medium, position1, direction1);
                             var med2 = _entityFactory.CreateAsteroid(AsteroidType.Medium, position2, direction2);
 

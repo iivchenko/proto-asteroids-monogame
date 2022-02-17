@@ -158,9 +158,9 @@ namespace Core.Entities
                                     AngularVelocity = rand.Next(5, 100).AsRadians(),
                                     Color = Colors.White,
                                     Position = asteroid.Position,
-                                    Scale = Vector2.One,
+                                    Scale = asteroid.Type == AsteroidType.Big ? new Vector2(2) : Vector2.One,
                                     Sprite = _asteroid._debri,
-                                    TTL = 4,
+                                    TTL = asteroid.Type == AsteroidType.Big ? 6 : 4,
                                     Velocity = new Vector2(rand.Next(-100, 100), rand.Next(-100, 100)),
                                 }))
                             .WithUpdate((rand, time, particle) =>
