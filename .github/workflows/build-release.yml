@@ -1,0 +1,11 @@
+name: Build - Rlease
+
+on:
+  push:
+    branches: [ main ]
+    
+jobs:      
+  release:
+    uses: ./.github/workflows/build-core.yml
+    with:
+      config: Release

@@ -50,7 +50,7 @@ namespace Engine
             Graphics.PreferredBackBufferWidth = (int)(GraphicsDevice.DisplayMode.Width * (2.0 / 3.0));
             Graphics.PreferredBackBufferHeight = (int)(GraphicsDevice.DisplayMode.Height * (2.0 / 3.0));
 
-#elif RELEASE
+#else
             Graphics.PreferredBackBufferWidth = GraphicsDevice.DisplayMode.Width;
             Graphics.PreferredBackBufferHeight = GraphicsDevice.DisplayMode.Height;
             Graphics.IsFullScreen = true;

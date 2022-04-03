@@ -1,9 +1,12 @@
-name: Asteroids Overflow Build
-
 on:
-  push:
-    branches: [ main, develop ]
-
+  workflow_call:
+    inputs:
+      config:
+        required: true
+        type: string
+      suffix: 
+        type: string
+        
 jobs:
 
   win-x64:
@@ -21,11 +24,11 @@ jobs:
       with:
         dotnet-version: 3.1.200
     - name: Publish WinX64
-      run: dotnet publish ./src/Desktop/Desktop.csproj --configuration Release --runtime win-x64 --self-contained true -o ./publish/win-x64
+      run: dotnet publish ./src/Desktop/Desktop.csproj --configuration ${{ inputs.config }} --runtime win-x64 --self-contained true -o ./publish/win-x64
     - name: Windows Artifacts
       uses: actions/upload-artifact@v1
       with:
-       name: ${{ format('asteroids-overflow-win-x64-v{0}.{1}', steps.version.outputs.content, github.run_number) }}
+       name: ${{ format('asteroids-overflow-win-x64-v{0}.{1}{2}', steps.version.outputs.content, github.run_number, inputs.suffix) }}
        path: publish/win-x64
        
   linux-x64:
@@ -43,11 +46,11 @@ jobs:
       with:
         dotnet-version: 3.1.200
     - name: Publish LinuxX64
-      run: dotnet publish ./src/Desktop/Desktop.csproj --configuration Release --runtime linux-x64 --self-contained true -o ./publish/linux-x64
+      run: dotnet publish ./src/Desktop/Desktop.csproj --configuration ${{ inputs.config }} --runtime linux-x64 --self-contained true -o ./publish/linux-x64
     - name: Linux Artifacts
       uses: actions/upload-artifact@v1
       with:
-       name: ${{ format('asteroids-overflow-linux-x64-v{0}.{1}', steps.version.outputs.content, github.run_number) }}
+       name: ${{ format('asteroids-overflow-linux-x64-v{0}.{1}{2}', steps.version.outputs.content, github.run_number, inputs.suffix) }}
        path: publish/linux-x64
   mac-x64:
     runs-on: windows-latest
@@ -64,7 +67,7 @@ jobs:
       with:
         dotnet-version: 3.1.200
     - name: Publish MacOSX64
-      run: dotnet publish ./src/Desktop/Desktop.csproj --configuration Release --runtime osx-x64 /p:PublishReadyToRun=false /p:TieredCompilation=false /p:DefineConstants="RELEASE MacOS" --self-contained true -o ./publish/macos-x64
+      run: dotnet publish ./src/Desktop/Desktop.csproj --configuration ${{ inputs.config }} --runtime osx-x64 /p:PublishReadyToRun=false /p:TieredCompilation=false /p:DefineConstants="${{ env.CONFIG }} MacOS" --self-contained true -o ./publish/macos-x64
     - name: Create Mac App
       run: |
         New-Item -ItemType Directory -Name './mac/Asteroids Overflow.App/Contents/MacOS'
@@ -98,5 +101,5 @@ jobs:
     - name: MacOS Artifacts
       uses: actions/upload-artifact@v2
       with:
-        name: ${{ format('asteroids-overflow-macos-x64-v{0}.{1}', steps.version.outputs.content, github.run_number) }}
+        name: ${{ format('asteroids-overflow-macos-x64-v{0}.{1}{2}', steps.version.outputs.content, github.run_number, inputs.suffix) }}
         path: mac
