@@ -62,7 +62,7 @@ namespace Engine.MonoGame
             {
                 var texture =_content.Load<Texture2D>(path);
 
-                var sprite = new Sprite(texture);
+                var sprite = new Sprite(texture.Height, texture.Width);
 
                 _map.Add(sprite.Id, path);
 
@@ -101,6 +101,11 @@ namespace Engine.MonoGame
             {
                 throw new System.Exception($"Unknown content type {type.Name}!!");
             }
+        }
+
+        internal Texture2D GetTexture(Sprite sprite)
+        {
+            return _content.Load<Texture2D>(_map[sprite.Id]);
         }
 
         internal TContent Load<TContent>(Guid id)

@@ -1,4 +1,5 @@
 ﻿using Engine.Audio;
+using Engine.Collisions;
 using Engine.Content;
 using Engine.Graphics;
 using Engine.MonoGame;
@@ -37,7 +38,9 @@ namespace Microsoft.Extensions.DependencyInjection
         {
             services.TryAddSingleton(x => new ContentRoot(content));
             services.TryAddSingleton<MonoGameContentProvider>();
+            services.TryAddSingleton<MonoGameCollisionService>();
             services.TryAdd(new ServiceDescriptor(typeof(IContentProvider), x => x.GetService<MonoGameContentProvider>(), ServiceLifetime.Singleton));
+            services.TryAdd(new ServiceDescriptor(typeof(ICollisionService), x => x.GetService<MonoGameCollisionService>(), ServiceLifetime.Singleton));
 
             return services;
         }

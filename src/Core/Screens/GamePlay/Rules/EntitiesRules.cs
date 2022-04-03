@@ -1,5 +1,6 @@
 ﻿using Core.Entities;
 using Core.Events;
+using Engine.Collisions;
 using Engine.Entities;
 using Engine.Graphics;
 using Engine.Rules;
@@ -34,15 +35,21 @@ namespace Core.Screens.GamePlay.Rules
             public sealed class ThenRemoveAsteroid : IRule<AsteroidDestroyedEvent>
             {
                 private readonly IWorld _world;
+                private readonly ICollisionService _collisionService;
 
-                public ThenRemoveAsteroid(IWorld world)
+                public ThenRemoveAsteroid(IWorld world, ICollisionService collisionService)
                 {
                     _world = world;
+                    _collisionService = collisionService;
                 }
 
                 public bool ExecuteCondition(AsteroidDestroyedEvent @event) => true;
 
-                public void ExecuteAction(AsteroidDestroyedEvent @event) => _world.Remove(@event.Asteroid);
+                public void ExecuteAction(AsteroidDestroyedEvent @event)
+                {
+                    _world.Remove(@event.Asteroid);
+                    _collisionService.UnregisterBody(@event.Asteroid);
+                }
             }
         }
 

@@ -11,11 +11,13 @@ namespace Core.Screens.GamePlay.Systems
     public sealed class OutOfScreenSystem : IGamePlaySystem
     {
         private readonly IWorld _world;
+        ICollisionService _collisionService;
         private readonly IViewport _viewport;
 
-        public OutOfScreenSystem(IWorld world, IViewport viewport)
+        public OutOfScreenSystem(IWorld world, ICollisionService collisionService, IViewport viewport)
         {
             _world = world;
+            _collisionService = collisionService;
             _viewport = viewport;
         }
 
@@ -44,6 +46,7 @@ namespace Core.Screens.GamePlay.Systems
             {
                 case Projectile projectile:
                     _world.Remove(projectile);
+                    _collisionService.UnregisterBody(projectile);
                     break;
                 default:
                     var x = body.Position.X;

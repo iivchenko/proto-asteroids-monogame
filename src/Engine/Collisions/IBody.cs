@@ -1,7 +1,5 @@
 ﻿using System.Numerics;
 
-using Color = Microsoft.Xna.Framework.Color;
-
 namespace Engine.Collisions
 {
     public interface IBody
@@ -12,6 +10,5 @@ namespace Engine.Collisions
         public float Rotation { get; set; }
         public float Width { get; set; }
         public float Height { get; set; }
-        public Color[] Data { get; set; }
     }
 }

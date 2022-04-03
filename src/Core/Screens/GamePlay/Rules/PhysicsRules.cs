@@ -105,14 +105,20 @@ namespace Core.Screens.GamePlay.Rules
                 public sealed class ThenRemovePlayersShipFromTheGame : OrPlayerShipDoesntHaveEnoughLifes
                 {
                     private readonly IWorld _world;
+                    private readonly ICollisionService _collisionService;
 
-                    public ThenRemovePlayersShipFromTheGame(GamePlayContext context, IWorld world)
+                    public ThenRemovePlayersShipFromTheGame(GamePlayContext context, IWorld world, ICollisionService collisionService)
                         : base(context)
                     {
                         _world = world;
+                        _collisionService = collisionService;
                     }
 
-                    protected override void ExecuteActionInternal(Ship ship, Asteroid asteroid) => _world.Remove(ship);
+                    protected override void ExecuteActionInternal(Ship ship, Asteroid asteroid)
+                    {
+                        _world.Remove(ship);
+                        _collisionService.UnregisterBody(ship);
+                    }
                 }
 
                 public sealed class ThenGameOver : OrPlayerShipDoesntHaveEnoughLifes
@@ -272,14 +278,21 @@ namespace Core.Screens.GamePlay.Rules
                 public sealed class ThenRemoveProjectile : AndAsteroidIsAlive
                 {
                     private readonly IWorld _world;
+                    private readonly ICollisionService _collisionService;
 
                     public ThenRemoveProjectile(
-                       IWorld world)
+                       IWorld world,
+                        ICollisionService collisionService)
                     {
                         _world = world;
+                        _collisionService = collisionService;
                     }
 
-                    protected override void ExecuteActionInternal(Projectile projectile, Asteroid asteroid) => _world.Remove(projectile);
+                    protected override void ExecuteActionInternal(Projectile projectile, Asteroid asteroid)
+                    {
+                        _world.Remove(projectile);
+                        _collisionService.UnregisterBody(projectile);
+                    }
                 }
 
                 public sealed class ThenDestroyAsteroid : AndAsteroidIsAlive
@@ -462,14 +475,21 @@ namespace Core.Screens.GamePlay.Rules
                 public sealed class ThenRemoveProjectile : AndUfoIsAlive
                 {
                     private readonly IWorld _world;
+                    private readonly ICollisionService _collisionService;
 
                     public ThenRemoveProjectile(
-                       IWorld world)
+                        IWorld world,
+                        ICollisionService collisionService)
                     {
                         _world = world;
+                        _collisionService = collisionService;
                     }
 
-                    protected override void ExecuteActionInternal(Projectile projectile, Ufo ufo) => _world.Remove(projectile);
+                    protected override void ExecuteActionInternal(Projectile projectile, Ufo ufo)
+                    {
+                        _world.Remove(projectile);
+                        _collisionService.UnregisterBody(projectile);
+                    }
                 }
 
                 public sealed class ThenDestroyUfo : AndUfoIsAlive
@@ -561,14 +581,20 @@ namespace Core.Screens.GamePlay.Rules
                 public sealed class ThenRemovePlayersShipFromTheGame : OrPlayerShipDoesntHaveEnoughLifes
                 {
                     private readonly IWorld _world;
+                    private readonly ICollisionService _collisionService;
 
-                    public ThenRemovePlayersShipFromTheGame(GamePlayContext context, IWorld world)
+                    public ThenRemovePlayersShipFromTheGame(GamePlayContext context, IWorld world, ICollisionService collisionService)
                         : base(context)
                     {
                         _world = world;
+                        _collisionService = collisionService;
                     }
 
-                    protected override void ExecuteActionInternal(Ship ship, Ufo ufo) => _world.Remove(ship);
+                    protected override void ExecuteActionInternal(Ship ship, Ufo ufo)
+                    {
+                        _world.Remove(ship);
+                        _collisionService.UnregisterBody(ship);
+                    }
                 }
 
                 public sealed class ThenGameOver : OrPlayerShipDoesntHaveEnoughLifes
@@ -702,14 +728,20 @@ namespace Core.Screens.GamePlay.Rules
                 public sealed class ThenRemovePlayersShipFromTheGame : OrPlayerShipDoesntHaveEnoughLifes
                 {
                     private readonly IWorld _world;
+                    private readonly ICollisionService _collisionService;
 
-                    public ThenRemovePlayersShipFromTheGame(GamePlayContext context, IWorld world)
+                    public ThenRemovePlayersShipFromTheGame(GamePlayContext context, IWorld world, ICollisionService collisionService)
                         : base(context)
                     {
                         _world = world;
+                        _collisionService = collisionService;
                     }
 
-                    protected override void ExecuteActionInternal(Projectile projectile, Ship ship) => _world.Remove(ship);
+                    protected override void ExecuteActionInternal(Projectile projectile, Ship ship)
+                    {
+                        _world.Remove(ship);
+                        _collisionService.UnregisterBody(ship);
+                    }
                 }
 
                 public sealed class ThenGameOver : OrPlayerShipDoesntHaveEnoughLifes

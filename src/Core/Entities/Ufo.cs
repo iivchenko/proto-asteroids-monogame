@@ -52,7 +52,6 @@ namespace Core.Entities
             Scale = Vector2.One;
             Width = _sprite.Width;
             Height = _sprite.Height;
-            Data = _sprite.ReadData();
 
             _state = new AliveState(this);
         }
@@ -65,7 +64,6 @@ namespace Core.Entities
         public float Rotation { get; set; }
         public float Width { get; set; }
         public float Height { get; set; }
-        public Color[] Data { get; set; }
         public bool CanFire { get => _weapon.State == WeaponState.Idle; }
         public UfoState State
         {

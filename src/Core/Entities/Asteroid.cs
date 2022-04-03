@@ -58,7 +58,6 @@ namespace Core.Entities
             Scale = scale;
             Width = _sprite.Width;
             Height = _sprite.Height;
-            Data = sprite.ReadData();
 
             _state = new AliveState(this);
         }
@@ -71,7 +70,6 @@ namespace Core.Entities
         public float Rotation { get; set; }
         public float Width { get; set; }
         public float Height { get; set; }
-        public Color[] Data { get; set; }
         public AsteroidType Type { get; set; }
         public Vector2 Velocity => _velocity;
         public AsteroidState State

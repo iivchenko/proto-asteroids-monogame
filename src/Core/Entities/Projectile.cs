@@ -34,7 +34,6 @@ namespace Core.Entities
             Scale = Vector2.One;
             Width = _sprite.Width;
             Height = _sprite.Height;
-            Data = sprite.ReadData();
         }
 
         public Guid Id { get; }
@@ -45,7 +44,6 @@ namespace Core.Entities
         public float Rotation { get; set; }
         public float Width { get; set; }
         public float Height { get; set; }
-        public Color[] Data { get; set; }
 
         void IUpdatable.Update(float time)
         {

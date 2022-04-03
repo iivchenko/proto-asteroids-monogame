@@ -13,11 +13,17 @@ namespace Engine.Collisions
     {
         private readonly IEventPublisher _publisher;
         private readonly IWorld _world;
+        private readonly ICollisionService _collisionService;
 
-        public CollisionGamePlaySystem(IEventPublisher publisher, IWorld world, uint priority)
+        public CollisionGamePlaySystem(
+            IEventPublisher publisher, 
+            IWorld world,
+            ICollisionService collisionService, 
+            uint priority)
         {
             _publisher = publisher;
             _world = world;
+            _collisionService = collisionService;
 
             Priority = priority;
         }
@@ -54,8 +60,13 @@ namespace Engine.Collisions
                 }
         }
 
-        private static bool IntersectPixels(IBody body1, IBody body2)
+        private bool IntersectPixels(IBody body1, IBody body2)
         {
+            var body1Data = _collisionService.ReadBodyPixels(body1);
+            var body2Data = _collisionService.ReadBodyPixels(body2);
+
+            if (body1Data.Length == 0 || body2Data.Length == 0) return false;
+
             var body1Matrix =
                 Matrix.CreateTranslation(new Vector3(-body1.Origin.ToXnaVector(), 0.0f)) *
                 Matrix.CreateScale(new Vector3(body1.Scale.ToXnaVector(), 1.0f)) *
@@ -101,8 +112,8 @@ namespace Engine.Collisions
                         0 <= yB && yB < body2.Height)
                     {
                         // Get the colors of the overlapping pixels
-                        Color colorA = body1.Data[xA + yA * (int)body1.Width];
-                        Color colorB = body2.Data[xB + yB * (int)body2.Width];
+                        Color colorA = body1Data[xA + yA * (int)body1.Width];
+                        Color colorB = body2Data[xB + yB * (int)body2.Width];
 
                         // If both pixels are not completely transparent,
                         if (colorA.Alpha != 0 && colorB.Alpha != 0)

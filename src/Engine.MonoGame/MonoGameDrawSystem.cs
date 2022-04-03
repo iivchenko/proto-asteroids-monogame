@@ -33,9 +33,10 @@ namespace Engine.MonoGame
 
         public void Draw(Sprite sprite, Vector2 position, Vector2 origin, Vector2 scale, float rotation, Color color)
         {
+            var texture = _content.GetTexture(sprite);
             _batch
                 .Draw(
-                    sprite.Texture,
+                    texture,
                     position.ToXna(),
                     null,
                     color.ToXna(),
@@ -48,19 +49,20 @@ namespace Engine.MonoGame
 
         public void Draw(Sprite sprite, Rectangle rectagle, Color color)
         {
+            var texture = _content.GetTexture(sprite);
             _batch
                 .Draw(
-                    sprite.Texture,
+                    texture,
                     rectagle.ToXna(),
                     color.ToXna());
         }
 
         public void Draw(Sprite sprite, Vector2 position, Rectangle source, Vector2 origin, Vector2 scale, float rotation, Color color)
         {
-
+            var texture = _content.GetTexture(sprite);
             _batch
                 .Draw(
-                    sprite.Texture, 
+                    texture, 
                     position.ToXna(),
                     source.ToXna(),
                     color.ToXna(),
@@ -73,7 +75,8 @@ namespace Engine.MonoGame
 
         public void Draw(Sprite sprite, Rectangle destination, Rectangle source, Color color)
         {
-            _batch.Draw(sprite.Texture, destination.ToXna(), source.ToXna(), color.ToXna());
+            var texture = _content.GetTexture(sprite);
+            _batch.Draw(texture, destination.ToXna(), source.ToXna(), color.ToXna());
         }
 
         public void DrawString(Font font, string text, Vector2 position, Color color)

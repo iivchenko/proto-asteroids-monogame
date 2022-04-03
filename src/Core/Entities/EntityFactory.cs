@@ -1,6 +1,7 @@
 ﻿using Core.Screens.GamePlay;
 using Engine;
 using Engine.Audio;
+using Engine.Collisions;
 using Engine.Content;
 using Engine.Graphics;
 using Engine.Rules;
@@ -39,17 +40,20 @@ namespace Core.Entities
         private readonly IPainter _draw;
         private readonly IAudioPlayer _player;
         private readonly IContentProvider _content;
+        private readonly ICollisionService _collisionService;
 
         private readonly Random _random;
 
         public EntityFactory(
             IContentProvider content,
+            ICollisionService collisionService,
             IProjectileFactory projectileFactory,
             IEventPublisher eventService,
             IPainter draw,
             IAudioPlayer player)
         {
             _content = content;
+            _collisionService = collisionService;
             _lazer = content.Load<Sound>("Sounds/laser.sound");
             _explosion = content.Load<Sound>("Sounds/asteroid-explosion.sound");
             _projectileFactory = projectileFactory;
@@ -86,11 +90,15 @@ namespace Core.Entities
                 new ShipTrail(trailSprite, new Vector2(xoffset, yoffset), new Vector2(trailSprite.Width / 2, 0), new Vector2(GameRoot.Scale), _draw)
             };
 
-            return new Ship(_draw, _publisher, sprite, debris, weapon, trails, _player, _explosion, MaxSpeed, Acceleration, MaxRotation.AsRadians(), MaxAngularAcceleration.AsRadians())
+            var ship = new Ship(_draw, _publisher, sprite, debris, weapon, trails, _player, _explosion, MaxSpeed, Acceleration, MaxRotation.AsRadians(), MaxAngularAcceleration.AsRadians())
             {
                 Position = position,
                 Scale = new Vector2(GameRoot.Scale)
             };
+
+            _collisionService.RegisterBody(ship, sprite);
+
+            return ship;
         }
         public Asteroid CreateAsteroid(AsteroidType type, Vector2 position, float direction)
         {
@@ -138,10 +146,14 @@ namespace Core.Entities
             }
             var debri = _content.Load<Sprite>("Sprites/Asteroids/Tiny/AsteroidTiny01"); // TODO: Create own asteroid debri
 
-            return new Asteroid(_draw, _player, _publisher, type, sprite, debri, _explosion, velocity, new Vector2(GameRoot.Scale), rotationSpeed)
+            var asteroid = new Asteroid(_draw, _player, _publisher, type, sprite, debri, _explosion, velocity, new Vector2(GameRoot.Scale), rotationSpeed)
             {
                 Position = position
             };
+
+            _collisionService.RegisterBody(asteroid, sprite);
+
+            return asteroid;
         }
 
         public Ufo CreateUfo(Vector2 position, float direction)
@@ -160,11 +172,15 @@ namespace Core.Entities
             var yoffset = sprite.Height * GameRoot.Scale / 2.0f;
 
             var velocity = direction.ToDirection() * new Vector2(MaxSpeed, MaxSpeed);
-            return new Ufo(_draw, _publisher, sprite, debris, _player, _explosion, weapon, velocity)
+            var ufo = new Ufo(_draw, _publisher, sprite, debris, _player, _explosion, weapon, velocity)
             {
                 Position = position,
                 Scale = new Vector2(GameRoot.Scale)
             };
+
+            _collisionService.RegisterBody(ufo, sprite);
+
+            return ufo;
         }
     }
 }
