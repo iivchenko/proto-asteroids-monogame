@@ -108,6 +108,12 @@
 /processorParam:Quality=Best
 /build:Sounds/asteroid-explosion.sound.wav
 
+#begin Sounds/enemy-spawn.sound.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Sounds/enemy-spawn.sound.wav
+
 #begin Sounds/laser.sound.ogg
 /importer:OggImporter
 /processor:SoundEffectProcessor
@@ -173,6 +179,18 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:Sprites/blank.sprite.png
+
+#begin Sprites/Blasters/Blaster01.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Sprites/Blasters/Blaster01.png
 
 #begin Sprites/Debris/Debri01.png
 /importer:TextureImporter
@@ -329,4 +347,16 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:Sprites/Trails/Trail01.png
+
+#begin Sprites/Ufos/Ufo01.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Sprites/Ufos/Ufo01.png
 

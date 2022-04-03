@@ -1,5 +1,7 @@
 ﻿using Core.Entities;
 using Engine;
+using Engine.Audio;
+using Engine.Content;
 using Engine.Entities;
 using Engine.Graphics;
 using Engine.Rules;
@@ -137,6 +139,73 @@ namespace Core.Screens.GamePlay.Rules
                 {
                     var direction = Vector2.Normalize(target - position).ToRotation();
                     return _entityFactory.CreateAsteroid(AsteroidType.Tiny, position, direction);
+                }
+            }
+
+            public sealed class ThenCreateUfo : IRule<OnTimerEvent>
+            {
+                private readonly IWorld _world;
+                private readonly IViewport _viewport;
+                private readonly IEntityFactory _entityFactory;
+                private readonly IContentProvider _content;
+                private readonly IAudioPlayer _player;
+                private readonly Random _random;
+
+                public ThenCreateUfo(
+                    IWorld world,
+                    IViewport viewport,
+                    IEntityFactory entityFactory,
+                    IContentProvider content,
+                    IAudioPlayer player)
+                {
+                    _world = world;
+                    _viewport = viewport;
+                    _entityFactory = entityFactory;
+                    _content = content;
+                    _player = player;
+
+                    _random = new Random();
+                }
+
+                public bool ExecuteCondition(OnTimerEvent @event) => @event.Timer.Tags.Contains(GameTags.NextUfo);
+
+                public void ExecuteAction(OnTimerEvent @event)
+                {
+                    var x = 0;
+                    var y = 0;
+
+                    switch (_random.Next(0, 4))
+                    {
+                        case 0: // Up -> Down
+                            x = _random.Next(0, (int)_viewport.Width);
+                            y = 0;
+                            break;
+
+                        case 1: // Right -> Left
+                            x = (int)_viewport.Width;
+                            y = _random.Next(0, (int)_viewport.Height);
+                            break;
+
+                        case 2: // Down -> UP
+                            x = _random.Next(0, (int)_viewport.Width);
+                            y = (int)_viewport.Height;
+                            break;
+
+                        case 3: // Left -> Right
+                            x = 0;
+                            y = _random.Next(0, (int)_viewport.Height);
+                            break;
+                    }
+
+                    var position = new Vector2(x, y);
+                    var direction = _random.Next(0, 360).AsRadians();
+                    var ufo = _entityFactory.CreateUfo(position, direction);
+
+                    _world.Add(ufo);
+
+                    var sound = _content.Load<Sound>("Sounds/enemy-spawn.sound");
+
+                    _player.Play(sound);
                 }
             }
         }

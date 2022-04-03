@@ -1,4 +1,5 @@
 ﻿using Engine;
+using Engine.Audio;
 using Engine.Collisions;
 using Engine.Entities;
 using Engine.Graphics;
@@ -19,6 +20,8 @@ namespace Core.Entities
         private readonly Sprite[] _debri;
         private readonly Weapon _weapon;
         private readonly ShipTrail[] _trails;
+        private readonly IAudioPlayer _audioPlayer;
+        private readonly Sound _explosion;
 
         private readonly float _maxSpeed;
         private readonly float _maxAcceleration;
@@ -37,6 +40,8 @@ namespace Core.Entities
             Sprite[] debri,
             Weapon weapon,
             ShipTrail[] trails,
+            IAudioPlayer audioPlayer,
+            Sound explosion,
             float maxSpeed,
             float maxAcceleration,
             float maxRotation,
@@ -48,6 +53,8 @@ namespace Core.Entities
             _debri = debri;
             _weapon = weapon;
             _trails = trails;
+            _audioPlayer = audioPlayer;
+            _explosion = explosion;
             _maxSpeed = maxSpeed;
             _maxAcceleration = maxAcceleration;
             _maxRotation = maxRotation;
@@ -197,7 +204,7 @@ namespace Core.Entities
             public DestroyState(Ship ship)
             {
                 _ship = ship;
-
+                _ship._audioPlayer.Play(_ship._explosion);
                 _particleEngine =
                     Particles
                         .CreateNew()

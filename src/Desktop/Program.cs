@@ -5,6 +5,7 @@ using Core.Screens;
 using Core.Screens.GamePlay;
 using Core.Screens.GamePlay.Systems;
 using Engine;
+using Engine.Entities;
 using Engine.Graphics;
 using Engine.Storage;
 using Microsoft.Extensions.Configuration;
@@ -59,6 +60,7 @@ namespace Desktop
                             .AddSingleton<IGamePlaySystem, OutOfScreenSystem>()
                             .AddEntitySystem(10, 50)
                             .AddCollisions(20)
+                            .AddSingleton<IGamePlaySystem, UfoAiSystem>(x => new UfoAiSystem(x.GetRequiredService<IWorld>(), 10))
                             .AddGameRules(new[] { Assembly.GetAssembly(typeof(Core.Version)) }, 30)
                             .AddSingleton<GamePlayContext>()
                             .AddSingleton<LeaderboardsManager>();

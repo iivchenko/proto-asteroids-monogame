@@ -1,4 +1,5 @@
-﻿using Engine;
+﻿using Core.Screens.GamePlay;
+using Engine;
 using Engine.Audio;
 using Engine.Content;
 using Engine.Graphics;
@@ -74,7 +75,7 @@ namespace Core.Entities
             var trailSpriteName = _content.GetFiles("Sprites/Trails").RandomPick();
             var trailSprite = _content.Load<Sprite>(trailSpriteName);
             var debris = _content.GetFiles("Sprites/Debris").Select(_content.Load<Sprite>).ToArray(); var reload = TimeSpan.FromMilliseconds(500);
-            var weapon = new Weapon(new Vector2(0, -(sprite.Width * GameRoot.Scale) / 2), reload, _projectileFactory, _publisher, _player, laserSprite, _lazer);
+            var weapon = new Weapon(new Vector2(0, -(sprite.Width * GameRoot.Scale) / 2), reload, _projectileFactory, _publisher, _player, laserSprite, _lazer, WeaponState.Idle, GameTags.Player);
 
             var xoffset = (sprite.Width * GameRoot.Scale / 2.0f) * 0.65f;
             var yoffset = sprite.Height * GameRoot.Scale / 2.0f;
@@ -85,7 +86,7 @@ namespace Core.Entities
                 new ShipTrail(trailSprite, new Vector2(xoffset, yoffset), new Vector2(trailSprite.Width / 2, 0), new Vector2(GameRoot.Scale), _draw)
             };
 
-            return new Ship(_draw, _publisher, sprite, debris, weapon, trails, MaxSpeed, Acceleration, MaxRotation.AsRadians(), MaxAngularAcceleration.AsRadians())
+            return new Ship(_draw, _publisher, sprite, debris, weapon, trails, _player, _explosion, MaxSpeed, Acceleration, MaxRotation.AsRadians(), MaxAngularAcceleration.AsRadians())
             {
                 Position = position,
                 Scale = new Vector2(GameRoot.Scale)
@@ -102,7 +103,7 @@ namespace Core.Entities
             switch (type)
             {
                 case AsteroidType.Tiny:
-                    sprite = _content.Load<Sprite>("Sprites/Asteroids/Tiny/AsteroidTiny01");                    
+                    sprite = _content.Load<Sprite>("Sprites/Asteroids/Tiny/AsteroidTiny01");
                     speedX = _random.Next(TinyAsteroidMinSpeed, TinyAsteroidMaxSpeed);
                     speedY = _random.Next(TinyAsteroidMinSpeed, TinyAsteroidMaxSpeed);
                     rotationSpeed = _random.Next(TinyAsteroidMinRotationSpeed, TinyAsteroidMaxRotationSpeed).AsRadians() * _random.NextDouble() > 0.5 ? 1 : -1;
@@ -140,6 +141,29 @@ namespace Core.Entities
             return new Asteroid(_draw, _player, _publisher, type, sprite, debri, _explosion, velocity, new Vector2(GameRoot.Scale), rotationSpeed)
             {
                 Position = position
+            };
+        }
+
+        public Ufo CreateUfo(Vector2 position, float direction)
+        {
+            const float MaxSpeed = 400.0f;
+            var spriteName = _content.GetFiles("Sprites/Ufos").RandomPick();
+            var sprite = _content.Load<Sprite>(spriteName);
+            var blasterSpriteName = _content.GetFiles("Sprites/Blasters").RandomPick();
+            var blasterSprite = _content.Load<Sprite>(blasterSpriteName);
+
+            var debris = _content.GetFiles("Sprites/Debris").Select(_content.Load<Sprite>).ToArray(); 
+            var reload = TimeSpan.FromMilliseconds(1500);
+            var weapon = new Weapon(new Vector2(0, -(sprite.Width * GameRoot.Scale) / 2), reload, _projectileFactory, _publisher, _player, blasterSprite, _lazer, WeaponState.Reload, GameTags.Enemy);
+
+            var xoffset = (sprite.Width * GameRoot.Scale / 2.0f);
+            var yoffset = sprite.Height * GameRoot.Scale / 2.0f;
+
+            var velocity = direction.ToDirection() * new Vector2(MaxSpeed, MaxSpeed);
+            return new Ufo(_draw, _publisher, sprite, debris, _player, _explosion, weapon, velocity)
+            {
+                Position = position,
+                Scale = new Vector2(GameRoot.Scale)
             };
         }
     }

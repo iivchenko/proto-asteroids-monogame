@@ -19,11 +19,12 @@ namespace Core.Entities
         private readonly IEventPublisher _eventService;
         private readonly IAudioPlayer _player;
         private readonly Random _random;
+        private readonly string _tag;
 
         private readonly Sprite _lazerSprite;
         private readonly Sound _lazer;
 
-        private State _state;
+        private WeaponState _state;
         private double _reloading;
 
         public Weapon(
@@ -33,18 +34,31 @@ namespace Core.Entities
             IEventPublisher eventService,
             IAudioPlayer player,
             Sprite lazerSprite,
-            Sound lazer)
+            Sound lazer,
+            WeaponState initialState,
+            string tag)
         {
             _offset = offset;
             _reload = reload;
             _factory = factory;
             _eventService = eventService;
             _player = player;
-
             _lazerSprite = lazerSprite;
             _lazer = lazer;
+            _state = initialState;
+            _tag = tag;
 
-            _state = State.Idle;
+            switch(initialState)
+            {
+                case WeaponState.Idle:
+                    _reloading = 0.0;
+                    break;
+
+                case WeaponState.Reload:
+                    _reloading = reload.TotalSeconds;
+                    break;
+            }
+
             _random = new Random();
 
             Id = Guid.NewGuid();
@@ -52,19 +66,20 @@ namespace Core.Entities
 
         public Guid Id { get; }
         public IEnumerable<string> Tags => Enumerable.Empty<string>();
+        public WeaponState State { get => _state; }
 
         public void Update(float time)
         {
             switch(_state)
             {
-                case State.Idle:
+                case WeaponState.Idle:
                     break;
-                case State.Reload:
+                case WeaponState.Reload:
                     _reloading -= time;
 
                     if (_reloading <= 0)
                     {
-                        _state = State.Idle;
+                        _state = WeaponState.Idle;
                     }
                     break;
             }
@@ -72,13 +87,13 @@ namespace Core.Entities
 
         public void Fire(Vector2 parentPosition, float parentRotation)
         {
-            if (_state == State.Idle)
+            if (_state == WeaponState.Idle)
             {
-                _state = State.Reload;
+                _state = WeaponState.Reload;
                 _reloading = _reload.TotalSeconds;
                 var position = Matrix2.CreateRotation(parentRotation) * _offset + parentPosition;
                 var direction = parentRotation.ToDirection();
-                var projectile = _factory.Create(position, direction, _lazerSprite);
+                var projectile = _factory.Create(position, direction, _lazerSprite, _tag);
 
                 _eventService.Publish(new EntityCreatedEvent(projectile));
 
@@ -86,11 +101,11 @@ namespace Core.Entities
                 _player.Play(_lazer, pitch);
             }
         }
+    }
 
-        private enum State
-        {
-            Idle,
-            Reload
-        }
+    public enum WeaponState
+    {
+        Idle,
+        Reload
     }
 }

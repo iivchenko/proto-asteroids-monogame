@@ -38,7 +38,7 @@ namespace Core.Entities
         }
 
         public Guid Id { get; }
-        public IEnumerable<string> Tags => Enumerable.Empty<string>();
+        public IEnumerable<string> Tags { get; set; }
         public Vector2 Position { get; set; }
         public Vector2 Origin { get; set; }
         public Vector2 Scale { get; set; }

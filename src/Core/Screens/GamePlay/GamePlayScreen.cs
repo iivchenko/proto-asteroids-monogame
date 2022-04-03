@@ -48,7 +48,9 @@ namespace Core.Screens.GamePlay
 
             var timer1 = new Timer(TimeSpan.FromSeconds(3), GameTags.NextAsteroid, _publisher);
             var timer2 = new Timer(TimeSpan.FromSeconds(60), GameTags.NextAsteroidLimitChange, _publisher);
-            var timer3 = new Timer(TimeSpan.FromSeconds(45), GameTags.NextHasardSituation, _publisher);
+            var timer3 = new Timer(TimeSpan.FromSeconds(35), GameTags.NextHasardSituation, _publisher);
+            var timer4 = new Timer(TimeSpan.FromSeconds(45), GameTags.NextUfo, _publisher);
+
             _hud = new GamePlayHud
             (
                 container.GetService<IOptionsMonitor<GameSettings>>(),
@@ -64,7 +66,8 @@ namespace Core.Screens.GamePlay
                 ship,
                 timer1,
                 timer2,
-                timer3
+                timer3,
+                timer4
             );
             
             var file =

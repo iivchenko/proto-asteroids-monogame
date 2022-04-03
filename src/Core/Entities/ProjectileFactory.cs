@@ -15,7 +15,7 @@ namespace Core.Entities
             _draw = draw;
         }
 
-        public Projectile Create(Vector2 position, Vector2 direction, Sprite sprite)
+        public Projectile Create(Vector2 position, Vector2 direction, Sprite sprite, string tag)
         {
             const float Speed = 1200.0f;
             var rotation = direction.ToRotation();
@@ -23,7 +23,8 @@ namespace Core.Entities
             return new Projectile(_draw, sprite, rotation, Speed)
             {
                 Position = position,
-                Scale = new Vector2(GameRoot.Scale)
+                Scale = new Vector2(GameRoot.Scale),
+                Tags = new[] { tag }
             };
         }
     }
