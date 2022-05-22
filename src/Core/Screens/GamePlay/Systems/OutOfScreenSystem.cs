@@ -11,7 +11,7 @@ namespace Core.Screens.GamePlay.Systems
     public sealed class OutOfScreenSystem : IGamePlaySystem
     {
         private readonly IWorld _world;
-        ICollisionService _collisionService;
+        private readonly ICollisionService _collisionService;
         private readonly IViewport _viewport;
 
         public OutOfScreenSystem(IWorld world, ICollisionService collisionService, IViewport viewport)

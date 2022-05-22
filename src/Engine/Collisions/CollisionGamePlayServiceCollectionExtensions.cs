@@ -1,7 +1,7 @@
 ﻿using Engine;
 using Engine.Collisions;
 using Engine.Entities;
-using Engine.Rules;
+using Engine.Events;
 namespace Microsoft.Extensions.DependencyInjection
 {
     public static class CollisionGamePlayServiceCollectionExtensions

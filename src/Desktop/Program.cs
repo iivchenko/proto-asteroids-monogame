@@ -57,13 +57,15 @@ namespace Desktop
                             .AddMonoGameContentSystem(contentRoot)
                             .AddMonoGameDrawSystem()
                             .AddMonoGameAudioSystem(configuration.GetSection("Audio"))
+                            .AddSingleton<IGamePlaySystem, GamePlaySystem>()
                             .AddSingleton<IGamePlaySystem, OutOfScreenSystem>()
                             .AddEntitySystem(10, 50)
                             .AddCollisions(20)
                             .AddSingleton<IGamePlaySystem, UfoAiSystem>(x => new UfoAiSystem(x.GetRequiredService<IWorld>(), 10))
-                            .AddGameRules(new[] { Assembly.GetAssembly(typeof(Core.Version)) }, 30)
+                            .AddGameEvents(new[] { Assembly.GetAssembly(typeof(Core.Version)) }, 30)
                             .AddSingleton<GamePlayContext>()
-                            .AddSingleton<LeaderboardsManager>();
+                            .AddSingleton<LeaderboardsManager>()
+                            .AddSingleton<GamePlayScoreManager>();
                     })
                 .WithConfiguration(config => // TODO: This beast seems become redundant
                     {

@@ -2,23 +2,23 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Engine.Rules
+namespace Engine.Events
 {
     public delegate IEnumerable<object> ServiceFactory(Type serviceType);
 
-    public sealed class RuleGamePlaySystem : IGamePlaySystem, IEventPublisher
+    public sealed class EventGamePlaySystem : IGamePlaySystem, IEventPublisher
     {
         private readonly ServiceFactory _serviceFactory;
         private readonly IList<IEvent> _events;
         private readonly Type _handlerType;
 
-        public RuleGamePlaySystem(ServiceFactory serviceFactory, uint priority)
+        public EventGamePlaySystem(ServiceFactory serviceFactory, uint priority)
         {
             _serviceFactory = serviceFactory;
 
             Priority = priority;
 
-            _handlerType = typeof(IRule<>);
+            _handlerType = typeof(IEventHandler<>);
             _events = new List<IEvent>();
         }
 

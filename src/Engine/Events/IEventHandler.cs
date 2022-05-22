@@ -1,6 +1,6 @@
-﻿namespace Engine.Rules
+﻿namespace Engine.Events
 {
-    public interface IRule<TEvent>
+    public interface IEventHandler<TEvent>
         where TEvent : IEvent
     {
         bool ExecuteCondition(TEvent @event);

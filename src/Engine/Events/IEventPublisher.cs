@@ -1,4 +1,4 @@
-﻿namespace Engine.Rules
+﻿namespace Engine.Events
 {
     public interface IEventPublisher
     {

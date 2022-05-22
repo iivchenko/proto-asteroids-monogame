@@ -4,7 +4,7 @@ using Engine.Audio;
 using Engine.Content;
 using Engine.Entities;
 using Engine.Graphics;
-using Engine.Rules;
+using Engine.Events;
 using Engine.Screens;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
@@ -46,10 +46,7 @@ namespace Core.Screens.GamePlay
             var context = container.GetService<GamePlayContext>();
             _controller = new PlayerShipKeyboardAndGamePadController(ship);
 
-            var timer1 = new Timer(TimeSpan.FromSeconds(3), GameTags.NextAsteroid, _publisher);
-            var timer2 = new Timer(TimeSpan.FromSeconds(60), GameTags.NextAsteroidLimitChange, _publisher);
             var timer3 = new Timer(TimeSpan.FromSeconds(35), GameTags.NextHasardSituation, _publisher);
-            var timer4 = new Timer(TimeSpan.FromSeconds(45), GameTags.NextUfo, _publisher);
 
             _hud = new GamePlayHud
             (
@@ -64,10 +61,7 @@ namespace Core.Screens.GamePlay
             _world.Add
             (
                 ship,
-                timer1,
-                timer2,
-                timer3,
-                timer4
+                timer3
             );
             
             var file =

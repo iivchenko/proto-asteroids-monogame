@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Engine.Rules
+namespace Engine.Events
 {
     public interface IEvent
     {
