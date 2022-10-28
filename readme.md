@@ -1,6 +1,6 @@
-# Asteroids Owerflow
+# Proto Asteroids MonoGame
 
-[![build](https://github.com/iivchenko/asteroids-overflow/actions/workflows/build.yml/badge.svg)](https://github.com/iivchenko/asteroids-overflow/actions/workflows/build.yml)
+[![build](https://github.com/iivchenko/proto-asteroids-monogame/actions/workflows/build.yml/badge.svg)](https://github.com/iivchenko/proto-asteroids-monogame/actions/workflows/build.yml)
 
 **Play button place holder** **Download last windows version button place holder**
 
@@ -14,9 +14,6 @@ Classical implementation or the [Asteroids Game](https://en.wikipedia.org/wiki/A
 * [Scrutor](https://github.com/khellang/Scrutor)
 * [Comora](https://github.com/dotnet-ad/Comora)
 * [Newton.Json](https://www.newtonsoft.com/json)
-
-# Roadmap
-Roadmap based on github milestones which you can also find [here](https://github.com/iivchenko/asteroids-overflow/milestones)
 
 # License
 * Source Code

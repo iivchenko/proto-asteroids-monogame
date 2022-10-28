@@ -71,6 +71,7 @@ namespace Core.Screens.GamePlay
                     .RandomPick();
 
             context.Initialize();
+            _musicPlayer.Stop();
             _musicPlayer.Play(content.Load<Music>(file));
         }
 

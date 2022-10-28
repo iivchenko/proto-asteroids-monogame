@@ -28,7 +28,7 @@ jobs:
     - name: Windows Artifacts
       uses: actions/upload-artifact@v1
       with:
-       name: ${{ format('asteroids-overflow-win-x64-v{0}.{1}{2}', steps.version.outputs.content, github.run_number, inputs.suffix) }}
+       name: ${{ format('proto-asteroids-monogame-win-x64-v{0}.{1}{2}', steps.version.outputs.content, github.run_number, inputs.suffix) }}
        path: publish/win-x64
        
   linux-x64:
@@ -50,7 +50,7 @@ jobs:
     - name: Linux Artifacts
       uses: actions/upload-artifact@v1
       with:
-       name: ${{ format('asteroids-overflow-linux-x64-v{0}.{1}{2}', steps.version.outputs.content, github.run_number, inputs.suffix) }}
+       name: ${{ format('proto-asteroids-monogame-linux-x64-v{0}.{1}{2}', steps.version.outputs.content, github.run_number, inputs.suffix) }}
        path: publish/linux-x64
   mac-x64:
     runs-on: windows-latest
@@ -70,22 +70,22 @@ jobs:
       run: dotnet publish ./src/Desktop/Desktop.csproj --configuration ${{ inputs.config }} --runtime osx-x64 /p:PublishReadyToRun=false /p:TieredCompilation=false /p:DefineConstants="${{ env.CONFIG }} MacOS" --self-contained true -o ./publish/macos-x64
     - name: Create Mac App
       run: |
-        New-Item -ItemType Directory -Name './mac/Asteroids Overflow.App/Contents/MacOS'
-        New-Item -ItemType Directory -Name './mac/Asteroids Overflow.App/Contents/Resources'
-        Copy-Item -Path './publish/macos-x64/Content' -Destination './mac/Asteroids Overflow.App/Contents/Resources' -Recurse
-        Copy-Item -Path './publish/macos-x64/game-settings.json' -Destination './mac/Asteroids Overflow.App/Contents/Resources/'
-        Copy-Item -Path './publish/macos-x64/*' -Destination './mac/Asteroids Overflow.App/Contents/MacOS' -Exclude 'Content','game-settings.json'
-        Copy-Item -Path './src/Desktop/Icon.icns' -Destination './mac/Asteroids Overflow.App/Contents/Resources/'
-        Set-Content -Path './mac/Asteroids Overflow.App/Contents/Info.plist' -Value '<?xml version="1.0" encoding="UTF-8"?>
+        New-Item -ItemType Directory -Name './mac/Proto Asteroids MonoGame.App/Contents/MacOS'
+        New-Item -ItemType Directory -Name './mac/Proto Asteroids MonoGame.App/Contents/Resources'
+        Copy-Item -Path './publish/macos-x64/Content' -Destination './mac/Proto Asteroids MonoGame.App/Contents/Resources' -Recurse
+        Copy-Item -Path './publish/macos-x64/game-settings.json' -Destination './mac/Proto Asteroids MonoGame.App/Contents/Resources/'
+        Copy-Item -Path './publish/macos-x64/*' -Destination './mac/Proto Asteroids MonoGame.App/Contents/MacOS' -Exclude 'Content','game-settings.json'
+        Copy-Item -Path './src/Desktop/Icon.icns' -Destination './mac/Proto Asteroids MonoGame.App/Contents/Resources/'
+        Set-Content -Path './mac/Proto Asteroids MonoGame.App/Contents/Info.plist' -Value '<?xml version="1.0" encoding="UTF-8"?>
         <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
         <plist version="1.0">
         <dict>
             <key>CFBundleExecutable</key>
-            <string>Asteroids Overflow</string>
+            <string>Proto Asteroids MonoGame</string>
             <key>CFBundleIconFile</key>
             <string>Icon</string>
             <key>CFBundleName</key>
-            <string>Asteroids Overflow</string>
+            <string>Proto Asteroids MonoGame</string>
             <key>CFBundlePackageType</key>
             <string>APPL</string>
             <key>CFBundleShortVersionString</key>
@@ -101,5 +101,5 @@ jobs:
     - name: MacOS Artifacts
       uses: actions/upload-artifact@v2
       with:
-        name: ${{ format('asteroids-overflow-macos-x64-v{0}.{1}{2}', steps.version.outputs.content, github.run_number, inputs.suffix) }}
+        name: ${{ format('proto-asteroids-monogame-macos-x64-v{0}.{1}{2}', steps.version.outputs.content, github.run_number, inputs.suffix) }}
         path: mac
