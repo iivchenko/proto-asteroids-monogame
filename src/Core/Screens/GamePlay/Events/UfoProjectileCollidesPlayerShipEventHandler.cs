@@ -1,5 +1,4 @@
 ﻿using Core.Entities;
-using Core.Leaderboards;
 using Engine.Entities;
 using Engine.Screens;
 using Engine.Collisions;
@@ -11,18 +10,15 @@ namespace Core.Screens.GamePlay.Events
     public sealed class UfoProjectileCollidesPlayerShipEventHandler : BaseCollisionEventHandler<Projectile, Ship>
     {
         private readonly GamePlayContext _context;
-        private readonly LeaderboardsManager _leaderBoard;
         private readonly IWorld _world;
         private readonly ICollisionService _collisionService;
 
         public UfoProjectileCollidesPlayerShipEventHandler(
             GamePlayContext context,
-            LeaderboardsManager leaderBoard,
             IWorld world,
             ICollisionService collisionService)
         {
             _context = context;
-            _leaderBoard = leaderBoard;
             _world = world;
             _collisionService = collisionService;
         }
@@ -45,29 +41,13 @@ namespace Core.Screens.GamePlay.Events
 
                 var playedTime = DateTime.Now - _context.StartTime;
 
-                if (_leaderBoard.CanAddLeader(_context.Scores))
-                {
-                    var newHigthScorePrompt = new PromptScreen("Congratulations, you made new high score!\nEnter you name:");
-
-                    newHigthScorePrompt.Accepted += (_, __) =>
-                    {
-                        _leaderBoard.AddLeader(newHigthScorePrompt.Text, _context.Scores, playedTime);
-                        GameOverMessage();
-                    };
-                    newHigthScorePrompt.Cancelled += (_, __) => GameOverMessage();
-
-                    GameRoot.ScreenManager.AddScreen(newHigthScorePrompt, null);
-                }
-                else
-                {
-                    GameOverMessage();
-                }
+                GameOverMessage();
             }
         }
 
         private void GameOverMessage()
         {
-            const string message = "GAME OVER?\nA button, Space, Enter = Restart\nB button, Esc = Exit";
+            var message = $"GAME OVER?\n\nYour score is: {_context.Scores}\n\nA button, Space, Enter = Restart\nB button, Esc = Exit";
             var msg = new MessageBoxScreen(message);
 
             msg.Accepted += (_, __) => LoadingScreen.Load(GameRoot.ScreenManager, false, null, new StarScreen(), new GamePlayScreen());

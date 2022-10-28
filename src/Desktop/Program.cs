@@ -1,6 +1,5 @@
 ﻿using Comora;
 using Core.Entities;
-using Core.Leaderboards;
 using Core.Screens;
 using Core.Screens.GamePlay;
 using Core.Screens.GamePlay.Systems;
@@ -20,7 +19,6 @@ namespace Desktop
     public static class Program
     {
         private const string ConfigFile = "game-settings.json";
-        private const string LeaderBoardsFile = "leaders.json";
 
         [STAThread]
         public static void Main()
@@ -31,7 +29,6 @@ namespace Desktop
             var root = string.Empty;
 #endif
             var configFilePath = Path.Combine(root, ConfigFile);
-            var leaderboardsFilePath = Path.Combine(root, LeaderBoardsFile);
             var contentRoot = root;
             GameBuilder
                 .CreateBuilder()
@@ -48,8 +45,6 @@ namespace Desktop
                             .Configure<GameSettings>(configuration)
                             .AddSingleton<IRepository<GameSettings>>(_ => new JsonRepository<GameSettings>(configFilePath))
                             .Decorate<IRepository<GameSettings>>(x => new DefaultInitializerRepositoryDecorator<GameSettings>(x, new GameSettings { Audio = { SfxVolume = 0.2f, MusicVolume = 0.2f } }))
-                            .AddSingleton<IRepository<Collection<LeaderboardItem>>>(_ => new JsonRepository<Collection<LeaderboardItem>>(leaderboardsFilePath))
-                            .Decorate<IRepository<Collection<LeaderboardItem>>>(x => new DefaultInitializerRepositoryDecorator<Collection<LeaderboardItem>>(x, new Collection<LeaderboardItem>()))
                             .AddSingleton<IEntityFactory, EntityFactory>()
                             .AddSingleton<IProjectileFactory, ProjectileFactory>()
                             .AddSingleton<IViewport, Viewport>(_ => new Viewport(0.0f, 0.0f, 3840.0f, 2160.0f))
@@ -64,7 +59,6 @@ namespace Desktop
                             .AddSingleton<IGamePlaySystem, UfoAiSystem>(x => new UfoAiSystem(x.GetRequiredService<IWorld>(), 10))
                             .AddGameEvents(new[] { Assembly.GetAssembly(typeof(Core.Version)) }, 30)
                             .AddSingleton<GamePlayContext>()
-                            .AddSingleton<LeaderboardsManager>()
                             .AddSingleton<GamePlayScoreManager>();
                     })
                 .WithConfiguration(config => // TODO: This beast seems become redundant

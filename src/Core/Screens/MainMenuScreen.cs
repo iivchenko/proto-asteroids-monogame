@@ -48,19 +48,16 @@ namespace Core.Screens
 
             // Create our menu entries.
             var playGameMenuEntry = new MenuEntry("Play Game", _h2, fontService);
-            var leaderboardMenuEntry = new MenuEntry("Leaderboard", _h2, fontService);
             var settingsMenuEntry = new MenuEntry("Settings", _h2, fontService);
             var exitMenuEntry = new MenuEntry("Exit", _h2, fontService);
 
             // Hook up menu event handlers.
             playGameMenuEntry.Selected += PlayGameMenuEntrySelected;
-            leaderboardMenuEntry.Selected += LeaderboardMenuEntrySelected;
             settingsMenuEntry.Selected += SettingsMenuEntrySelected;
             exitMenuEntry.Selected += OnCancel;
 
             // Add entries to the menu.
             MenuEntries.Add(playGameMenuEntry);
-            MenuEntries.Add(leaderboardMenuEntry);
             MenuEntries.Add(settingsMenuEntry);
             MenuEntries.Add(exitMenuEntry);
 
@@ -82,11 +79,6 @@ namespace Core.Screens
         void PlayGameMenuEntrySelected(object sender, PlayerIndexEventArgs e)
         {
             LoadingScreen.Load(ScreenManager, false, e.PlayerIndex, new StarScreen(), new GamePlayScreen());
-        }
-
-        void LeaderboardMenuEntrySelected(object sender, PlayerIndexEventArgs e)
-        {
-            ScreenManager.AddScreen(new LeaderBoardsScreen(), e.PlayerIndex);
         }
 
         /// <summary>
