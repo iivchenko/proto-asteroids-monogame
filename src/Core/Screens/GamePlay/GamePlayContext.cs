@@ -10,21 +10,25 @@ namespace Core.Screens.GamePlay
 
         public DateTime StartTime { get; private set; }
 
-        public AsteroidContext AsteroidContext { get; set; }
+        public Timer2 NextAsteroidSpawn { get; set; }
 
-        public UfoContext UfoContext { get; set; }
+        public Timer2 NextSpeedUp { get; set; }
 
-        public HazardContext HazardContext { get; set; }
+        public Timer2 NextUfoSpawn { get; set; }
+
+        public Timer2 NextHazardSpawn { get; set; }
 
         public void Initialize()
         {
-            Lifes = 3;
+            Lifes = 3000;
             Scores = 0;
             StartTime = DateTime.Now;
 
-            AsteroidContext = new AsteroidContext(3, 1, 60, 3);
-            UfoContext = new UfoContext(45);
-            HazardContext = new HazardContext(35);
+            NextAsteroidSpawn = new Timer2(5);
+            NextUfoSpawn = new Timer2(45);
+            NextHazardSpawn = new Timer2(35);
+
+            NextSpeedUp = new Timer2(60, 10);
         }
     }
 
@@ -67,7 +71,7 @@ namespace Core.Screens.GamePlay
 
             if (_currentTimetoNextAsteroid <= 0)
             {
-                _currentTimetoNextAsteroid = _timeToNextAsteroid;             
+                _currentTimetoNextAsteroid = _timeToNextAsteroid;
 
                 return true;
             }
@@ -76,53 +80,66 @@ namespace Core.Screens.GamePlay
         }
     }
 
-    public sealed class UfoContext
+    public sealed class Timer2
     {
-        private float _nextUfoTime;
-        private float _currentNextUfoTime;
+        private readonly bool _isIninite;
 
-        public UfoContext(float nextUfoTime)
+        private float _currentTime;
+        private int _count;
+
+        public Timer2(float time)
         {
-            _nextUfoTime = _currentNextUfoTime = nextUfoTime;
+            RecurintTime = _currentTime = time;
+            _count = -1;
+            _isIninite = true;
         }
+
+        public Timer2(float time, int count)
+        {
+            RecurintTime = _currentTime = time;
+            _count = count;
+            _isIninite = false;
+        }
+
+        public float RecurintTime { get; set; }
 
         public bool Update(float time)
         {
-            _currentNextUfoTime -= time;
-
-            if (_currentNextUfoTime < 0)
+            if (_isIninite)
             {
-                _currentNextUfoTime = _nextUfoTime;
+                _currentTime -= time;
 
-                return true;
+                if (_currentTime <= 0)
+                {
+                    _currentTime = RecurintTime;
+
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
             }
-
-            return false;
-        }
-    }
-
-    public sealed class HazardContext
-    {
-        private float _nextHazardTime;
-        private float _currentNextHazardTime;
-
-        public HazardContext(float nextHazardTime)
-        {
-            _nextHazardTime = _currentNextHazardTime = nextHazardTime;
-        }
-
-        public bool Update(float time)
-        {
-            _currentNextHazardTime -= time;
-
-            if (_currentNextHazardTime < 0)
+            else if (_count > 0)
             {
-                _currentNextHazardTime = _nextHazardTime;
+                _currentTime -= time;
 
-                return true;
+                if (_currentTime <= 0)
+                {
+                    _currentTime = RecurintTime;
+                    _count--;
+
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
             }
-
-            return false;
+            else
+            {
+                return false;
+            }
         }
     }
 }

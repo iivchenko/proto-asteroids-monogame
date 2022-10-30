@@ -42,9 +42,11 @@ namespace Core.Screens.GamePlay.Systems
 
         public void Update(float time)
         {
-            if (_context.AsteroidContext.Update(time)) CreateAsteroid();
-            if (_context.UfoContext.Update(time)) CreateUfo();
-            if (_context.HazardContext.Update(time)) CreateHazard();
+            if (_context.NextAsteroidSpawn.Update(time)) CreateAsteroid();            
+            if (_context.NextUfoSpawn.Update(time)) CreateUfo();
+            if (_context.NextHazardSpawn.Update(time)) CreateHazard();
+
+            if (_context.NextSpeedUp.Update(time)) SpeedUpGame();
         }
 
         public void CreateAsteroid()
@@ -81,6 +83,13 @@ namespace Core.Screens.GamePlay.Systems
             var asteroid = _entityFactory.CreateAsteroid(type, position, direction);
 
             _world.Add(asteroid);
+        }
+
+        public void SpeedUpGame()
+        {
+            _context.NextAsteroidSpawn.RecurintTime = _context.NextAsteroidSpawn.RecurintTime * 0.85f;
+            _context.NextUfoSpawn.RecurintTime = _context.NextUfoSpawn.RecurintTime * 0.89f;
+            _context.NextHazardSpawn.RecurintTime = _context.NextHazardSpawn.RecurintTime * 0.87f;
         }
 
         public void CreateUfo()
