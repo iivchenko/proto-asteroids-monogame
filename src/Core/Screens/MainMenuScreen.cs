@@ -49,16 +49,19 @@ namespace Core.Screens
             // Create our menu entries.
             var playGameMenuEntry = new MenuEntry("Play Game", _h2, fontService);
             var settingsMenuEntry = new MenuEntry("Settings", _h2, fontService);
+            var creditsMenuEntry = new MenuEntry("Credits", _h2, fontService);
             var exitMenuEntry = new MenuEntry("Exit", _h2, fontService);
 
             // Hook up menu event handlers.
             playGameMenuEntry.Selected += PlayGameMenuEntrySelected;
             settingsMenuEntry.Selected += SettingsMenuEntrySelected;
+            creditsMenuEntry.Selected += CreditsMenuEntrySelected;
             exitMenuEntry.Selected += OnCancel;
 
             // Add entries to the menu.
             MenuEntries.Add(playGameMenuEntry);
             MenuEntries.Add(settingsMenuEntry);
+            MenuEntries.Add(creditsMenuEntry);
             MenuEntries.Add(exitMenuEntry);
 
 
@@ -87,6 +90,14 @@ namespace Core.Screens
         void SettingsMenuEntrySelected(object sender, PlayerIndexEventArgs e)
         {
             ScreenManager.AddScreen(new SettingsScreen(), e.PlayerIndex);
+        }
+
+        /// <summary>
+        /// Event handler for when the Credits menu entry is selected.
+        /// </summary>
+        void CreditsMenuEntrySelected(object sender, PlayerIndexEventArgs e)
+        {
+            ScreenManager.AddScreen(new CreditScreen(), e.PlayerIndex);
         }
 
         /// <summary>
