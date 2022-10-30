@@ -58,4 +58,4 @@ Classical implementation or the [Asteroids Game](https://en.wikipedia.org/wiki/A
         * [License](https://davidkbd.itch.io/hair-and-kuckles-technometal-music-pack)
 
 # Stats for Develop branch
-![Alt](https://repobeats.axiom.co/api/embed/a59bd07ebe8be71e4c1d320f262bd72bb4fd7320.svg "Repobeats analytics image")
+![Alt](https://repobeats.axiom.co/api/embed/a0f5874847480db22b839e1aa4f7c3224560d0e5.svg "Repobeats analytics image")
