@@ -1,17 +1,13 @@
-﻿using System;
+﻿using Engine.Content;
 
 namespace Engine.Graphics
 {
-    public sealed class Font
+    public sealed class Font : ContentObject
     {
         public Font(int lineSpacing)
         {
-            Id = Guid.NewGuid();
-
             LineSpacing = lineSpacing;
         }
-
-        public Guid Id { get; }
 
         public int LineSpacing { get; }
     }

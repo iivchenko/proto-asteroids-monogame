@@ -25,13 +25,13 @@ namespace Engine.MonoGame
     public sealed class MonoGameContentProvider : IContentProvider
     {
         private readonly ContentManager _content;
-        private readonly IDictionary<Guid, string> _map;
+        private readonly IDictionary<Guid, object> _map;
         private readonly string _root;
 
         public MonoGameContentProvider(ContentManager content, ContentRoot root)
         {
             _content = content;
-            _map = new Dictionary<Guid, string>();
+            _map = new Dictionary<Guid, object>();
 
             _root = root.Path;
         }
@@ -54,7 +54,7 @@ namespace Engine.MonoGame
         }
 
         public TContent Load<TContent>(string path)
-            where TContent : class
+            where TContent : ContentObject
         {
             var type = typeof(TContent);
 
@@ -64,7 +64,7 @@ namespace Engine.MonoGame
 
                 var sprite = new Sprite(texture.Height, texture.Width);
 
-                _map.Add(sprite.Id, path);
+                _map.Add(sprite.Id, texture);
 
                 return sprite as TContent;
             }
@@ -72,9 +72,9 @@ namespace Engine.MonoGame
             {
                 var sound = new Sound();
 
-                _content.Load<SoundEffect>(path);
+                var sfx = _content.Load<SoundEffect>(path);
 
-                _map.Add(sound.Id, path);
+                _map.Add(sound.Id, sfx);
 
                 return sound as TContent;
             }
@@ -83,7 +83,7 @@ namespace Engine.MonoGame
                 var spriteFont = _content.Load<SpriteFont>(path);
                 var font = new Font(spriteFont.LineSpacing);
 
-                _map.Add(font.Id, path);
+                _map.Add(font.Id, spriteFont);
 
                 return font as TContent;
             }
@@ -91,9 +91,9 @@ namespace Engine.MonoGame
             {
                 var music = new Music();
 
-                _content.Load<Song>(path);
+                var song = _content.Load<Song>(path);
 
-                _map.Add(music.Id, path);
+                _map.Add(music.Id, song);
 
                 return music as TContent;
             }
@@ -105,14 +105,14 @@ namespace Engine.MonoGame
 
         internal Texture2D GetTexture(Sprite sprite)
         {
-            return _content.Load<Texture2D>(_map[sprite.Id]);
+            return _map[sprite.Id] as Texture2D;
         }
 
         internal TContent Load<TContent>(Guid id)
         {
-            if (_map.TryGetValue(id, out var path))
+            if (_map.TryGetValue(id, out var value))
             {
-                return _content.Load<TContent>(path);
+                return (TContent)value;
             }
 
             throw new InvalidOperationException($"Specified id doesn't exist '{id}'!");

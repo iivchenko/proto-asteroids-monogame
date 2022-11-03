@@ -1,18 +1,15 @@
-﻿using System;
+﻿using Engine.Content;
 
 namespace Engine.Graphics
 {
-    public sealed class Sprite
+    public sealed class Sprite : ContentObject
     {
         public Sprite(float height, float width)
         {
-
-            Id = Guid.NewGuid();
             Height = height;
             Width = width;
         }
 
-        public Guid Id { get; }
         public float Height { get; }
         public float Width { get; }
     }

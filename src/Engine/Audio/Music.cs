@@ -1,14 +1,9 @@
 ﻿using System;
+using Engine.Content;
 
 namespace Engine.Audio
 {
-    public sealed class Music
-    {
-        public Music()
-        {
-            Id = Guid.NewGuid();
-        }
-
-        public Guid Id { get; }
+    public sealed class Music : ContentObject
+    {      
     }
 }

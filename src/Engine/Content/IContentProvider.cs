@@ -5,7 +5,7 @@ namespace Engine.Content
     public interface IContentProvider
     {
         TContent Load<TContent>(string path)
-            where TContent : class;
+            where TContent : ContentObject;
 
         IEnumerable<string> GetFiles(string subFolder);
 
