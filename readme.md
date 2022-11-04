@@ -1,6 +1,6 @@
-# Kenney Asteroids
+# Proto Asteroids MonoGame
 
-[![build](https://github.com/iivchenko/kenney-asteroids/actions/workflows/build.yml/badge.svg)](https://github.com/iivchenko/kenney-asteroids/actions/workflows/build.yml)
+[![build](https://github.com/iivchenko/proto-asteroids-monogame/actions/workflows/build.yml/badge.svg)](https://github.com/iivchenko/proto-asteroids-monogame/actions/workflows/build.yml)
 
 **Play button place holder** **Download last windows version button place holder**
 
@@ -8,22 +8,12 @@ Classical implementation or the [Asteroids Game](https://en.wikipedia.org/wiki/A
 
 ![Game Screenshot](doc/game-screenshot.png)
 
-
-## Releases
-* [v0.4.0](doc/release-notes/v0.4.0.md)
-* [v0.3.0](doc/release-notes/v0.3.0.md)
-* [v0.2.0](doc/release-notes/v0.2.0.md)
-* [v0.1.0](doc/release-notes/v0.1.0.md)
-
 ## Tech Stack
 * [.net core 3.1](https://dotnet.microsoft.com/download/dotnet/3.1)
 * [MonoGame 3.8](https://www.monogame.net/downloads/)
 * [Scrutor](https://github.com/khellang/Scrutor)
 * [Comora](https://github.com/dotnet-ad/Comora)
 * [Newton.Json](https://www.newtonsoft.com/json)
-* [BenchmarkDotNet](https://github.com/dotnet/BenchmarkDotNet)
-
-[Roadmap](https://github.com/iivchenko/kenney-asteroids/milestones)
 
 # License
 * Source Code
@@ -31,26 +21,41 @@ Classical implementation or the [Asteroids Game](https://en.wikipedia.org/wiki/A
     * [MIT License](doc/source-code-mit-license)
 * Graphics
   * [Space Shooter Redux](https://kenney.nl/assets/space-shooter-redux) 
-    * Thank you Kenney for the great assets!
-    * [Repo Asset](src/KenneyAsteroids.Desktop/Content/SpriteSheets/Asteroids.sprite.png)
-    * [CC0 1.0 License](https://creativecommons.org/publicdomain/zero/1.0/)
+    * Thank you Kenney for the great assets that inspired me to create this game!
 * Fonts
   * [Kenney Fonts](https://kenney.nl/assets/kenney-fonts)
     * Thank you Kenney for the great assets!
-    * [Repo Asset](src/KenneyAsteroids.Desktop/Content/Fonts/kenney-future.font.ttf)
+    * [Repo Asset](src/Content/Fonts/kenney-future.font.ttf)
     * [CC0 1.0 License](https://creativecommons.org/publicdomain/zero/1.0/)
 * Sfx
   * [Space Shooter Redux](https://kenney.nl/assets/space-shooter-redux)
     * Thank you Kenney for the great assets!
-    * [Repo Asset](src/KenneyAsteroids.Desktop/Content/Sounds/laser.sound.ogg)
+    * [Repo Asset](src/Content/Sounds/laser.sound.ogg)
     * [CC0 1.0 License](https://creativecommons.org/publicdomain/zero/1.0/)
   * Thank you [jsfxr](https://sfxr.me/) for soundtracks 
 * Music
     * [Dreamy Space Soundtrack](https://chiphead64.itch.io/dreamy-space-soundtrack)
       * Thank you chiphead64 for the great assets!
-      * [Repo Asset](src/KenneyAsteroids.Desktop/Content/Music/menu.song.mp3)
+      * [Repo Asset](src/Content/Music/menu.song.mp3)
       * [CC BY 4.0 License](https://creativecommons.org/licenses/by/4.0/)
     * [FREE Music Pack 4: Electronic 2](https://joshua-mclean.itch.io/free-music-pack-4)
       * Thank you Joshua McLean for the great assets!
-      * [Repo Asset](src/KenneyAsteroids.Desktop/Content/Music/game1.song.mp3)
+      * [Repo Asset](src/Content/Music/game1.song.mp3)
       * [CC BY 4.0 License](https://creativecommons.org/licenses/by/4.0/)
+    * [Izakaya Funes' Metal Pack](https://polarnyne.itch.io/izakaya-funes-metal-pack)
+      * Thank you Izakaya Funes' for the great assets!
+      * [Repo Asset#1](src/Content/Music/game2.song.wav)
+      * [Repo Asset#2](src/Content/Music/game3.song.wav)
+      * [Repo Asset#3](src/Content/Music/game4.song.wav)
+      * [Repo Asset#4](src/Content/Music/game5.song.wav)
+      * [Repo Asset#5](src/Content/Music/game6.song.wav)
+      * [License](https://polarnyne.itch.io/izakaya-funes-metal-pack)
+    * [Hair and Kuckles Techno+Metal Music Pack](https://davidkbd.itch.io/hair-and-kuckles-technometal-music-pack)
+        * Thank you David KBD for the great assets!
+        * [Repo Asset#1](src/Content/Music/game7.song.ogg)
+        * [Repo Asset#2](src/Content/Music/game8.song.ogg)
+        * [Repo Asset#3](src/Content/Music/game9.song.ogg)
+        * [License](https://davidkbd.itch.io/hair-and-kuckles-technometal-music-pack)
+
+# Stats for Develop branch
+![Alt](https://repobeats.axiom.co/api/embed/a0f5874847480db22b839e1aa4f7c3224560d0e5.svg "Repobeats analytics image")
