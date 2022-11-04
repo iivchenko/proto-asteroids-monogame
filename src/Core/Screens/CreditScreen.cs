@@ -7,8 +7,6 @@ using System.Numerics;
 
 using XTime = Microsoft.Xna.Framework.GameTime;
 using Microsoft.Extensions.DependencyInjection;
-using Engine.Audio;
-using Microsoft.Xna.Framework.Input;
 
 namespace Core.Screens
 {
@@ -45,9 +43,9 @@ namespace Core.Screens
         {
             base.HandleInput(input);
 
-            if (input.IsNewKeyPress(Keys.Escape, null, out _) || input.IsNewButtonPress(Buttons.Start, null, out _))
+            if (input.IsMenuCancel(ControllingPlayer, out _))
             {
-                LoadingScreen.Load(ScreenManager, false, null, new StarScreen(), new MainMenuScreen());
+                ScreenManager.RemoveScreen(this);
             }
         }
 

@@ -71,13 +71,11 @@ namespace Core.Screens.GamePlay
                     .RandomPick();
 
             context.Initialize();
-            _musicPlayer.Stop();
             _musicPlayer.Play(content.Load<Music>(file));
         }
 
         public override void Free()
         {
-            _musicPlayer.Stop();
             _world.Free();
 
             base.Free();

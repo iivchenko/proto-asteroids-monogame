@@ -23,7 +23,9 @@ namespace Engine.MonoGame
             _songs = new List<Song>();
 
             _settings.OnChange(s => MediaPlayer.Volume = s.MusicVolume);
-            MediaPlayer.MediaStateChanged += OnStateChanged;
+
+            MediaPlayer.ActiveSongChanged += OnStateChanged;
+
         }
 
         public void Play(Sound sound, float pitch = 0.0f)
@@ -61,14 +63,12 @@ namespace Engine.MonoGame
 
         public void Stop()
         {
-            MediaPlayer.MediaStateChanged -= OnStateChanged;
             MediaPlayer.Stop();
-            MediaPlayer.MediaStateChanged += OnStateChanged;
         }
 
         public void Dispose()
         {
-            MediaPlayer.MediaStateChanged -= OnStateChanged;
+            MediaPlayer.ActiveSongChanged -= OnStateChanged;
         }
 
         private void Play()
@@ -81,16 +81,13 @@ namespace Engine.MonoGame
             _songs.Remove(song);
             _songs.Add(song);
 
-            MediaPlayer.Volume = _settings.CurrentValue.MusicVolume;
             MediaPlayer.Play(song);
         }
 
         private void OnStateChanged(object sender, EventArgs e)
         {
-            if (MediaPlayer.State == MediaState.Stopped)
-            {
-                Play();
-            }
+
+            Play();
         }
     }
 }
