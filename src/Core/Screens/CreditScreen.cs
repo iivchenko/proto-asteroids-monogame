@@ -81,7 +81,7 @@ namespace Core.Screens
         {
             var thanksToMyWife =
                 "Special thanks to\n" +
-                "   My beloved wife Slava\n" +
+                "   My beloved wife Myroslava\n" +
                 "   Who supported me for the whole journey\n" +
                 "   And of course for creation of the great art!";
 

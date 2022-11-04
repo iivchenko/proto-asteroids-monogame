@@ -20,7 +20,7 @@ namespace Core.Screens.GamePlay
 
         public void Initialize()
         {
-            Lifes = 3000;
+            Lifes = 7;
             Scores = 0;
             StartTime = DateTime.Now;
 
