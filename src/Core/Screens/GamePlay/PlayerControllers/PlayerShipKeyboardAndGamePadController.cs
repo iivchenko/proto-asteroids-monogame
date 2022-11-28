@@ -22,12 +22,14 @@ namespace Core.Screens.GamePlay.PlayerControllers
             var gampad = input.CurrentGamePadStates[0];
 
             if (keyboard.IsKeyDown(Keys.W) ||
+                keyboard.IsKeyDown(Keys.Up) ||
                 gampad.IsButtonDown(Buttons.RightTrigger))
             {
                 action |= ShipAction.Accelerate;
             }
 
             if (keyboard.IsKeyDown(Keys.A) ||
+                 keyboard.IsKeyDown(Keys.Left) ||
                 gampad.IsButtonDown(Buttons.LeftThumbstickLeft) ||
                 gampad.IsButtonDown(Buttons.DPadLeft))
             {
@@ -35,6 +37,7 @@ namespace Core.Screens.GamePlay.PlayerControllers
             }
 
             if (keyboard.IsKeyDown(Keys.D) ||
+                keyboard.IsKeyDown(Keys.Right) ||
                 gampad.IsButtonDown(Buttons.LeftThumbstickRight) ||
                 gampad.IsButtonDown(Buttons.DPadRight))
             {
